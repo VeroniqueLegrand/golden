@@ -1,0 +1,10 @@
+embl:X55027
+embl:X51700
+embl:Z12029
+embl:X52701
+embl:X52706
+embl:X52703
+embl:X17276
+embl:X68321
+embl:X52700
+embl:X52702

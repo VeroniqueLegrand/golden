@@ -1,0 +1,6 @@
+uniprot:028R_FRG3G
+uniprot:Z_WWAVU
+uniprot:ATPAM_ARATH
+uniprot:ATP6_RICB8
+uniprot:ATPA_BACTN
+uniprot:032R_FRG3G

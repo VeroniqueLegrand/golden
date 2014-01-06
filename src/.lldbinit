@@ -1,0 +1,2 @@
+env DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib
+settings set target.run-args '-f /users/vlegrand/Desktop/golden-1.1a/nt_misc.txt

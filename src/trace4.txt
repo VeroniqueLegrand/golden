@@ -1,0 +1,541 @@
+Read: genbank:JX841180 uniprot:028R_FRG3G genbank:JX276463 embl:X55027 refseq:XM_004227550 genbank:L08039 genbank:J03050 refseq:XM_002130464 embl:X51700 genbank:M67477 refseq:NG_005132 embl:Z12029 refseq:NG_005128 uniprot:Z_WWAVU genbank:M60544 uniprot:ATPAM_ARATH uniprot:ATP6_RICB8 uniprot:ATPA_BACTN genbank:M19434 refseq:NR_044731 embl:X52701 refseq:NM_001082267 genbank:M81924 refseq:NM_001001440 embl:X52706 refseq:NM_001079485 genbank:M15215 enzyme:4.2.3.15 enzyme:6.4.1.3 genbank:M35305 genbank:M81467 uniprot:032R_FRG3G refseq:NM_001101684 embl:X52703 embl:X17276 refseq:NR_025834 genbank:M98015 refseq:NR_033287 genbank:M97858 embl:X68321 enzyme:4.2.99.15 embl:X52700 embl:X52702 refseq:NM_173911 genbank:S61325 genbank:M33635 
+lst_work content :genbank:JX841180 uniprot:028R_FRG3G genbank:JX276463 embl:X55027 refseq:XM_004227550 genbank:L08039 genbank:J03050 refseq:XM_002130464 embl:X51700 genbank:M67477 refseq:NG_005132 embl:Z12029 refseq:NG_005128 uniprot:Z_WWAVU genbank:M60544 uniprot:ATPAM_ARATH uniprot:ATP6_RICB8 uniprot:ATPA_BACTN genbank:M19434 refseq:NR_044731 embl:X52701 refseq:NM_001082267 genbank:M81924 refseq:NM_001001440 embl:X52706 refseq:NM_001079485 genbank:M15215 enzyme:4.2.3.15 enzyme:6.4.1.3 genbank:M35305 genbank:M81467 uniprot:032R_FRG3G refseq:NM_001101684 embl:X52703 embl:X17276 refseq:NR_025834 genbank:M98015 refseq:NR_033287 genbank:M97858 embl:X68321 enzyme:4.2.99.15 embl:X52700 embl:X52702 refseq:NM_173911 genbank:S61325 genbank:M33635 
+
+lst_work content :embl:X17276 embl:X52702 embl:X68321 embl:Z12029 embl:X52703 embl:X52706 embl:X55027 embl:X52701 embl:X51700 embl:X52700 enzyme:6.4.1.3 enzyme:4.2.3.15 enzyme:4.2.99.15 genbank:M33635 genbank:JX276463 genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:M15215 genbank:M35305 genbank:M81467 genbank:M98015 genbank:M97858 genbank:S61325 genbank:JX841180 refseq:NM_001082267 refseq:NM_001001440 refseq:NM_001101684 refseq:NM_001079485 refseq:NG_005132 refseq:XM_004227550 refseq:NG_005128 refseq:NR_025834 refseq:XM_002130464 refseq:NR_033287 refseq:NR_044731 refseq:NM_173911 uniprot:ATP6_RICB8 uniprot:032R_FRG3G uniprot:Z_WWAVU uniprot:028R_FRG3G uniprot:ATPA_BACTN uniprot:ATPAM_ARATH 
+goldenLstQuery, entering loop for db : embl
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_new.acx
+name : X17276
+index_search: Adding X17276 to aux_lst_notFoundname : X52702
+index_search: Adding X52702 to aux_lst_notFoundname : X68321
+index_search: Adding X68321 to aux_lst_notFoundname : Z12029
+index_search: Adding Z12029 to aux_lst_notFoundname : X52703
+index_search: Adding X52703 to aux_lst_notFoundname : X52706
+index_search: Adding X52706 to aux_lst_notFoundname : X55027
+index_search: Adding X55027 to aux_lst_notFoundname : X52701
+index_search: Adding X52701 to aux_lst_notFoundname : X51700
+index_search: Adding X51700 to aux_lst_notFoundname : X52700
+index_search: Adding X52700 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_new.acx, for cur_db : embl, nb_not_found=10, nb_res_found=0 
+lst_notFound content :
+embl:X17276 embl:X52702 embl:X68321 embl:Z12029 embl:X52703 embl:X52706 embl:X55027 embl:X52701 embl:X51700 embl:X52700 access_search : returned from index_search: nb_not_found_for_db=10, nb_res_found=0 
+Still looking for : X17276 X52702 X68321 Z12029 X52703 X52706 X55027 X52701 X51700 X52700 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_con.acx
+name : X17276
+index_search: Adding X17276 to aux_lst_notFoundname : X52702
+index_search: Adding X52702 to aux_lst_notFoundname : X68321
+index_search: Adding X68321 to aux_lst_notFoundname : Z12029
+index_search: Adding Z12029 to aux_lst_notFoundname : X52703
+index_search: Adding X52703 to aux_lst_notFoundname : X52706
+index_search: Adding X52706 to aux_lst_notFoundname : X55027
+index_search: Adding X55027 to aux_lst_notFoundname : X52701
+index_search: Adding X52701 to aux_lst_notFoundname : X51700
+index_search: Adding X51700 to aux_lst_notFoundname : X52700
+index_search: Adding X52700 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_con.acx, for cur_db : embl, nb_not_found=10, nb_res_found=0 
+lst_notFound content :
+embl:X17276 embl:X52702 embl:X68321 embl:Z12029 embl:X52703 embl:X52706 embl:X55027 embl:X52701 embl:X51700 embl:X52700 access_search : returned from index_search: nb_not_found_for_db=10, nb_res_found=0 
+Still looking for : X17276 X52702 X68321 Z12029 X52703 X52706 X55027 X52701 X51700 X52700 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_est.acx
+name : X17276
+index_search: Adding X17276 to aux_lst_notFoundname : X52702
+index_search: Adding X52702 to aux_lst_notFoundname : X68321
+index_search: Adding X68321 to aux_lst_notFoundname : Z12029
+index_search: Adding Z12029 to aux_lst_notFoundname : X52703
+index_search: Adding X52703 to aux_lst_notFoundname : X52706
+index_search: Adding X52706 to aux_lst_notFoundname : X55027
+index_search: Adding X55027 to aux_lst_notFoundname : X52701
+index_search: Adding X52701 to aux_lst_notFoundname : X51700
+index_search: Adding X51700 to aux_lst_notFoundname : X52700
+index_search: Adding X52700 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_est.acx, for cur_db : embl, nb_not_found=10, nb_res_found=0 
+lst_notFound content :
+embl:X17276 embl:X52702 embl:X68321 embl:Z12029 embl:X52703 embl:X52706 embl:X55027 embl:X52701 embl:X51700 embl:X52700 access_search : returned from index_search: nb_not_found_for_db=10, nb_res_found=0 
+Still looking for : X17276 X52702 X68321 Z12029 X52703 X52706 X55027 X52701 X51700 X52700 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_gss.acx
+name : X17276
+index_search: Adding X17276 to aux_lst_notFoundname : X52702
+index_search: Adding X52702 to aux_lst_notFoundname : X68321
+index_search: Adding X68321 to aux_lst_notFoundname : Z12029
+index_search: Adding Z12029 to aux_lst_notFoundname : X52703
+index_search: Adding X52703 to aux_lst_notFoundname : X52706
+index_search: Adding X52706 to aux_lst_notFoundname : X55027
+index_search: Adding X55027 to aux_lst_notFoundname : X52701
+index_search: Adding X52701 to aux_lst_notFoundname : X51700
+index_search: Adding X51700 to aux_lst_notFoundname : X52700
+index_search: Adding X52700 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_gss.acx, for cur_db : embl, nb_not_found=10, nb_res_found=0 
+lst_notFound content :
+embl:X17276 embl:X52702 embl:X68321 embl:Z12029 embl:X52703 embl:X52706 embl:X55027 embl:X52701 embl:X51700 embl:X52700 access_search : returned from index_search: nb_not_found_for_db=10, nb_res_found=0 
+Still looking for : X17276 X52702 X68321 Z12029 X52703 X52706 X55027 X52701 X51700 X52700 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_htc.acx
+name : X17276
+index_search: Adding X17276 to aux_lst_notFoundname : X52702
+index_search: Adding X52702 to aux_lst_notFoundname : X68321
+index_search: Adding X68321 to aux_lst_notFoundname : Z12029
+index_search: Adding Z12029 to aux_lst_notFoundname : X52703
+index_search: Adding X52703 to aux_lst_notFoundname : X52706
+index_search: Adding X52706 to aux_lst_notFoundname : X55027
+index_search: Adding X55027 to aux_lst_notFoundname : X52701
+index_search: Adding X52701 to aux_lst_notFoundname : X51700
+index_search: Adding X51700 to aux_lst_notFoundname : X52700
+index_search: Adding X52700 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_htc.acx, for cur_db : embl, nb_not_found=10, nb_res_found=0 
+lst_notFound content :
+embl:X17276 embl:X52702 embl:X68321 embl:Z12029 embl:X52703 embl:X52706 embl:X55027 embl:X52701 embl:X51700 embl:X52700 access_search : returned from index_search: nb_not_found_for_db=10, nb_res_found=0 
+Still looking for : X17276 X52702 X68321 Z12029 X52703 X52706 X55027 X52701 X51700 X52700 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_htg.acx
+name : X17276
+index_search: Adding X17276 to aux_lst_notFoundname : X52702
+index_search: Adding X52702 to aux_lst_notFoundname : X68321
+index_search: Adding X68321 to aux_lst_notFoundname : Z12029
+index_search: Adding Z12029 to aux_lst_notFoundname : X52703
+index_search: Adding X52703 to aux_lst_notFoundname : X52706
+index_search: Adding X52706 to aux_lst_notFoundname : X55027
+index_search: Adding X55027 to aux_lst_notFoundname : X52701
+index_search: Adding X52701 to aux_lst_notFoundname : X51700
+index_search: Adding X51700 to aux_lst_notFoundname : X52700
+index_search: Adding X52700 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_htg.acx, for cur_db : embl, nb_not_found=10, nb_res_found=0 
+lst_notFound content :
+embl:X17276 embl:X52702 embl:X68321 embl:Z12029 embl:X52703 embl:X52706 embl:X55027 embl:X52701 embl:X51700 embl:X52700 access_search : returned from index_search: nb_not_found_for_db=10, nb_res_found=0 
+Still looking for : X17276 X52702 X68321 Z12029 X52703 X52706 X55027 X52701 X51700 X52700 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_pat.acx
+name : X17276
+index_search: Adding X17276 to aux_lst_notFoundname : X52702
+index_search: Adding X52702 to aux_lst_notFoundname : X68321
+index_search: Adding X68321 to aux_lst_notFoundname : Z12029
+index_search: Adding Z12029 to aux_lst_notFoundname : X52703
+index_search: Adding X52703 to aux_lst_notFoundname : X52706
+index_search: Adding X52706 to aux_lst_notFoundname : X55027
+index_search: Adding X55027 to aux_lst_notFoundname : X52701
+index_search: Adding X52701 to aux_lst_notFoundname : X51700
+index_search: Adding X51700 to aux_lst_notFoundname : X52700
+index_search: Adding X52700 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_pat.acx, for cur_db : embl, nb_not_found=10, nb_res_found=0 
+lst_notFound content :
+embl:X17276 embl:X52702 embl:X68321 embl:Z12029 embl:X52703 embl:X52706 embl:X55027 embl:X52701 embl:X51700 embl:X52700 access_search : returned from index_search: nb_not_found_for_db=10, nb_res_found=0 
+Still looking for : X17276 X52702 X68321 Z12029 X52703 X52706 X55027 X52701 X51700 X52700 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_std.acx
+name : X17276
+index_search, setting db_name to : embl_stdname : X52702
+index_search, setting db_name to : embl_stdname : X68321
+index_search, setting db_name to : embl_stdname : Z12029
+index_search, setting db_name to : embl_stdname : X52703
+index_search, setting db_name to : embl_stdname : X52706
+index_search, setting db_name to : embl_stdname : X55027
+index_search, setting db_name to : embl_stdname : X52701
+index_search, setting db_name to : embl_stdname : X51700
+index_search, setting db_name to : embl_stdname : X52700
+index_search, setting db_name to : embl_std
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/embl_std.acx, for cur_db : embl, nb_not_found=0, nb_res_found=10 
+lst_notFound content :
+access_search : returned from index_search: nb_not_found_for_db=0, nb_res_found=10 
+Still looking for : 
+10 res found in .acx file for db: embl 
+goldenLstQuery, entering loop for db : enzyme
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/enzyme.acx
+name : 6.4.1.3
+index_search: Adding 6.4.1.3 to aux_lst_notFoundname : 4.2.3.15
+index_search: Adding 4.2.3.15 to aux_lst_notFoundname : 4.2.99.15
+index_search: Adding 4.2.99.15 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/enzyme.acx, for cur_db : enzyme, nb_not_found=3, nb_res_found=0 
+lst_notFound content :
+enzyme:6.4.1.3 enzyme:4.2.3.15 enzyme:4.2.99.15 access_search : returned from index_search: nb_not_found_for_db=3, nb_res_found=0 
+0 res found in .acx file for db: enzyme 
+Searching in file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/enzyme.vix 
+Searching in file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/enzyme.idx 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/enzyme.idx
+name : 6.4.1.3
+index_search, setting db_name to : enzymename : 4.2.3.15
+index_search, setting db_name to : enzymename : 4.2.99.15
+index_search, setting db_name to : enzyme
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/enzyme.idx, for cur_db : enzyme, nb_not_found=0, nb_res_found=3 
+lst_notFound content :
+3 res found in .lcx file for db: enzyme 
+goldenLstQuery, entering loop for db : genbank
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_new.acx
+name : M33635
+index_search: Adding M33635 to aux_lst_notFoundname : JX276463
+index_search, setting db_name to : genbank_newname : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : M15215
+index_search: Adding M15215 to aux_lst_notFoundname : M35305
+index_search: Adding M35305 to aux_lst_notFoundname : M81467
+index_search: Adding M81467 to aux_lst_notFoundname : M98015
+index_search: Adding M98015 to aux_lst_notFoundname : M97858
+index_search: Adding M97858 to aux_lst_notFoundname : S61325
+index_search: Adding S61325 to aux_lst_notFoundname : JX841180
+index_search, setting db_name to : genbank_new
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_new.acx, for cur_db : genbank, nb_not_found=13, nb_res_found=2 
+lst_notFound content :
+genbank:M33635 genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:M15215 genbank:M35305 genbank:M81467 genbank:M98015 genbank:M97858 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=13, nb_res_found=2 
+Still looking for : M33635 L08039 J03050 M67477 M60544 M19434 M81924 M15215 M35305 M81467 M98015 M97858 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_bct.acx
+name : M33635
+index_search, setting db_name to : genbank_bctname : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : M15215
+index_search, setting db_name to : genbank_bctname : M35305
+index_search, setting db_name to : genbank_bctname : M81467
+index_search, setting db_name to : genbank_bctname : M98015
+index_search: Adding M98015 to aux_lst_notFoundname : M97858
+index_search, setting db_name to : genbank_bctname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_bct.acx, for cur_db : genbank, nb_not_found=8, nb_res_found=7 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:M98015 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=8, nb_res_found=7 
+Still looking for : L08039 J03050 M67477 M60544 M19434 M81924 M98015 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_con.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : M98015
+index_search: Adding M98015 to aux_lst_notFoundname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_con.acx, for cur_db : genbank, nb_not_found=8, nb_res_found=7 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:M98015 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=8, nb_res_found=7 
+Still looking for : L08039 J03050 M67477 M60544 M19434 M81924 M98015 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_env.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : M98015
+index_search: Adding M98015 to aux_lst_notFoundname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_env.acx, for cur_db : genbank, nb_not_found=8, nb_res_found=7 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:M98015 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=8, nb_res_found=7 
+Still looking for : L08039 J03050 M67477 M60544 M19434 M81924 M98015 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_est.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : M98015
+index_search: Adding M98015 to aux_lst_notFoundname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_est.acx, for cur_db : genbank, nb_not_found=8, nb_res_found=7 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:M98015 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=8, nb_res_found=7 
+Still looking for : L08039 J03050 M67477 M60544 M19434 M81924 M98015 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_gss.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : M98015
+index_search: Adding M98015 to aux_lst_notFoundname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_gss.acx, for cur_db : genbank, nb_not_found=8, nb_res_found=7 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:M98015 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=8, nb_res_found=7 
+Still looking for : L08039 J03050 M67477 M60544 M19434 M81924 M98015 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_htc.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : M98015
+index_search: Adding M98015 to aux_lst_notFoundname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_htc.acx, for cur_db : genbank, nb_not_found=8, nb_res_found=7 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:M98015 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=8, nb_res_found=7 
+Still looking for : L08039 J03050 M67477 M60544 M19434 M81924 M98015 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_htg.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : M98015
+index_search: Adding M98015 to aux_lst_notFoundname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_htg.acx, for cur_db : genbank, nb_not_found=8, nb_res_found=7 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:M98015 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=8, nb_res_found=7 
+Still looking for : L08039 J03050 M67477 M60544 M19434 M81924 M98015 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_inv.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : M98015
+index_search, setting db_name to : genbank_invname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_inv.acx, for cur_db : genbank, nb_not_found=7, nb_res_found=8 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=7, nb_res_found=8 
+Still looking for : L08039 J03050 M67477 M60544 M19434 M81924 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_mam.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_mam.acx, for cur_db : genbank, nb_not_found=7, nb_res_found=8 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=7, nb_res_found=8 
+Still looking for : L08039 J03050 M67477 M60544 M19434 M81924 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_pat.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_pat.acx, for cur_db : genbank, nb_not_found=7, nb_res_found=8 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=7, nb_res_found=8 
+Still looking for : L08039 J03050 M67477 M60544 M19434 M81924 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_phg.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search: Adding M81924 to aux_lst_notFoundname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_phg.acx, for cur_db : genbank, nb_not_found=7, nb_res_found=8 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:M81924 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=7, nb_res_found=8 
+Still looking for : L08039 J03050 M67477 M60544 M19434 M81924 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_pln.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search: Adding J03050 to aux_lst_notFoundname : M67477
+index_search: Adding M67477 to aux_lst_notFoundname : M60544
+index_search: Adding M60544 to aux_lst_notFoundname : M19434
+index_search: Adding M19434 to aux_lst_notFoundname : M81924
+index_search, setting db_name to : genbank_plnname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_pln.acx, for cur_db : genbank, nb_not_found=6, nb_res_found=9 
+lst_notFound content :
+genbank:L08039 genbank:J03050 genbank:M67477 genbank:M60544 genbank:M19434 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=6, nb_res_found=9 
+Still looking for : L08039 J03050 M67477 M60544 M19434 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_pri.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : J03050
+index_search, setting db_name to : genbank_priname : M67477
+index_search, setting db_name to : genbank_priname : M60544
+index_search, setting db_name to : genbank_priname : M19434
+index_search, setting db_name to : genbank_priname : S61325
+index_search: Adding S61325 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_pri.acx, for cur_db : genbank, nb_not_found=2, nb_res_found=13 
+lst_notFound content :
+genbank:L08039 genbank:S61325 access_search : returned from index_search: nb_not_found_for_db=2, nb_res_found=13 
+Still looking for : L08039 S61325 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_rod.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFoundname : S61325
+index_search, setting db_name to : genbank_rod
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_rod.acx, for cur_db : genbank, nb_not_found=1, nb_res_found=14 
+lst_notFound content :
+genbank:L08039 access_search : returned from index_search: nb_not_found_for_db=1, nb_res_found=14 
+Still looking for : L08039 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_sts.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_sts.acx, for cur_db : genbank, nb_not_found=1, nb_res_found=14 
+lst_notFound content :
+genbank:L08039 access_search : returned from index_search: nb_not_found_for_db=1, nb_res_found=14 
+Still looking for : L08039 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_syn.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_syn.acx, for cur_db : genbank, nb_not_found=1, nb_res_found=14 
+lst_notFound content :
+genbank:L08039 access_search : returned from index_search: nb_not_found_for_db=1, nb_res_found=14 
+Still looking for : L08039 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_tsa.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_tsa.acx, for cur_db : genbank, nb_not_found=1, nb_res_found=14 
+lst_notFound content :
+genbank:L08039 access_search : returned from index_search: nb_not_found_for_db=1, nb_res_found=14 
+Still looking for : L08039 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_una.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_una.acx, for cur_db : genbank, nb_not_found=1, nb_res_found=14 
+lst_notFound content :
+genbank:L08039 access_search : returned from index_search: nb_not_found_for_db=1, nb_res_found=14 
+Still looking for : L08039 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_vrl.acx
+name : L08039
+index_search: Adding L08039 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_vrl.acx, for cur_db : genbank, nb_not_found=1, nb_res_found=14 
+lst_notFound content :
+genbank:L08039 access_search : returned from index_search: nb_not_found_for_db=1, nb_res_found=14 
+Still looking for : L08039 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_vrt.acx
+name : L08039
+index_search, setting db_name to : genbank_vrt
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/genbank_vrt.acx, for cur_db : genbank, nb_not_found=0, nb_res_found=15 
+lst_notFound content :
+access_search : returned from index_search: nb_not_found_for_db=0, nb_res_found=15 
+Still looking for : 
+15 res found in .acx file for db: genbank 
+goldenLstQuery, entering loop for db : refseq
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/refseq_new.acx
+name : NM_001082267
+index_search: Adding NM_001082267 to aux_lst_notFoundname : NM_001001440
+index_search: Adding NM_001001440 to aux_lst_notFoundname : NM_001101684
+index_search: Adding NM_001101684 to aux_lst_notFoundname : NM_001079485
+index_search: Adding NM_001079485 to aux_lst_notFoundname : NG_005132
+index_search: Adding NG_005132 to aux_lst_notFoundname : XM_004227550
+index_search, setting db_name to : refseq_newname : NG_005128
+index_search: Adding NG_005128 to aux_lst_notFoundname : NR_025834
+index_search: Adding NR_025834 to aux_lst_notFoundname : XM_002130464
+index_search, setting db_name to : refseq_newname : NR_033287
+index_search: Adding NR_033287 to aux_lst_notFoundname : NR_044731
+index_search: Adding NR_044731 to aux_lst_notFoundname : NM_173911
+index_search, setting db_name to : refseq_new
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/refseq_new.acx, for cur_db : refseq, nb_not_found=9, nb_res_found=3 
+lst_notFound content :
+refseq:NM_001082267 refseq:NM_001001440 refseq:NM_001101684 refseq:NM_001079485 refseq:NG_005132 refseq:NG_005128 refseq:NR_025834 refseq:NR_033287 refseq:NR_044731 access_search : returned from index_search: nb_not_found_for_db=9, nb_res_found=3 
+Still looking for : NM_001082267 NM_001001440 NM_001101684 NM_001079485 NG_005132 NG_005128 NR_025834 NR_033287 NR_044731 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/refseq_dna.acx
+name : NM_001082267
+index_search: Adding NM_001082267 to aux_lst_notFoundname : NM_001001440
+index_search: Adding NM_001001440 to aux_lst_notFoundname : NM_001101684
+index_search: Adding NM_001101684 to aux_lst_notFoundname : NM_001079485
+index_search: Adding NM_001079485 to aux_lst_notFoundname : NG_005132
+index_search, setting db_name to : refseq_dnaname : NG_005128
+index_search, setting db_name to : refseq_dnaname : NR_025834
+index_search: Adding NR_025834 to aux_lst_notFoundname : NR_033287
+index_search: Adding NR_033287 to aux_lst_notFoundname : NR_044731
+index_search: Adding NR_044731 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/refseq_dna.acx, for cur_db : refseq, nb_not_found=7, nb_res_found=5 
+lst_notFound content :
+refseq:NM_001082267 refseq:NM_001001440 refseq:NM_001101684 refseq:NM_001079485 refseq:NR_025834 refseq:NR_033287 refseq:NR_044731 access_search : returned from index_search: nb_not_found_for_db=7, nb_res_found=5 
+Still looking for : NM_001082267 NM_001001440 NM_001101684 NM_001079485 NR_025834 NR_033287 NR_044731 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/refseq_pro.acx
+name : NM_001082267
+index_search: Adding NM_001082267 to aux_lst_notFoundname : NM_001001440
+index_search: Adding NM_001001440 to aux_lst_notFoundname : NM_001101684
+index_search: Adding NM_001101684 to aux_lst_notFoundname : NM_001079485
+index_search: Adding NM_001079485 to aux_lst_notFoundname : NR_025834
+index_search: Adding NR_025834 to aux_lst_notFoundname : NR_033287
+index_search: Adding NR_033287 to aux_lst_notFoundname : NR_044731
+index_search: Adding NR_044731 to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/refseq_pro.acx, for cur_db : refseq, nb_not_found=7, nb_res_found=5 
+lst_notFound content :
+refseq:NM_001082267 refseq:NM_001001440 refseq:NM_001101684 refseq:NM_001079485 refseq:NR_025834 refseq:NR_033287 refseq:NR_044731 access_search : returned from index_search: nb_not_found_for_db=7, nb_res_found=5 
+Still looking for : NM_001082267 NM_001001440 NM_001101684 NM_001079485 NR_025834 NR_033287 NR_044731 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/refseq_rna.acx
+name : NM_001082267
+index_search, setting db_name to : refseq_rnaname : NM_001001440
+index_search, setting db_name to : refseq_rnaname : NM_001101684
+index_search, setting db_name to : refseq_rnaname : NM_001079485
+index_search, setting db_name to : refseq_rnaname : NR_025834
+index_search, setting db_name to : refseq_rnaname : NR_033287
+index_search, setting db_name to : refseq_rnaname : NR_044731
+index_search, setting db_name to : refseq_rna
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/refseq_rna.acx, for cur_db : refseq, nb_not_found=0, nb_res_found=12 
+lst_notFound content :
+access_search : returned from index_search: nb_not_found_for_db=0, nb_res_found=12 
+Still looking for : 
+12 res found in .acx file for db: refseq 
+goldenLstQuery, entering loop for db : uniprot
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/uniprot_sprot.acx
+name : ATP6_RICB8
+index_search: Adding ATP6_RICB8 to aux_lst_notFoundname : 032R_FRG3G
+index_search: Adding 032R_FRG3G to aux_lst_notFoundname : Z_WWAVU
+index_search: Adding Z_WWAVU to aux_lst_notFoundname : 028R_FRG3G
+index_search: Adding 028R_FRG3G to aux_lst_notFoundname : ATPA_BACTN
+index_search: Adding ATPA_BACTN to aux_lst_notFoundname : ATPAM_ARATH
+index_search: Adding ATPAM_ARATH to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/uniprot_sprot.acx, for cur_db : uniprot, nb_not_found=6, nb_res_found=0 
+lst_notFound content :
+uniprot:ATP6_RICB8 uniprot:032R_FRG3G uniprot:Z_WWAVU uniprot:028R_FRG3G uniprot:ATPA_BACTN uniprot:ATPAM_ARATH access_search : returned from index_search: nb_not_found_for_db=6, nb_res_found=0 
+Still looking for : ATP6_RICB8 032R_FRG3G Z_WWAVU 028R_FRG3G ATPA_BACTN ATPAM_ARATH 
+access_search : all results were not found ; continue 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/uniprot_trembl.acx
+name : ATP6_RICB8
+index_search: Adding ATP6_RICB8 to aux_lst_notFoundname : 032R_FRG3G
+index_search: Adding 032R_FRG3G to aux_lst_notFoundname : Z_WWAVU
+index_search: Adding Z_WWAVU to aux_lst_notFoundname : 028R_FRG3G
+index_search: Adding 028R_FRG3G to aux_lst_notFoundname : ATPA_BACTN
+index_search: Adding ATPA_BACTN to aux_lst_notFoundname : ATPAM_ARATH
+index_search: Adding ATPAM_ARATH to aux_lst_notFound
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/uniprot_trembl.acx, for cur_db : uniprot, nb_not_found=6, nb_res_found=0 
+lst_notFound content :
+uniprot:ATP6_RICB8 uniprot:032R_FRG3G uniprot:Z_WWAVU uniprot:028R_FRG3G uniprot:ATPA_BACTN uniprot:ATPAM_ARATH access_search : returned from index_search: nb_not_found_for_db=6, nb_res_found=0 
+Still looking for : ATP6_RICB8 032R_FRG3G Z_WWAVU 028R_FRG3G ATPA_BACTN ATPAM_ARATH 
+access_search : all results were not found ; continue 
+0 res found in .acx file for db: uniprot 
+Searching in file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/uniprot.vix 
+Searching in file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/uniprot_sprot.vix 
+Searching in file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/uniprot_sprot.idx 
+index_search called on : /users/vlegrand/Desktop/GOLDENDATA/index/golden/uniprot_sprot.idx
+name : ATP6_RICB8
+index_search, setting db_name to : uniprot_sprotname : 032R_FRG3G
+index_search, setting db_name to : uniprot_sprotname : Z_WWAVU
+index_search, setting db_name to : uniprot_sprotname : 028R_FRG3G
+index_search, setting db_name to : uniprot_sprotname : ATPA_BACTN
+index_search, setting db_name to : uniprot_sprotname : ATPAM_ARATH
+index_search, setting db_name to : uniprot_sprot
+ index_search, closed file : /users/vlegrand/Desktop/GOLDENDATA/index/golden/uniprot_sprot.idx, for cur_db : uniprot, nb_not_found=0, nb_res_found=6 
+lst_notFound content :
+6 res found in .lcx file for db: uniprot 

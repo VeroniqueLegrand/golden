@@ -1,0 +1,7 @@
+the ToDo list :
+
+- Use better merge algorithm.
+- Allow storing indexes descriptions in .dbx/.vix files, and retrieved with
+  golden `-d' (description) option.
+- Add documentation for virtual indexes (.vix) files 
+
