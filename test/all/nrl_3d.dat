@@ -1,0 +1,62 @@
+ENTRY            1PYMA      #type fragments
+TITLE            phosphoenolpyruvate mutase (EC 5.4.2.9), chain A - blue
+                   mussel (fragments)
+ALTERNATE_NAMES  phosphoenolpyruvate phosphomutase
+PDB_TITLE        phosphoenolpyruvate mutase from mollusk in with bound mg2-
+                   oxalate
+ORGANISM         #formal_name Mytilus edulis #common_name blue mussel
+   #note         expressed in Escherichia coli, strain b834(de3)
+REFERENCE        A76000
+   #authors      Huang, K.; Li, Z.; Herzberg, O.
+   #submission   submitted to the Protein Data Bank, February 1999
+   #cross-references PDB:1PYM
+REFERENCE        TN075665
+   #authors      Huang, K.; Li, Z.; Jia, Y.; Dunaway-mariano, D.; Herzberg, O.
+   #journal      Structure (London) (1999) 7:539
+   #title        Helix swapping between two alphaBETA BARRELS: crystal
+                   structure of phosphoenolpyruvate mutase with bound
+                   mg2+-oxalate.
+COMMENT    Resolution: 1.80 angstroms
+COMMENT    Determination: X-ray diffraction
+COMMENT    R-value: 0.188
+KEYWORDS         phosphotransferase; phosphomutase; p-c bond formation
+FEATURE
+   3-12               #region helix (right hand alpha)\
+   25-33              #region helix (right hand alpha)\
+   43-50              #region helix (right hand alpha)\
+   60-73              #region helix (right hand alpha)\
+   89-102             #region helix (right hand alpha)\
+   131-143            #region helix (right hand alpha)\
+   165-177            #region helix (right hand alpha)\
+   193-201            #region helix (right hand alpha)\
+   220-224            #region helix (right hand alpha)\
+   236-255            #region helix (right hand alpha)\
+   259-262            #region helix (right hand alpha)\
+   268-274            #region helix (right hand alpha)\
+   277-287            #region helix (right hand alpha)\
+   38-41,77-81,
+   106-110,151-155,
+   182-184            #region beta sheet\
+   54,81,83,110,155,
+   116,43,44          #site Asp, Asp, Asp, Glu, Arg, Lys, Gly, Leu #label PEP\
+   10                 #modified_site selenomethionine (Met)\
+   20                 #modified_site selenomethionine (Met)\
+   70                 #modified_site selenomethionine (Met)\
+   185                #modified_site selenomethionine (Met)\
+   199                #modified_site selenomethionine (Met)\
+   226                #modified_site selenomethionine (Met)\
+   230                #modified_site selenomethionine (Met)
+SUMMARY          #length 291  #checksum 4311
+SEQUENCE
+                 5        10        15        20        25        30
+       1 V K K T T Q L K Q/M/L N S K D L E F I/M/E A H N G L S A R I
+      31 V Q E A G F K G I W G S G L S V S A Q L G V R D S N E A S W
+      61 T Q V V E V L E F/M/S D A S D V P I L L D A D T G Y G N F N
+      91 N A R R L V R K L E D R G V A G A C L E D K L F P K T N S L
+     121 H D G R A Q P L A D I E E F A L K I K A C K D S Q T D P D F
+     151 C I V A R V E A F I A G W G L D E A L K R A E A Y R N A G A
+     181 D A I L/M/H S K K A D P S D I E A F/M/K A W N N Q G P V V I
+     211 V P T K Y Y K T P T D H F R D/M/G V S/M/V I W A N H N L R A
+     241 S V S A I Q Q T T K Q I Y D D Q S L V N V E D K I V S V K E
+     271 I F R L Q R D D E L V Q A E D K Y L P K N
+///

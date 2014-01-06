@@ -58,6 +58,7 @@ int main(int argc, char **argv) {
   /* Inits */
   prog = basename(*argv);
   nb_res=0;
+  input_file = NULL;
 
   /* Checks command line options & arguments */
   i = loc = acc = chk = 0; file = NULL;
@@ -78,9 +79,13 @@ int main(int argc, char **argv) {
     case 'o':
       file = optarg; break;
     case 'f':
+      /*if (argc!=0) {
+        error_fatal("arguments", "no arguments allowed with -f option");
+        return EXIT_SUCCESS;
+      }*/
       input_file = optarg; break;
       /*
-       * input_file contains many info such as bank:AC\n
+       * input_file contains many bank:AC infos
        */
     default:
       usage(EXIT_FAILURE); break; }
@@ -116,7 +121,7 @@ int main(int argc, char **argv) {
             error_fatal(input_file, "Couldn't close file");
 	  }
   }
-  else my_list=argv[0];
+  else my_list=argv[argc-1];
 
   char *end;
   // Trim leading space
@@ -215,7 +220,9 @@ int main(int argc, char **argv) {
 		  free(cur_res.real_dbase);
 	  }
   }
-  free(my_list);
+  if (input_file!=NULL) {
+    free(my_list);
+  }
   free(lst_work);
   free(res);
 

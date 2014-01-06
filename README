@@ -1,0 +1,16 @@
+GOLDEN
+
+Golden is a small databanks entries retriever. It searches and displays
+entries on indexed databanks `flat' files.
+
+This package currently contains the following programs :
+  golden   ... Entries retriever.
+  goldin   ... Indexes generator.
+
+Queries/Indexes can be made using entry name, primary accession
+numbers or even both (by default).
+
+Currently supported formats : Genbank, Embl, Pir codata, and
+assimiled.
+
+Any remark/suggestion/problem should be reported to <njoly@pasteur.fr>.
