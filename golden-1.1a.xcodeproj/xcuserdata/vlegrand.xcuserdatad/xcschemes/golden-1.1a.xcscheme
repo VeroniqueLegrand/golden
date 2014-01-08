@@ -44,7 +44,7 @@
       </PathRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-i -o mes_fiches.txt &quot;embl:X51700 genbank:JX841180&quot; "
+            argument = "-i -o mes_fiches.txt -f /Users/vlegrand/Desktop/golden-1.1a/data/nt_uniprot_only.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_10_first.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_misc_uniprot.txt"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
@@ -68,6 +68,11 @@
          </AdditionalOption>
          <AdditionalOption
             key = "MallocGuardEdges"
+            value = ""
+            isEnabled = "YES">
+         </AdditionalOption>
+         <AdditionalOption
+            key = "MallocStackLogging"
             value = ""
             isEnabled = "YES">
          </AdditionalOption>

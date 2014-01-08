@@ -5,6 +5,9 @@
 #endif
 
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <fcntl.h>
 
 #include <stdio.h>
 #ifdef STDC_HEADERS
@@ -39,30 +42,37 @@
 /* Functions prototypes */
 static void usage(int);
 void res_display(result_t res, int chk, char * file);
-// result_t* goldenLstQuery(char * lst,int acc,int loc , int * nb_res);
 void goldenLstQuery(result_t** ,int, int ,int , int * );
 static int compare_dbase (void const *a, void const *b);
+char * build_query(const int from_file, int optind, const int argc, char ** argv);
+int get_nbCards(char * my_list);
+void print_wrk_struct(int nb_cards,result_t ** lst_work);
+void print_results(int nb_res,int chk, result_t * res,char * file);
 
 /* Global variables */
 static char *prog;
+
+// for sepqrqting elements in the list containing the AC.
+// const char* separator=" ";
 
 
 /* Main function */
 int main(int argc, char **argv) {
   FILE  *h;
-  int i, loc, acc, chk, nb_res;
-  char *file, *input_file;
+  int i, loc, acc, chk, nb_res,from_file;
+  int nb_cards;
+  char *file=NULL;
   result_t *res;
   char * my_list=NULL;
 
   /* Inits */
   prog = basename(*argv);
   nb_res=0;
-  input_file = NULL;
+  // input_file = NULL;
 
   /* Checks command line options & arguments */
-  i = loc = acc = chk = 0; file = NULL;
-  while((i = getopt(argc, argv, "achilo:f:")) != -1) {
+  i = loc = acc = chk = from_file = 0; file = NULL;
+  while((i = getopt(argc, argv, "achilo:f")) != -1) {
     switch(i) {
     case 'a':
       acc = 1; break;
@@ -74,77 +84,22 @@ int main(int argc, char **argv) {
       loc = 1; break;
     case 'l':
       if (list_check()) {
-	error_fatal("databases", "cannot retrieve list"); }
+        error_fatal("databases", "cannot retrieve list"); }
       return EXIT_SUCCESS;
     case 'o':
       file = optarg; break;
     case 'f':
-      /*if (argc!=0) {
-        error_fatal("arguments", "no arguments allowed with -f option");
-        return EXIT_SUCCESS;
-      }*/
-      input_file = optarg; break;
-      /*
-       * input_file contains many bank:AC infos
-       */
+      from_file=1; break;
     default:
       usage(EXIT_FAILURE); break; }
   }
   if ((loc + acc) == 0) { loc = acc = 1; }
-
-  /* read input file into a list of bank:AC stuff. */
-  if (input_file!=NULL) {
-	  h= fopen(input_file, "r");
-	  if (h == NULL) {
-		  error_fatal(input_file,"Couldn't open file");
-		  return EXIT_SUCCESS; }
-	  fseek(h, 0, SEEK_END);
-	  int input_size = ftell(h);
-	  fseek(h, 0, SEEK_SET);
-	  my_list=(char *) malloc(input_size*sizeof(char));
-	  if (my_list==NULL) {
-		  error_fatal("memory", NULL);
-	  } else {
-	        fread(my_list, sizeof(char), input_size, h);
-	  }
-	  char * end_substr=strstr(my_list,"\n");
-	  while (end_substr!=NULL) {
-		  *end_substr=' ';
-		  end_substr=strstr(my_list,"\n");
-	  }
-
-#ifdef DEBUG
-	  printf ("Read: ");
-	  printf("%s ",my_list);
-#endif
-	  if (fclose(h ) == EOF) {
-            error_fatal(input_file, "Couldn't close file");
-	  }
+  if (optind==argc) {
+      error_fatal("arguments", "no input file or list of bank:AC provided.");
   }
-  else my_list=argv[argc-1];
-
-  char *end;
-  // Trim leading space
-  while(isspace(*my_list)) my_list++;
-  // Trim trailing space
-  end = my_list + strlen(my_list) - 1;
-  while(end > my_list && isspace(*end)) end--;
-  // Write new null terminator
-  *(end+1) = 0;
-
+  my_list=build_query(from_file,optind, argc, argv);
+  nb_cards=get_nbCards(my_list);
   // instantiate storage for query results.
-  // count spaces to know how many cards we are expecting.
-  char * tmp_list=my_list;
-  char * blank_pos;
-  int nb_cards=0;
-  blank_pos=strstr(tmp_list," ");
-  while (blank_pos!=NULL) {
-	  nb_cards++;
-	  tmp_list=blank_pos;
-	  tmp_list+=1;
-	  blank_pos=strstr(tmp_list," ");
-  }
-  nb_cards++;
   res=(result_t*) malloc(sizeof(result_t)*nb_cards);
   // instantiate data structure for work
   result_t ** lst_work=(result_t **) malloc(sizeof(result_t *)*nb_cards);
@@ -175,8 +130,137 @@ int main(int argc, char **argv) {
 
   // here, debug stuff, check that lst_work is filled correctly.
 #ifdef DEBUG
+  print_wrk_struct(nb_cards,lst_work);
+#endif
+  // now, sort "work" data structures so that e can work with it.
+  qsort (lst_work,nb_cards, sizeof(result_t *), compare_dbase);
+#ifdef DEBUG
+  print_wrk_struct(nb_cards,lst_work);
+#endif
+
+  goldenLstQuery(lst_work,nb_cards,acc,loc,&nb_res);
+  print_results(nb_res,chk,res,file);
+  
+  free(my_list);
+  free(lst_work);
+  free(res);
+
+  return EXIT_SUCCESS; }
+
+
+/*
+ From input arguments provided by the user, build a char string containing a list of bank:AC stuff separated by blanks.
+ Returns this string. The caller must free the memory allocated for the returned string.
+ */
+char * build_query(const int from_file, int optind, const int argc, char ** argv) {
+    struct stat buff;
+    int fd;
+    int new_siz,prev_siz=0;
+    char * my_list=NULL;
+    if (from_file) {
+        /* read input file(s)if any into a list of bank:AC stuff. */
+        while (optind<argc) {
+          printf("%s\n",argv[optind]);
+            fd=open(argv[optind],O_RDONLY);
+            if (fd==-1) { // maybe see errno in that case.
+                printf( "Error opening file: %s\n", strerror( errno ) );
+                error_fatal("argv[optind]", "cannot open file.");
+            }
+            if (fstat(fd, &buff)==-1) {
+                error_fatal("argv[optind]", "cannot get file size.");
+            }
+            if (my_list==NULL) {
+                if ((my_list=(char *) malloc(buff.st_size*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
+                new_siz=buff.st_size;
+            } else {
+                prev_siz+=1; // allocate 1car for separator
+                new_siz=prev_siz+buff.st_size;
+                if ((my_list=(char *) realloc(my_list,new_siz*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
+                strcat(my_list," ");
+            }
+            if (read(fd,&my_list[prev_siz],buff.st_size)==-1) {
+                error_fatal("argv[optind]", "cannot read file.");
+            }
+            prev_siz=new_siz;
+            close(fd);
+            optind++;
+        }
+    } else {
+        // argv[optind] looks like: "base:name"
+        while (optind<argc) {
+            //printf("%s\n",argv[optind]);
+            if (my_list==NULL) {
+                new_siz=strlen(argv[optind]);
+                // printf("Allocating %d bytes for my_list\n",new_siz);
+                if ((my_list=(char *) malloc(new_siz*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
+                strncpy(my_list,argv[optind],strlen(argv[optind]));
+            } else {
+                prev_siz+=1; // allocate space for separator
+                int arg_len=strlen(argv[optind])+1; //keep place for the \0 char.
+                new_siz=prev_siz+arg_len;
+                my_list = (char *) realloc(my_list,new_siz*sizeof(char));
+                // printf("Re-allocating %d bytes for my_list\n",new_siz);
+                if (my_list == NULL) {
+                    error_fatal("memory", "cannot allocate memory to store requested ACs.");
+                }
+                //printf("%s\n",my_list);
+                strcat(my_list," ");
+                // my_list[prev_siz-1]=' ';
+                // printf("%s\n",my_list);
+                int new_len=strlen(my_list);
+                strncat(my_list,argv[optind],arg_len-1);
+                // printf("%s\n",my_list);
+            }
+            prev_siz=new_siz;
+            optind++;
+        }
+        printf("%s\n",my_list);
+    }
+    
+    
+    char *end;
+    // Trim leading space
+    while(isspace(*my_list)) my_list++;
+    // Trim trailing space
+    end = my_list + strlen(my_list) - 1;
+    while(end > my_list && isspace(*end)) end--;
+    // Write new null terminator
+    *(end+1) = 0;
+    // replace '\n' with spaces.
+    char * p_cr;
+    while ((p_cr=strchr(my_list,'\n')) != NULL) {
+        *p_cr=' ';
+    }
+    return my_list;
+}
+
+
+/*
+ returns the number of cards in the query.
+ */
+int get_nbCards(char * my_list) {
+    // count spaces to know how many cards we are expecting.
+    char * tmp_list=my_list;
+    char * blank_pos;
+    int nb_cards=0;
+    blank_pos=strstr(tmp_list," ");
+    while (blank_pos!=NULL) {
+        nb_cards++;
+        tmp_list=blank_pos;
+        tmp_list+=1;
+        blank_pos=strstr(tmp_list," ");
+    }
+    nb_cards++;
+    return nb_cards;
+}
+
+
+/*
+ Debug utility : prints content of data structure used for work (array of adresses of result_t structures).
+ */
+void print_wrk_struct(int nb_cards,result_t ** lst_work) {
   printf("\nlst_work content :");
-  i=0;
+  int i=0;
   result_t * cur_res;
   while (i<nb_cards) {
 	  cur_res=lst_work[i];
@@ -184,30 +268,17 @@ int main(int argc, char **argv) {
 	  i++;
   }
   printf("\n");
-#endif
+}
 
-  // now, sort "work" data structures so that e can work with it.
-  qsort (lst_work,nb_cards, sizeof(result_t *), compare_dbase);
-
-#ifdef DEBUG
-  printf("\nlst_work content :");
-  i=0;
-  // result_t * cur_res;
-  while (i<nb_cards) {
-	  cur_res=lst_work[i];
-	  printf("%s:%s ",cur_res->dbase,cur_res->name);
-	  i++;
-  }
-  printf("\n");
-#endif
-
-
-  goldenLstQuery(lst_work,nb_cards,acc,loc,&nb_res);
-
+/*
+ prints results to screen or file and free memory allocated for strings in result_t structures.
+ TODO : move instructions that free memory somewhere else; it doesn't seem a good idea to do that here.
+ */
+void print_results(int nb_res,int chk,result_t * res,char * file) {
+  int i;
 #ifdef DEBUG
   printf("going to print : %d results \n",nb_res);
 #endif
-
   // first version prints output. Don't want to change main's prototype at the beginning.
   for (i=0; i<nb_res; i++) {
 	  res_display(res[i],chk, file);
@@ -220,13 +291,8 @@ int main(int argc, char **argv) {
 		  free(cur_res.real_dbase);
 	  }
   }
-  if (input_file!=NULL) {
-    free(my_list);
-  }
-  free(lst_work);
-  free(res);
 
-  return EXIT_SUCCESS; }
+}
 
 
 /*
@@ -234,12 +300,9 @@ int main(int argc, char **argv) {
  */
 static int compare_dbase (void const *a, void const *b)
 {
-   /* definir des pointeurs type's et initialise's
-      avec les parametres */
    result_t const * const *pa = a;
    result_t const * const *pb = b;
 
-   /* evaluer et retourner l'etat de l'evaluation (tri croissant) */
    /*
 #ifdef DEBUG
    printf("\nComparing  pa->dbase and  pb->dbase : ");
