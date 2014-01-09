@@ -31,8 +31,6 @@ ArrayOfResAddr access_search(result_t ** lst_current_db, int lst_size, char * db
   int fgetCalls=0; // need to count that for memory allocation.
   ArrayOfResAddr in_lst_notFound;
 
-
-
   // cur_base may be virtual.
   /* Virtual database indexes */
   file = index_file(NULL, db_name, VIRSUF);
