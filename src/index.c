@@ -43,9 +43,27 @@ static uint64_t iswap64(uint64_t);
 static uint32_t iswap32(uint32_t);
 
 // initializes the structure where we store info about the AC and locus that were not found.
+/*
 void initArrayOfResAddr(ArrayOfResAddr * const ia_arr) {
   ia_arr->addrArray=NULL;
   ia_arr->arrSize=0;
+}*/
+
+/*
+  Debug utility : prints content of data structure used for work (array of adresses of result_t structures).
+ */
+void print_wrk_struct(int nb_cards,result_t ** lst_work, int missing_only) {
+    printf("\nlst_work content :");
+    int i=0;
+    result_t * cur_res;
+    while (i<nb_cards) {
+  	  cur_res=lst_work[i];
+      if ((missing_only && (cur_res->filenb==NOT_FOUND)) || (!missing_only)){
+        printf("%s:%s ",cur_res->dbase,cur_res->name);
+      }
+  	  i++;
+    }
+    printf("\n");
 }
 
 
@@ -83,7 +101,7 @@ char *index_file(const char *dir, const char *dbase, const char *suf) {
  index_search returns the number of elements that were not found.
  index_search allocates memory for lst_not_found. It is up to the caller to free it.
  */
-int index_search(char *file, char * db_name, result_t ** lst, int lst_size, result_t *** const const lst_notFound , int * nb_res_found) {
+int index_search(char *file, char * db_name, result_t ** lst, int lst_size, int * nb_not_found) {
   FILE *f;
   int i, swap;
   uint64_t indnb;
@@ -92,9 +110,11 @@ int index_search(char *file, char * db_name, result_t ** lst, int lst_size, resu
   size_t len;
   struct stat st;
   indix_t inx;
-  int nb_not_found;
+  int nb_found;
 
-  nb_not_found=0;
+  nb_found=0;
+  result_t ** start_l=lst; // for printing debug nfo only.
+  
   if (lst==NULL) return 0;
   if (*lst==NULL) {
 	  error_fatal("index_search : bad list in input", NULL);
@@ -118,10 +138,10 @@ int index_search(char *file, char * db_name, result_t ** lst, int lst_size, resu
     if ((swap = (chk != st.st_size)) == 1) {
       indnb = iswap64(indnb); }
 
-  char * cur_db=(*lst)->dbase;
-  int idx=0;
+  // char * cur_db=(*lst)->dbase;
+  int idx_card;
 
-  while ((idx<lst_size) && (strcmp((*lst)->dbase,cur_db)==0))
+  for (idx_card=0;idx_card<lst_size;idx_card++)
   {
 	 char * name= (*lst)->name;
 #ifdef DEBUG
@@ -149,27 +169,8 @@ int index_search(char *file, char * db_name, result_t ** lst, int lst_size, resu
 	    if (i < 0) { max = cur - 1; }
 	   	if (i > 0) { min = cur + 1; }
 	 }
-	   	/* Not found */
-	 if (i != 0) {
-	    if ((lst_notFound==NULL) || ((*lst_notFound)==NULL)) {
-	    	// should never happen, raise exc. an adress were to store the list of entries that were not found must be provided by the caller.
-	    	error_fatal("mis-use of index_search, you should provide an adress in memory to list of entries that ere not found.",NULL);
-	   	}
-	   	else {
-	   		nb_not_found++;
-	   		result_t ** aux_lst_notFound=*lst_notFound; // for readability
-	   		aux_lst_notFound=realloc(aux_lst_notFound, nb_not_found*sizeof(result_t *));
-	   		if (aux_lst_notFound==NULL) {
-	   			 error_fatal("index_search: memory", NULL);
-	   		}
-	   		aux_lst_notFound[nb_not_found-1]=*lst;
-	   		*lst_notFound=aux_lst_notFound; // adress value aux_lst_notFound may have changed following realloc.
-#ifdef DEBUG
-	   		printf("index_search: Adding %s to aux_lst_notFound",((*lst)->name));
-#endif
-	   	}
-
-	 } else {
+   if (i==0) { // found
+      (*nb_not_found)--;
 	   	(*lst)->filenb = inx.filenb;
 	   	(*lst)->offset = inx.offset;
 	   	printf("index_search, setting db_name to : %s", db_name);
@@ -177,25 +178,27 @@ int index_search(char *file, char * db_name, result_t ** lst, int lst_size, resu
 	   	if (swap == 1) {
 	   		(*lst)->filenb = iswap32((*lst)->filenb);
 	   		(*lst)->offset = iswap64((*lst)->offset); }
-	   	*nb_res_found=*nb_res_found+1;
+	   	nb_found++;
 	 }
 	 ++lst;
-	 ++idx;
+	 // ++idx;
   }
   if (fclose(f) == EOF) {
     error_fatal(file, NULL); }
 #ifdef DEBUG
-	 printf("\n index_search, closed file : %s, for cur_db : %s, nb_not_found=%d, nb_res_found=%d \n",file,cur_db,nb_not_found,*nb_res_found);
-	 printf("lst_notFound content :\n");
-	 int j=0;
+  printf("\n index_search, closed file : %s, for cur_db : %s, nb_not_found=%d, nb_res_found=%d \n",file,db_name,*nb_not_found,nb_found);
+  print_wrk_struct(lst_size,start_l, 1);
+	 /*int j=0;
 	 result_t * cur_res;
-	 while (j<nb_not_found) {
-	  cur_res=(*lst_notFound)[j];
-	  printf("%s:%s ",cur_res->dbase,cur_res->name);
+	 while (j<lst_size) {
+	  cur_res=start_l[j];
+    if (cur_res->filenb==NOT_FOUND) {
+	    printf("%s:%s ",cur_res->dbase,cur_res->name);
+    }
 	  j++;
-  }
+  }*/
 #endif
-  return nb_not_found;}
+  return nb_found;}
 
 
 /* Merge indexes */

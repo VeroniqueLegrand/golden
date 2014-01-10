@@ -63,7 +63,7 @@ ArrayOfResAddr locus_search(result_t ** lst_current_db,int lst_size,char *dbase,
 #endif
   in_lst_notFound.addrArray=malloc(sizeof(result_t *));
   in_lst_notFound.arrSize=0;
-  in_lst_notFound.arrSize=index_search(file, dbase, lst_current_db,lst_size, &in_lst_notFound.addrArray, nb_res_found);
+  in_lst_notFound.arrSize=index_search(file, dbase, lst_current_db,lst_size, nb_res_found);
   free(file);
   return in_lst_notFound; }
 

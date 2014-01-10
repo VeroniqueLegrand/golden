@@ -44,7 +44,7 @@
       </PathRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-i -o mes_fiches.txt -f /Users/vlegrand/Desktop/golden-1.1a/data/nt_uniprot_only.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_10_first.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_misc_uniprot.txt"
+            argument = "-o mes_fiches.txt -f /Users/vlegrand/Desktop/golden-1.1a/data/nt_uniprot_only.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_10_first.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_misc_uniprot.txt"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

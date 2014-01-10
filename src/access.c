@@ -25,11 +25,10 @@
  * It is used and "free" by the caller.
  * For recursive calls to access_search and calls to index_search, use memory areas allocated by access_search.
  */
-ArrayOfResAddr access_search(result_t ** lst_current_db, int lst_size, char * db_name, int * nb_res_found) {
+void access_search(result_t ** lst_current_db, int lst_size, char * db_name, int * nb_AC_not_found) {
   FILE *f;
   char *p, *file, buf[1024];
-  int fgetCalls=0; // need to count that for memory allocation.
-  ArrayOfResAddr in_lst_notFound;
+  result_t ** start_l=lst_current_db; // for printing debug info
 
   // cur_base may be virtual.
   /* Virtual database indexes */
@@ -40,56 +39,57 @@ ArrayOfResAddr access_search(result_t ** lst_current_db, int lst_size, char * db
 
     while (fgets(buf, 1023, f) != NULL) {
       if ((p = strrchr(buf, '\n')) != NULL) { *p = '\0'; }
-      in_lst_notFound=access_search(lst_current_db, lst_size, buf, nb_res_found);
+      access_search(lst_current_db, lst_size, buf, nb_AC_not_found);
 #ifdef DEBUG
-      // dump in_lst_notFound
+      // dump list of accession numbers that were not found yet.
+      print_wrk_struct(lst_size,start_l,1);
+      /*
       int i;
       result_t * cur_res;
       printf("Still looking for : ");
-      for (i=0; i<in_lst_notFound.arrSize; i++) {
-    	  cur_res=in_lst_notFound.addrArray[i];
-    	  printf("%s ",cur_res->name);
+      for (i=0; i<lst_size; i++) {
+    	  cur_res=*start_l;
+        if (cur_res->filenb==NOT_FOUND) {
+          printf("%s ",cur_res->name);
+        }
+        start_l++;
       }
-      printf("\n");
+      printf("\n"); */
 #endif
-      if (in_lst_notFound.arrSize!=0) {
+      if (*nb_AC_not_found!=0) {
 #ifdef DEBUG
     	  printf("access_search : all results were not found ; continue \n");
 #endif
-    	  if (fgetCalls>=1) {
-    		  free(lst_current_db); // have to free that since it points to memory allocated by index_search during the previous call to access_search (for the previous file in the virtual database indexes).
-    	  }
-    	  lst_current_db=in_lst_notFound.addrArray; // search only for results that were not found previously.
-    	  lst_size=in_lst_notFound.arrSize;
-    	  fgetCalls++;
     	  continue;
       }
-      break; }
-    if (fgetCalls>1 && in_lst_notFound.arrSize==0) { free(lst_current_db);} // if fgetCalls=1 or 0,lst_current_db is lstGoldenQuery's lst_work; and it is free in main.
+      break;
+    }
+    // if (fgetCalls>1 && in_lst_notFound.arrSize==0) { free(lst_current_db);} // if fgetCalls=1 or 0,lst_current_db is lstGoldenQuery's lst_work; and it is free in main.
                                                                             // if in_lst_notFound.arrSize!=0 : memory may need to be used after when looking for locus. => free it only if all AC were found.
     if (fclose(f) == EOF) {
       error_fatal("memory", NULL); }
     free(file);
-    return in_lst_notFound;  }
+    return;  }
 
   /* Real database indexes */
   file = index_file(NULL, db_name, ACCSUF);
 #ifdef DEBUG
   //printf("Searching in file : %s \n",file);
 #endif
+  /*
   in_lst_notFound.addrArray=malloc(sizeof(result_t *));
-  in_lst_notFound.arrSize=0;
-  in_lst_notFound.arrSize=index_search(file, db_name, lst_current_db,lst_size, &in_lst_notFound.addrArray, nb_res_found);
+  in_lst_notFound.arrSize=0;*/
+  int nb_AC_found=index_search(file, db_name, lst_current_db,lst_size, nb_AC_not_found);
 #ifdef DEBUG
-  printf("access_search : returned from index_search: nb_not_found_for_db=%d, nb_res_found=%d \n",in_lst_notFound.arrSize,*nb_res_found);
+  printf("access_search : returned from index_search: nb_not_found_for_db=%d, nb_res_found=%d \n",*nb_AC_not_found,nb_AC_found);
 #endif
   // if everything was found, free memory.
-  if (in_lst_notFound.arrSize==0) {
+  /*if (in_lst_notFound.arrSize==0) {
 	  free(in_lst_notFound.addrArray); // pb here.
 	  initArrayOfResAddr(&in_lst_notFound);
-  }
+  }*/
   free(file);
-  return in_lst_notFound;	}
+  return;	}
 
 
 /* Merge accession indexes */

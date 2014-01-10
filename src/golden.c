@@ -62,12 +62,13 @@ typedef struct {
 static void usage(int);
 void res_display(result_t res, int chk, char * file);
 int goldenLstQuery(result_t** ,int, int ,int);
+int performGoldenQuery(WAllQueryData, int,int);
 static int compare_dbase (void const *a, void const *b);
 char * build_query(const int from_file, int optind, const int argc, char ** argv);
 WAllQueryData prepareQueryData(char *, result_t * ,int);
 void freeQueryData(WAllQueryData wData);
 int get_nbCards(char * my_list);
-void print_wrk_struct(int nb_cards,result_t ** lst_work);
+// void print_wrk_struct(int nb_cards,result_t ** lst_work);
 void print_results(int nb_res,int chk, result_t * res,char * file);
 
 /* Global variables */
@@ -121,7 +122,7 @@ int main(int argc, char **argv) {
   // instantiate storage for query results.
   res=(result_t*) malloc(sizeof(result_t)*nb_cards);
   WAllQueryData wData=prepareQueryData(my_list,res,nb_cards);
-  
+  nb_res=performGoldenQuery(wData,acc,loc);
   //nb_res=goldenLstQuery(lst_work,nb_cards,acc,loc);
   // print_results(nb_res,chk,res,file);
   
@@ -243,6 +244,7 @@ int get_nbCards(char * my_list) {
 /*
  Debug utility : prints content of data structure used for work (array of adresses of result_t structures).
  */
+/*
 void print_wrk_struct(int nb_cards,result_t ** lst_work) {
   printf("\nlst_work content :");
   int i=0;
@@ -253,7 +255,7 @@ void print_wrk_struct(int nb_cards,result_t ** lst_work) {
 	  i++;
   }
   printf("\n");
-}
+}*/
 
 /*
  prints results to screen or file and free memory allocated for strings in result_t structures.
@@ -386,16 +388,16 @@ WAllQueryData prepareQueryData(char * my_list, result_t * res,int nb_cards) {
   }
   // here, debug stuff, check that lst_work is filled correctly.
 #ifdef DEBUG
-  print_wrk_struct(nb_cards,lst_work);
+  print_wrk_struct(nb_cards,lst_work,0);
 #endif
   // now, sort "work" data structures so that we can work with it.
   qsort (lst_work,nb_cards, sizeof(result_t *), compare_dbase);
 #ifdef DEBUG
-  print_wrk_struct(nb_cards,lst_work);
+  print_wrk_struct(nb_cards,lst_work,0);
 #endif
   
   char * curDBName=lst_work[0]->dbase;
-  int cnt_cards4db=1;
+  int cnt_cards4db=0;
   int nb_db=1;
   
   WDBQueryData infoCurDB;
@@ -443,99 +445,26 @@ void freeQueryData(WAllQueryData wData) {
  returns :
     tot_nb_res_found : total number of cards found
 */
-//void goldenLstQuery(result_t** lst_searched_for,int lst_siz,int acc,int loc , int * nb_res_found) {
-int goldenLstQuery(result_t** lst_searched_for,int tot_nb_cards,int acc,int loc) {
-	int loc4base;
-	int lst_notFound_siz;
-	int nb_res_acc, nb_res_loc; // respectively : number of AC and number of locus found for the current db.
+
+int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
+  int loc4base,idx_db;
+  char * cur_dbname;
   int tot_nb_res_found=0;
-	result_t ** lst_notFound=NULL; // array of pointers towards AC that were not found in the indicated DB.
-	ArrayOfResAddr lst_AC_notFound_db; // array of AC that were not found for the current DB
-	ArrayOfResAddr lst_LOC_notFound_db; // array of locus thst were not found for the current DB.
-	result_t ** lst_current_db=lst_searched_for; // current position in the lst_searched_for array
+  int nb_AC_not_found;
   
-	char * cur_dbname;
-	/*int idx=0; // to iterate over lst_searched_for
-	int prev_idx=0;
-	int delta=0;*/
-	//int orig_lst_siz=nb_cards;
-  
-  /*if (lst_searched_for!=NULL) {
-    cur_dbname=(*lst_searched_for)->dbase;
-  } else {
-    error_fatal("goldenLstQuery", "NULL array passed as argument");
-  }*/
-
-	initArrayOfResAddr(&lst_AC_notFound_db);
-	initArrayOfResAddr(&lst_LOC_notFound_db);
-
-  int nb_processed_cards,nb_remaining_cards;
-	while (nb_processed_cards<tot_nb_cards) { // That loop is entered for each db_name.
-		cur_dbname=(*lst_current_db)->dbase;
-		nb_remaining_cards=tot_nb_cards-nb_processed_cards;
-#ifdef DEBUG
-		printf("goldenLstQuery, entering loop for db : %s\n",cur_dbname);
-#endif
-		loc4base=loc;
-		nb_res_acc=0;
-		nb_res_loc=0;
-    int lst_siz;
-    int idx;
-		if (acc) {
-			lst_AC_notFound_db=access_search(lst_current_db,lst_siz,cur_dbname, &nb_res_acc); 
-			tot_nb_res_found+=nb_res_acc;
-			lst_notFound=lst_AC_notFound_db.addrArray;
-			lst_notFound_siz=lst_AC_notFound_db.arrSize;
-			if (lst_AC_notFound_db.arrSize==0) loc4base = 0; // all "name" were found in AC indexes for that base.
-#ifdef DEBUG
-			printf("%d res found in .acx file for db: %s \n",nb_res_acc,cur_dbname);
-#endif
-		} else {
-			lst_notFound=lst_current_db; // in that case, the user indicated that they only wanted to look for locus names. (1)
-			lst_notFound_siz=nb_remaining_cards;
-		}
-		if (loc4base) {
-			/* in that case, 2 possibilities :
-			- user specified that they wanted to look only for locus (1),
-			- user didn't specify locus or AC but previous call to access_search didn't find all the AC (2).
-			*/
-			lst_LOC_notFound_db=locus_search(lst_notFound,lst_notFound_siz,cur_dbname,&nb_res_loc);
-			tot_nb_res_found+=nb_res_loc;
-			// idx=idx+nb_res_loc;
-#ifdef DEBUG
-			printf("%d res found in .lcx file for db: %s \n",nb_res_loc,cur_dbname);
-#endif
-			if (acc) { // case (2), lst_notFound=lst_AC_notFound_db.addrArray
-				free(lst_notFound);
-			}
-			if (lst_LOC_notFound_db.arrSize!=0) { // not all locus (or ac+locus) were found, log information and free memory.
-				// idx=idx+lst_LOC_notFound_db.arrSize;
-				logEntriesNotFound(lst_LOC_notFound_db.addrArray,lst_LOC_notFound_db.arrSize,cur_dbname);
-				free(lst_LOC_notFound_db.addrArray);
-				initArrayOfResAddr(&lst_LOC_notFound_db);
-			}
-		} else {
-			/* - user specified they wanted only AC or, (3)
-			   - all requested stuff were found in .acx files.
-			 */
-			if (lst_AC_notFound_db.arrSize!=0) { // case (3)
-				// in that case, the user is only looking for AC and some of them were not found: log it somewhere! and free memory.
-				idx=idx+lst_AC_notFound_db.arrSize;
-				logEntriesNotFound(lst_AC_notFound_db.addrArray,lst_AC_notFound_db.arrSize,cur_dbname);
-				free(lst_AC_notFound_db.addrArray);
-				initArrayOfResAddr(&lst_AC_notFound_db);
-			}
-		}/*
-		if (prev_idx==0) {
-			lst_current_db=lst_current_db+idx;
-		} else {
-			delta=idx-prev_idx;
-			lst_current_db=lst_current_db+delta;
-		}
-		prev_idx=idx;*/
-	}
+  int nb_db=wData.meta_lst_work.nb_db;
+  WDBQueryData * l_infoDB=wData.meta_lst_work.l_infoDB;
+  for (idx_db=0;idx_db<nb_db;idx_db++) {
+    nb_AC_not_found=l_infoDB[idx_db].len_l;
+    cur_dbname=(*(l_infoDB[idx_db].start_l))->dbase;
+    // printf("cur_dbname : %s",cur_dbname);
+    if (acc) {
+			access_search(l_infoDB[idx_db].start_l,l_infoDB[idx_db].len_l,cur_dbname, &nb_AC_not_found);
+    }
+  }
   return tot_nb_res_found;
 }
+
 
 
 
