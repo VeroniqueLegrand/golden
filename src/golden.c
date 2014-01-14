@@ -53,6 +53,7 @@ WAllQueryData prepareQueryData(char *, result_t * ,int);
 void freeQueryData(WAllQueryData wData);
 int get_nbCards(char * my_list);
 void print_results(int nb_res,int chk, result_t * res,char * file);
+void logEntriesNotFound(WAllQueryData wData,int nb_notFound);
 
 /* Global variables */
 static char *prog;
@@ -107,14 +108,13 @@ int main(int argc, char **argv) {
   WAllQueryData wData=prepareQueryData(my_list,res,nb_cards);
   nb_res=performGoldenQuery(wData,acc,loc);
   
+  logEntriesNotFound(wData,nb_cards-nb_res);
   // print results
   print_results(wData.nb_cards,chk,res,file);
   
   free(my_list);
   freeQueryData(wData);
-  // free(lst_work);
   free(res);
-
   return EXIT_SUCCESS; }
 
 
@@ -237,6 +237,7 @@ void print_results(int nb_res,int chk,result_t * res,char * file) {
 #endif
   // first version prints output. Don't want to change main's prototype at the beginning.
   for (i=0; i<nb_res; i++) {
+    if (res[i].filenb==NOT_FOUND) continue; // only call print for results that were found. 
 	  res_display(res[i],chk, file);
 	  printf("###############################################################################");
 	  printf("                                                                               ");
@@ -319,12 +320,12 @@ void logEntriesNotFound(WAllQueryData wData,int nb_notFound) {
 	while ((i<wData.nb_cards) && (j<nb_notFound)) {
 		cur_res=wData.lst_work[i];
     if (cur_res->filenb==NOT_FOUND) {
-      fprintf(stderr, "%s:%s",cur_res->dbase,cur_res->name);
+      fprintf(stderr, "%s:%s ",cur_res->dbase,cur_res->name);
       j++;
     }
 		i++;
-    
 	}
+  fprintf(stderr, "\n");
 }
 
 
@@ -438,6 +439,7 @@ int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
 			access_search(queryDB,cur_dbname, &nb_AC_not_found);
       if (nb_AC_not_found==0) loc4base=0;
       nb_locus_not_found=nb_AC_not_found;
+      tot_nb_res_not_found+=nb_AC_not_found;
     }
     if (loc4base) {
       locus_search(queryDB,cur_dbname,&nb_locus_not_found);
@@ -447,7 +449,8 @@ int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
     }
   }
   // log entries not found
-  logEntriesNotFound(wData,tot_nb_res_not_found);
+  
+  // logEntriesNotFound(wData,tot_nb_res_not_found);
   tot_nb_res_found=wData.nb_cards-tot_nb_res_not_found;
   return tot_nb_res_found;
 }
