@@ -32,7 +32,7 @@ typedef struct {
   int filenb;
   off_t offset; } result_t;
 
-void print_wrk_struct(int nb_cards,result_t ** lst_work,int);
+void print_wrk_struct(result_t ** lst_work,int nb_cards,int);
 
 
 typedef struct {
@@ -55,8 +55,7 @@ typedef struct {
 
 /* Functions prototypes */
 int index_merge(char *, long, indix_t *);
-//int index_search(char *, char *, result_t ** , int, result_t *** const  , int * );
-int index_search(char *file, char * db_name, result_t ** lst, int lst_size, int * nb_not_found);
+int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_found);
 const char *index_dir(void);
 char *index_file(const char *, const char *, const char *);
 

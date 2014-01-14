@@ -52,7 +52,6 @@ char * build_query(const int from_file, int optind, const int argc, char ** argv
 WAllQueryData prepareQueryData(char *, result_t * ,int);
 void freeQueryData(WAllQueryData wData);
 int get_nbCards(char * my_list);
-// void print_wrk_struct(int nb_cards,result_t ** lst_work);
 void print_results(int nb_res,int chk, result_t * res,char * file);
 
 /* Global variables */
@@ -312,12 +311,13 @@ void res_display(result_t res, int chk, char * file) {
 
 
 
-void logEntriesNotFound(WAllQueryData ** wData,int nb_notFound) {
+void logEntriesNotFound(WAllQueryData wData,int nb_notFound) {
 	fprintf(stderr, "entries not found : ");
 	result_t * cur_res;
-	int i=0,j=0;
-	while (i<wData.nb_cards) && (j<nb_notFound) {
-		cur_res=lst_NotFound[i];
+	int i=0;
+  int j=0;
+	while ((i<wData.nb_cards) && (j<nb_notFound)) {
+		cur_res=wData.lst_work[i];
     if (cur_res->filenb==NOT_FOUND) {
       fprintf(stderr, "%s:%s",cur_res->dbase,cur_res->name);
       j++;
@@ -362,12 +362,12 @@ WAllQueryData prepareQueryData(char * my_list, result_t * res,int nb_cards) {
   }
   // here, debug stuff, check that lst_work is filled correctly.
 #ifdef DEBUG
-  print_wrk_struct(nb_cards,lst_work,0);
+  print_wrk_struct(lst_work,nb_cards,0);
 #endif
   // now, sort "work" data structures so that we can work with it.
   qsort (lst_work,nb_cards, sizeof(result_t *), compare_dbase);
 #ifdef DEBUG
-  print_wrk_struct(nb_cards,lst_work,0);
+  print_wrk_struct(lst_work,nb_cards,0);
 #endif
   
   char * curDBName=lst_work[0]->dbase;
@@ -426,20 +426,21 @@ int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
   int nb_AC_not_found,nb_locus_not_found;
   
   int nb_db=wData.meta_lst_work.nb_db;
-  WDBQueryData * l_infoDB=wData.meta_lst_work.l_infoDB;
+  // WDBQueryData * l_infoDB=wData.meta_lst_work.l_infoDB[];
   for (idx_db=0;idx_db<nb_db;idx_db++) {
+    WDBQueryData queryDB=wData.meta_lst_work.l_infoDB[idx_db];
     loc4base=loc;
-    nb_AC_not_found=l_infoDB[idx_db].len_l;
-    nb_locus_not_found=l_infoDB[idx_db].len_l;
-    cur_dbname=(*(l_infoDB[idx_db].start_l))->dbase;
+    nb_AC_not_found=queryDB.len_l;
+    nb_locus_not_found=queryDB.len_l;
+    cur_dbname=(*queryDB.start_l)->dbase;
     // printf("cur_dbname : %s",cur_dbname);
     if (acc) {
-			access_search(wData,cur_dbname, &nb_AC_not_found);
+			access_search(queryDB,cur_dbname, &nb_AC_not_found);
       if (nb_AC_not_found==0) loc4base=0;
       nb_locus_not_found=nb_AC_not_found;
     }
     if (loc4base) {
-      locus_search(wData,cur_dbname,&nb_locus_not_found);
+      locus_search(queryDB,cur_dbname,&nb_locus_not_found);
       tot_nb_res_not_found+=nb_locus_not_found;
     } else {
       tot_nb_res_not_found+=nb_AC_not_found;

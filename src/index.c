@@ -184,7 +184,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
     error_fatal(file, NULL); }
 #ifdef DEBUG
   printf("\n index_search, closed file : %s, for cur_db : %s, nb_not_found=%d, nb_res_found=%d \n",file,db_name,*nb_not_found,nb_found);
-  print_wrk_struct(lst_size,start_l, 1);
+  print_wrk_struct(start_l,lst_size, 1);
 #endif
   return nb_found;}
 

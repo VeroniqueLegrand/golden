@@ -19,40 +19,35 @@
 
 
 /* Search in entry names indexes */
-ArrayOfResAddr locus_search(result_t ** lst_current_db,int lst_size,char *dbase, int * nb_res_found) {
+void locus_search(WDBQueryData wData, char * dbase, int * nb_locus_not_found) {
   FILE *f;
   char *p, *file, buf[1024];
-  *nb_res_found=0;
-  int fgetCalls=0; // need to count that for memory allocation.
-  ArrayOfResAddr in_lst_notFound;
-
-
+  result_t ** start_l=wData.start_l; // for printing debug info
+  
   /* Virtual database indexes */
   file = index_file(NULL, dbase, VIRSUF);
-#ifdef DEBUG
-  printf("Searching in file : %s \n",file);
-#endif
    if (access(file, F_OK) != -1) {
     if ((f = fopen(file, "r")) == NULL) {
       error_fatal("memory", NULL); }
     while (fgets(buf, 1023, f) != NULL) {
       if ((p = strrchr(buf, '\n')) != NULL) { *p = '\0'; }
-      in_lst_notFound= locus_search(lst_current_db, lst_size,buf,  nb_res_found);
-      if (in_lst_notFound.arrSize!=0) {
-    	  if (fgetCalls>=1) {
-    	      free(lst_current_db); // have to free that since it points to memory allocated by index_search during the previous call to locus_search (for the previous file in the virtual database indexes).
-    	  }
-    	  lst_current_db=in_lst_notFound.addrArray; // search only for results that were not found previously.
-    	  lst_size=in_lst_notFound.arrSize;
-    	  fgetCalls++;
-    	  continue;
+      locus_search(wData,buf, nb_locus_not_found);
+#ifdef DEBUG
+      // dump list of accession numbers that were not found yet.
+      print_wrk_struct(start_l,wData.len_l,1);
+#endif
+      if (*nb_locus_not_found!=0) {
+#ifdef DEBUG
+    	  printf("access_search : all results were not found ; continue \n");
+#endif
+        continue;
       }
-      break; }
-    if (fgetCalls>1 && in_lst_notFound.arrSize==0) { free(lst_current_db);} // else lst_current_db is lstGoldenQuery's lst_work; and it is free in main. Or, we need it to log info about what was not found.
+      break;
+    }
     if (fclose(f) == EOF) {
       error_fatal("memory", NULL); }
     free(file);
-    return in_lst_notFound;
+    return;
    }
 
 
@@ -61,11 +56,9 @@ ArrayOfResAddr locus_search(result_t ** lst_current_db,int lst_size,char *dbase,
 #ifdef DEBUG
   printf("Searching in file : %s \n",file);
 #endif
-  in_lst_notFound.addrArray=malloc(sizeof(result_t *));
-  in_lst_notFound.arrSize=0;
-  in_lst_notFound.arrSize=index_search(file, dbase, lst_current_db,lst_size, nb_res_found);
+  int nb_found=index_search(file, dbase, wData,nb_locus_not_found);
   free(file);
-  return in_lst_notFound; }
+  return ; }
 
 
 /* Merge locus indexes with existing file */
