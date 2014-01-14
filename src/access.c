@@ -25,10 +25,10 @@
  * It is used and "free" by the caller.
  * For recursive calls to access_search and calls to index_search, use memory areas allocated by access_search.
  */
-void access_search(result_t ** lst_current_db, int lst_size, char * db_name, int * nb_AC_not_found) {
+void access_search(WDBQueryData wData, char * db_name, int * nb_AC_not_found) {
   FILE *f;
   char *p, *file, buf[1024];
-  result_t ** start_l=lst_current_db; // for printing debug info
+  result_t ** start_l=wData.start_l; // for printing debug info
 
   // cur_base may be virtual.
   /* Virtual database indexes */
@@ -39,22 +39,10 @@ void access_search(result_t ** lst_current_db, int lst_size, char * db_name, int
 
     while (fgets(buf, 1023, f) != NULL) {
       if ((p = strrchr(buf, '\n')) != NULL) { *p = '\0'; }
-      access_search(lst_current_db, lst_size, buf, nb_AC_not_found);
+      access_search(wData, buf, nb_AC_not_found);
 #ifdef DEBUG
       // dump list of accession numbers that were not found yet.
-      print_wrk_struct(lst_size,start_l,1);
-      /*
-      int i;
-      result_t * cur_res;
-      printf("Still looking for : ");
-      for (i=0; i<lst_size; i++) {
-    	  cur_res=*start_l;
-        if (cur_res->filenb==NOT_FOUND) {
-          printf("%s ",cur_res->name);
-        }
-        start_l++;
-      }
-      printf("\n"); */
+      print_wrk_struct(start_l,wData.len_l,1);
 #endif
       if (*nb_AC_not_found!=0) {
 #ifdef DEBUG
@@ -64,8 +52,6 @@ void access_search(result_t ** lst_current_db, int lst_size, char * db_name, int
       }
       break;
     }
-    // if (fgetCalls>1 && in_lst_notFound.arrSize==0) { free(lst_current_db);} // if fgetCalls=1 or 0,lst_current_db is lstGoldenQuery's lst_work; and it is free in main.
-                                                                            // if in_lst_notFound.arrSize!=0 : memory may need to be used after when looking for locus. => free it only if all AC were found.
     if (fclose(f) == EOF) {
       error_fatal("memory", NULL); }
     free(file);
@@ -76,18 +62,10 @@ void access_search(result_t ** lst_current_db, int lst_size, char * db_name, int
 #ifdef DEBUG
   //printf("Searching in file : %s \n",file);
 #endif
-  /*
-  in_lst_notFound.addrArray=malloc(sizeof(result_t *));
-  in_lst_notFound.arrSize=0;*/
-  int nb_AC_found=index_search(file, db_name, lst_current_db,lst_size, nb_AC_not_found);
+    int nb_AC_found=index_search(file, db_name, wData, nb_AC_not_found);
 #ifdef DEBUG
-  printf("access_search : returned from index_search: nb_not_found_for_db=%d, nb_res_found=%d \n",*nb_AC_not_found,nb_AC_found);
+  printf("access_search : returned from index_search DB : %s : nb_not_found_for_db=%d, nb_res_found=%d \n",db_name,*nb_AC_not_found,nb_AC_found);
 #endif
-  // if everything was found, free memory.
-  /*if (in_lst_notFound.arrSize==0) {
-	  free(in_lst_notFound.addrArray); // pb here.
-	  initArrayOfResAddr(&in_lst_notFound);
-  }*/
   free(file);
   return;	}
 
