@@ -40,22 +40,6 @@
 #define DEBUG
 
 
-// TODO : move that to some .h
-typedef struct {
-  result_t ** start_l;
-  int len_l; // in fact number of cards that we have to look for in the DB.
-} WDBQueryData;
-
-typedef struct {
-  WDBQueryData * l_infoDB;
-  int nb_db;
-} LWDBQueryData;
-
-typedef struct {
-  result_t ** lst_work; // array of pointers to result_t structures sorted in alphabetical order of db_name.
-  int nb_cards; // size of the previous array.
-  LWDBQueryData meta_lst_work; // meta information about the array ; pointer to "sub arays" for each db_name + size of sub array.
-} WAllQueryData;
 
 
 /* Functions prototypes */
@@ -123,8 +107,9 @@ int main(int argc, char **argv) {
   res=(result_t*) malloc(sizeof(result_t)*nb_cards);
   WAllQueryData wData=prepareQueryData(my_list,res,nb_cards);
   nb_res=performGoldenQuery(wData,acc,loc);
-  //nb_res=goldenLstQuery(lst_work,nb_cards,acc,loc);
-  // print_results(nb_res,chk,res,file);
+  
+  // print results
+  print_results(wData.nb_cards,chk,res,file);
   
   free(my_list);
   freeQueryData(wData);
@@ -241,21 +226,6 @@ int get_nbCards(char * my_list) {
 }
 
 
-/*
- Debug utility : prints content of data structure used for work (array of adresses of result_t structures).
- */
-/*
-void print_wrk_struct(int nb_cards,result_t ** lst_work) {
-  printf("\nlst_work content :");
-  int i=0;
-  result_t * cur_res;
-  while (i<nb_cards) {
-	  cur_res=lst_work[i];
-	  printf("%s:%s ",cur_res->dbase,cur_res->name);
-	  i++;
-  }
-  printf("\n");
-}*/
 
 /*
  prints results to screen or file and free memory allocated for strings in result_t structures.
@@ -320,7 +290,7 @@ void res_display(result_t res, int chk, char * file) {
 
 	/* Set output stream */
 	g = stdout;
-	if (file != NULL && (g = fopen(file, "w")) == NULL) {
+	if (file != NULL && (g = fopen(file, "a")) == NULL) {
 	    error_fatal(file, NULL); }
 
 	/* Display database entry */
@@ -342,14 +312,18 @@ void res_display(result_t res, int chk, char * file) {
 
 
 
-void logEntriesNotFound(result_t ** lst_NotFound,int nb_notFound,char *cur_dbname) {
-	fprintf(stderr, "entries not found in %s : ", cur_dbname);
+void logEntriesNotFound(WAllQueryData ** wData,int nb_notFound) {
+	fprintf(stderr, "entries not found : ");
 	result_t * cur_res;
-	int i=0;
-	while (i<nb_notFound) {
+	int i=0,j=0;
+	while (i<wData.nb_cards) && (j<nb_notFound) {
 		cur_res=lst_NotFound[i];
-		fprintf(stderr, "%s ",cur_res->name);
+    if (cur_res->filenb==NOT_FOUND) {
+      fprintf(stderr, "%s:%s",cur_res->dbase,cur_res->name);
+      j++;
+    }
 		i++;
+    
 	}
 }
 
@@ -438,8 +412,6 @@ void freeQueryData(WAllQueryData wData) {
 /*
   Golden version that works on a list of database:accession_nbr or database:entry_names stuffs.
   Parameters :
-    lst_searched_for : array of adresses of result_t structures. Sorded by db_name (alphabetical order).
-    tot_nb_cards : size of lst_searched_for array; in fact : total number of cards in user's query.
     acc : flag indicating if we look for AC.
     loc : flag indicating if we look for locus.
  returns :
@@ -450,18 +422,32 @@ int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
   int loc4base,idx_db;
   char * cur_dbname;
   int tot_nb_res_found=0;
-  int nb_AC_not_found;
+  int tot_nb_res_not_found=0;
+  int nb_AC_not_found,nb_locus_not_found;
   
   int nb_db=wData.meta_lst_work.nb_db;
   WDBQueryData * l_infoDB=wData.meta_lst_work.l_infoDB;
   for (idx_db=0;idx_db<nb_db;idx_db++) {
+    loc4base=loc;
     nb_AC_not_found=l_infoDB[idx_db].len_l;
+    nb_locus_not_found=l_infoDB[idx_db].len_l;
     cur_dbname=(*(l_infoDB[idx_db].start_l))->dbase;
     // printf("cur_dbname : %s",cur_dbname);
     if (acc) {
-			access_search(l_infoDB[idx_db].start_l,l_infoDB[idx_db].len_l,cur_dbname, &nb_AC_not_found);
+			access_search(wData,cur_dbname, &nb_AC_not_found);
+      if (nb_AC_not_found==0) loc4base=0;
+      nb_locus_not_found=nb_AC_not_found;
+    }
+    if (loc4base) {
+      locus_search(wData,cur_dbname,&nb_locus_not_found);
+      tot_nb_res_not_found+=nb_locus_not_found;
+    } else {
+      tot_nb_res_not_found+=nb_AC_not_found;
     }
   }
+  // log entries not found
+  logEntriesNotFound(wData,tot_nb_res_not_found);
+  tot_nb_res_found=wData.nb_cards-tot_nb_res_not_found;
   return tot_nb_res_found;
 }
 

@@ -32,35 +32,26 @@ typedef struct {
   int filenb;
   off_t offset; } result_t;
 
-  void print_wrk_struct(int nb_cards,result_t ** lst_work,int);
+void print_wrk_struct(int nb_cards,result_t ** lst_work,int);
 
 
-
-/* Structure used to store intermediate results : ie, list of AC that were not found yet and tha
- t have to be looked for in other DB. */
-
-typedef struct {
-  result_t ** addrArray;
-  int arrSize;
-} ArrayOfResAddr;
-
-void initArrayOfResAddr(ArrayOfResAddr * const ia_arr);  // deprecated
-
-/* Try to make code simpler. 
- I work on an array of adresses of result_t structures.
- This array is sorted in alphabetical order of result_t->db_name.
- This structure is a utilty to make the manipulation of the array by the goldenLstQuery more simple.
- */
-/*
 typedef struct {
   result_t ** start_l;
   int len_l; // in fact number of cards that we have to look for in the DB.
-} InfoDbResAddr;
+} WDBQueryData;
 
 typedef struct {
-  InfoDbResAddr * l_infoDB;
+  WDBQueryData * l_infoDB;
   int nb_db;
-} LInfoDbResAddr;*/
+} LWDBQueryData;
+
+typedef struct {
+  result_t ** lst_work; // array of pointers to result_t structures sorted in alphabetical order of db_name.
+  int nb_cards; // size of the previous array.
+  LWDBQueryData meta_lst_work; // meta information about the array ; pointer to "sub arays" for each db_name + size of sub array.
+} WAllQueryData;
+
+
 
 /* Functions prototypes */
 int index_merge(char *, long, indix_t *);
