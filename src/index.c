@@ -150,6 +150,10 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
 	  }
 
 	 min = 0; max = (long)indnb - 1;
+   i=-1; // to avoid pb in case indnb=0 and i is not initialized.
+#ifdef DEBUG
+   printf("entering while search loop : min=%d max=%d\n",min,max);
+#endif
 	 while(min <= max)
 	 {
 		 /* Set current position */
@@ -170,7 +174,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
       (*nb_not_found)--;
 	   	cur_res->filenb = inx.filenb;
 	   	cur_res->offset = inx.offset;
-	   	printf("index_search, setting db_name to : %s", db_name);
+	   	// printf("index_search, setting db_name to : %s", db_name);
 	   	cur_res->real_dbase=strdup(db_name);
 	   	if (swap == 1) {
 	   		cur_res->filenb = iswap32(cur_res->filenb);
