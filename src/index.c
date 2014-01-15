@@ -134,7 +134,6 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
     if ((swap = (chk != st.st_size)) == 1) {
       indnb = iswap64(indnb); }
 
-  // char * cur_db=(*lst)->dbase;
   int idx_card;
 
   for (idx_card=0;idx_card<lst_size;idx_card++)
@@ -143,12 +142,12 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
     if (cur_res->filenb!=NOT_FOUND) continue;
     char * name=cur_res->name;
 #ifdef DEBUG
-	 printf("name : %s\n",name);
+	  printf("name : %s\n",name);
 #endif
-	 len = strlen(name);
-	 if (len > NAMLEN) {
-	    error_fatal(name, "name too long");
-	 }
+	  len = strlen(name);
+	  if (len > NAMLEN) {
+	     error_fatal(name, "name too long");
+	  }
 
 	 min = 0; max = (long)indnb - 1;
 	 while(min <= max)

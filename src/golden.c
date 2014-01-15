@@ -128,9 +128,10 @@ char * build_query(const int from_file, int optind, const int argc, char ** argv
     int new_siz,prev_siz=0;
     char * my_list=NULL;
     if (from_file) {
+        printf("optind=%d\n",optind);
+        printf("%s\n",argv[optind]);
         /* read input file(s)if any into a list of bank:AC stuff. */
         while (optind<argc) {
-          printf("%s\n",argv[optind]);
             fd=open(argv[optind],O_RDONLY);
             if (fd==-1) { // maybe see errno in that case.
                 printf( "Error opening file: %s\n", strerror( errno ) );
@@ -142,6 +143,7 @@ char * build_query(const int from_file, int optind, const int argc, char ** argv
             if (my_list==NULL) {
                 if ((my_list=(char *) malloc(buff.st_size*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
                 new_siz=buff.st_size;
+                printf("Allocated %d bytes for query. \n",new_siz);
             } else {
                 prev_siz+=1; // allocate 1car for separator
                 new_siz=prev_siz+buff.st_size;
@@ -420,21 +422,22 @@ void freeQueryData(WAllQueryData wData) {
 */
 
 int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
-  int loc4base,idx_db;
+  int loc4base,idx_db,nb_db;
   char * cur_dbname;
+  WDBQueryData queryDB;
   int tot_nb_res_found=0;
   int tot_nb_res_not_found=0;
   int nb_AC_not_found,nb_locus_not_found;
   
-  int nb_db=wData.meta_lst_work.nb_db;
-  // WDBQueryData * l_infoDB=wData.meta_lst_work.l_infoDB[];
+  nb_db=wData.meta_lst_work.nb_db;
+  
   for (idx_db=0;idx_db<nb_db;idx_db++) {
-    WDBQueryData queryDB=wData.meta_lst_work.l_infoDB[idx_db];
+    queryDB=wData.meta_lst_work.l_infoDB[idx_db];
     loc4base=loc;
     nb_AC_not_found=queryDB.len_l;
     nb_locus_not_found=queryDB.len_l;
     cur_dbname=(*queryDB.start_l)->dbase;
-    // printf("cur_dbname : %s",cur_dbname);
+    printf("cur_dbname : %s\n",cur_dbname);
     if (acc) {
 			access_search(queryDB,cur_dbname, &nb_AC_not_found);
       if (nb_AC_not_found==0) loc4base=0;
@@ -448,9 +451,6 @@ int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
       tot_nb_res_not_found+=nb_AC_not_found;
     }
   }
-  // log entries not found
-  
-  // logEntriesNotFound(wData,tot_nb_res_not_found);
   tot_nb_res_found=wData.nb_cards-tot_nb_res_not_found;
   return tot_nb_res_found;
 }

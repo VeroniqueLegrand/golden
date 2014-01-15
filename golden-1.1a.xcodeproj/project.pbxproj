@@ -17,6 +17,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D4D323F1886B79C00712232 /* nt_enzyme_only.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nt_enzyme_only.txt; sourceTree = "<group>"; };
 		2D57E4EB187AB08400C62F47 /* aclocal.m4 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aclocal.m4; sourceTree = "<group>"; };
 		2D57E4EC187AB08400C62F47 /* AUTHORS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
 		2D57E4EE187AB08400C62F47 /* output.0 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = output.0; sourceTree = "<group>"; };
@@ -319,6 +320,7 @@
 		2D57E564187AC0C200C62F47 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				2D4D323F1886B79C00712232 /* nt_enzyme_only.txt */,
 				2D57E565187AC0C200C62F47 /* genbank_ac_locus.txt */,
 				2D57E566187AC0C200C62F47 /* nt_10_first.txt */,
 				2D57E567187AC0C200C62F47 /* nt_ac_extracts.txt */,

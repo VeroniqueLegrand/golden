@@ -38,13 +38,13 @@
       buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
-      allowLocationSimulation = "YES">
+      allowLocationSimulation = "NO">
       <PathRunnable
          FilePath = "/Users/vlegrand/Desktop/golden-1.1a/src/golden">
       </PathRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-o mes_fiches.txt -f /Users/vlegrand/Desktop/golden-1.1a/data/nt_uniprot_only.txt"
+            argument = "-o mes_fiches.txt -f /Users/vlegrand/Desktop/golden-1.1a/data/nt_enzyme_only.txt"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
