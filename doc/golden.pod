@@ -1,0 +1,101 @@
+
+=head1 NAME
+
+=over 4
+
+=item B<golden> - Databank flat files entry retriever
+
+=back
+
+=head1 SYNOPSIS
+
+=over 4
+
+=item B<golden> [B<-achil>] [B<-o> F<file>] E<lt>F<dbase>:F<name>E<gt>
+
+=back
+
+=head1 OPTIONS
+
+Following command line options are allowed:
+
+=over 4
+
+=item -a
+
+Search entry by accession number.
+
+=item -c
+
+Check entry existence (do not display it, if found).
+
+=item -h
+
+Usage display.
+
+=item -i
+
+Search entry by entry name.
+
+=item -l
+
+List all available databanks.
+
+=item -o F<file>
+
+Output result in F<file>.
+
+=back
+
+=head1 DESCRIPTION
+
+B<golden> is a databank flat files entry retriever.
+
+It search for entry F<name> in F<dbase> indexes. By default, both
+accession number and entry names are searched (in that order), and the
+first matching F<name> is displayed.
+
+Search can be restricted to a single index type by setting one of the
+following flags: B<-a> for accession numbers or B<-i> for entry
+names. Setting both flags will restore the default search behaviour.
+
+=head1 EXAMPLES
+
+=over 4
+
+=item golden genbank:mmvasp
+
+Search an entry named `mmvasp' in `genbank' databank in both entry
+names and accession number indexes (default = both).
+
+=item golden -i genbank:mmvasp
+
+Same search but in entry names indexes only.
+
+=item golden -l
+
+List all available (indexed) databanks.
+
+=back
+
+=head1 ENVIRONMENT
+
+=over 10
+
+=item GOLDENDATA
+
+Used to specify an alternate golden indexes directory.
+
+=back
+
+=head1 SEE ALSO
+
+=over 4
+
+=item B<goldin>(1)
+
+=back
+
+=head1 AUTHOR
+
+Nicolas Joly (njoly@pasteur.fr), Institut Pasteur.

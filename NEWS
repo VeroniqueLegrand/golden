@@ -1,0 +1,19 @@
+What's new in ?:
+
+* Indexes files use now fixed size records. This breaks compatibility
+  with old indexes, but allow the same files to be accessed on both 32
+  and 64 bits hosts.
+
+* New goldin '-d' flag, to specify an alternate flat files directory.
+  NB: This change introduce some .dbx index file format modification,
+  but compatibility with old structure is preserved.
+
+What's new in 1.1:
+
+* New golden '-c' flag, to check for entries existence without dumping
+  them.
+
+* Virtual databanks queries first support (.vix files).
+
+* Support for large files (larger than 2 GB) on some 32 bits hosts.
+

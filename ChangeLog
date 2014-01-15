@@ -1,0 +1,225 @@
+2013-03-11  Nicolas Joly  <njoly@pasteur.fr>
+
+	* python/Golden.c: Cache previous bank existence checks. No need
+	to do it for each query, only redo it if bank changes.
+
+	* python/*: New python binding files.
+
+2012-02-28  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/{access,locus}.c: Plug a memory leak when searching virtual
+	databanks.
+
+2009-06-03  Nicolas Joly  <njoly@pasteur.fr>
+
+	* doc/golden.pod: Add missing `-o' flag documentation.
+
+2007-10-16  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/index.h: Replace `stdint.h' by `inttypes.h' to allow
+	building on Solaris.
+
+2007-06-25  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/golden.c: Rework the message for `no entry found', and make
+	it a little less scary.
+	* test/golden.sh: Exercise non existent entries search.
+
+2006-10-02  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/index.h: Fix build on Linux machines by adding needed
+	stdint.h include (for uint{32,64}_t types definitions).
+
+	* src/index.c: Fix endianness problems, by adding runtime
+	detection and values swapping.
+
+2006-09-26  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/index.c: Use fixed record sizes for file indexes. This
+	change allow sharing indexes files between 32 and 64 bits
+	architectures.
+
+2006-09-20  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/*.c: Always test `fclose()' return value against EOF.
+
+	* src/index.c: Use `sizeof()' on variables, instead of type in
+	most cases.
+
+	* test/virtual.sh: Use `test -r' instead of `test -e' to appease
+	Solaris /bin/sh.
+
+2005-12-06  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/goldin.c: Check for regular files before processing them
+	(avoid an endless loop with directory under linux).
+
+2005-11-18  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/*.c: Add `#include <sys/types.h>' for `off_t' definition on
+	MacOSX 10.4.
+
+2005-11-08  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/list.c: Add some compatibility with old DBX format (to make
+	the transition easier).
+	* test/golden.sh: Exercise it.
+
+	* src/goldin.c: New `-d' flag, to specify an alternate flat files
+	directory instead of dbase default.
+	* doc/goldin.pod: Document it.
+	* src/list.[ch]: Adjust accordingly.
+
+2005-09-14  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/entry.c: Adjust entry_display() for output stream.
+	* src/golden.c: Use it for output file option (-o).
+
+2005-09-08  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/index.[ch]: Add some const keyword where appropriate.
+	* src/list.c: Adjust accordingly.
+
+2005-04-06  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/index.c: Fix string length count in temp file name
+	allocation.
+
+	* src/index.c: Adjust for dirname() behaviour under linux.
+
+2004-09-19  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/*.c: Use consistently fseeko/ftello, but fall back to
+	fseek/ftell if not supported.
+	* src/index.c: Use correct file name in error message. Do not
+	force TMPDIR value, it can be set by user.
+	* src/*.[ch]: Remove arguments names from functions prototypes.
+
+2004-09-07  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/index.c: Use temporary file and rename call to move indexes
+	across filesystems.
+
+2004-09-02  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/goldin.c: New `-q' (quiet) flag to suppress some warnings.
+
+2004-06-13  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/index.c: Use TMPDIR environment variable if exist.
+	* doc/goldin.pod: Document it.
+
+2004-06-12  Nicolas Joly  <njoly@pasteur.fr>
+
+	* test/goldin.sh: Check for indexes update.
+
+2004-06-08  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/entry.c: Be robust to files missing newline at EOF.
+
+2004-04-27  Nicolas Joly  <njoly@pasteur.fr>
+
+	* configure.in: Remove unused `strncasecmp' check.
+	* src/index.c (index_compare): Replace previously forgotten
+	`strncasecmp' call with `strncmp'.
+
+2004-01-19  Nicolas Joly  <njoly@pasteur.fr>
+
+	* configure.in: golden 1.1 is out.
+
+2004-01-18  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/entry.c: Handle long lines in databanks entries.
+
+2004-01-11  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/error.c, src/index.c: Use const qualifier where appropriate.
+	* src/error.h, src.index.h: Adjust.
+
+2003-12-18  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/goldin.c: Clean text fields before writing to it (allows
+	indexes comparisons).
+
+2003-09-14  Nicolas Joly  <njoly@pasteur.fr>
+
+	* test/*.sh: Full rewrite.
+	* src/golden.c: New '-c' flag, to check if an entry exists.
+	* automake 1.7.6 update.
+
+2003-09-02  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/golden.c: Added <ctype.h> for toupper prototype.
+
+2003-07-23  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/entry.c: New warning for databases truncated entries.
+
+2003-05-12  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/index.c: Use `strcmp' instead of `strcasecmp' as lowered
+	strings may give false results: 'D' < '_' < 'd'.
+	* src/golden.c: Always uppercase names.
+	* src/goldin.c: Likewise.
+
+2003-03-29  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/golden.c: Use function `basename' instead of 'strrchr'.
+	* src/goldin.c: Likewise.
+
+2003-03-06  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/list.c: Virtual databanks must be listed too.
+
+2003-03-04  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/access.c, src/locus.c: Added support for virtual databanks
+	queries (.vix files).
+	* test/virtual.sh: New file.
+
+	* src/index.h: Hold indexes files suffixes.
+	* src/index.c: New generic function that generate index file name.
+	* src/golden.c: Added missing entry.h header.
+
+2003-03-02  Nicolas Joly  <njoly@pasteur.fr>
+
+	* doc/Makefile.am: Updated man pages mecanism.
+
+2002-07-05  Nicolas Joly  <njoly@pasteur.fr>
+
+	* configure.in: Extend large file support for some hosts, set
+	_FILE_OFFSET_BITS=64.
+
+2002-06-23  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/entry.c, src/golden.c: Add fallback for systems with missing
+	fseeko/ftello.
+
+2002-06-20  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/index.h, src/entry.h: Add large file support (> 2GB). Use
+	`off_t' instead of `long' for file offsets.
+	* src/entry.c, src/golden.c: Use `ftello/fseeko' instead of
+	`ftell/fseek'.
+
+	* configure.in: Add checks for extra headers and functions.
+	Bumped version to 1.0a.
+
+2002-05-03  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/golden.c: Do not uppercase query.
+	* src/index.c: Perform case insensitive indexes searches.
+
+2002-01-20  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/list.c: Fix for problem introduced in previous correction.
+
+2001-11-29  Nicolas Joly  <njoly@pasteur.fr>
+
+	* src/list.c: Corrected a small read/write file access problem
+	under Linux.
+
+2001-07-16  Nicolas Joly  <njoly@pasteur.fr>
+
+	* v1.0 released.
+

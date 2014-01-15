@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2D6B2834187AADD6000B7895"
+               BlueprintIdentifier = "2D4D32471886C6AB00712232"
                BuildableName = "golden-1.1a"
                BlueprintName = "golden-1.1a"
                ReferencedContainer = "container:golden-1.1a.xcodeproj">
@@ -38,13 +38,17 @@
       buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
-      allowLocationSimulation = "NO">
+      allowLocationSimulation = "YES">
       <PathRunnable
          FilePath = "/Users/vlegrand/Desktop/golden-1.1a/src/golden">
       </PathRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-o mes_fiches.txt -f /Users/vlegrand/Desktop/golden-1.1a/data/nt_enzyme_only.txt"
+            argument = "-o mes_fiches.txt -f /Users/vlegrand/Desktop/golden-1.1a/data/nt_uniprot_only.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_10_first.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_misc_uniprot.txt"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/vlegrand/Desktop/golden-1.1a/data/nt_misc_uniprot_missing_doublons.txt"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
