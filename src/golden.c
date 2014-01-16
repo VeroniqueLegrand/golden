@@ -117,6 +117,52 @@ int main(int argc, char **argv) {
   free(res);
   return EXIT_SUCCESS; }
 
+/*
+ Builds query from files whose names are passed as arguments to the command line.
+ */
+/*
+char * build_query_files() {
+  printf("optind=%d\n",optind);
+  printf("%s\n",argv[optind]);
+  
+  while (optind<argc) {
+    fd=open(argv[optind],O_RDONLY);
+    if (fd==-1) { // maybe see errno in that case.
+      printf( "Error opening file: %s\n", strerror( errno ) );
+      error_fatal("argv[optind]", "cannot open file.");
+    }
+    if (fstat(fd, &buff)==-1) {
+      error_fatal("argv[optind]", "cannot get file size.");
+    }
+    if (my_list==NULL) {
+      new_siz=buff.st_size; // add 1 for the case where there is a \n at the end of the file or else get segmentation fault when doing printf("%s\n",my_list).
+      if ((my_list=(char *) malloc(new_siz*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
+      printf("Allocated %d bytes for query. \n",new_siz);
+    } else {
+      prev_siz+=1; // allocate 1 car for separator
+      new_siz=prev_siz+buff.st_size;
+      // new_siz+=1; // add 1 for the case where there is a \n at the end of the file.
+      if ((my_list=(char *) realloc(my_list,new_siz*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
+      printf("re-allocated %d bytes for query. \n",new_siz);
+      strcat(my_list," ");
+    }
+    int nb_read;
+    if ((nb_read=read(fd,&my_list[prev_siz],buff.st_size))==-1) {
+      error_fatal("argv[optind]", "cannot read file.");
+    }
+    close(fd);
+    printf("read : %d\n",nb_read);
+    // remove trailing \n.
+    while (my_list[nb_read-1]=='\n') {
+      my_list[nb_read-1]='\0';
+      nb_read--;
+      new_siz--;
+    }
+    printf("%s\n",my_list);
+    prev_siz=new_siz;
+    optind++;
+  }
+}*/
 
 /*
  From input arguments provided by the user, build a char string containing a list of bank:AC stuff separated by blanks.
@@ -141,20 +187,31 @@ char * build_query(const int from_file, int optind, const int argc, char ** argv
                 error_fatal("argv[optind]", "cannot get file size.");
             }
             if (my_list==NULL) {
-                if ((my_list=(char *) malloc(buff.st_size*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
-                new_siz=buff.st_size;
+                new_siz=buff.st_size; // add 1 for the case where there is a \n at the end of the file or else get segmentation fault when doing printf("%s\n",my_list).
+                if ((my_list=(char *) malloc(new_siz*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
                 printf("Allocated %d bytes for query. \n",new_siz);
             } else {
-                prev_siz+=1; // allocate 1car for separator
+                prev_siz+=1; // allocate 1 car for separator
                 new_siz=prev_siz+buff.st_size;
+                // new_siz+=1; // add 1 for the case where there is a \n at the end of the file.
                 if ((my_list=(char *) realloc(my_list,new_siz*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
+                printf("re-allocated %d bytes for query. \n",new_siz);
                 strcat(my_list," ");
             }
-            if (read(fd,&my_list[prev_siz],buff.st_size)==-1) {
+            int nb_read;
+            if ((nb_read=read(fd,&my_list[prev_siz],buff.st_size))==-1) {
                 error_fatal("argv[optind]", "cannot read file.");
             }
-            prev_siz=new_siz;
             close(fd);
+            printf("read : %d\n",nb_read);
+            // remove trailing \n.
+            while (my_list[nb_read-1]=='\n') {
+              my_list[nb_read-1]='\0';
+              nb_read--;
+              new_siz--;
+            }
+            printf("%s\n",my_list);
+            prev_siz=new_siz;
             optind++;
         }
     } else {
@@ -191,8 +248,14 @@ char * build_query(const int from_file, int optind, const int argc, char ** argv
     
     
     char *end;
+    printf("%s\n",my_list);
     // Trim leading space
-    while(isspace(*my_list)) my_list++;
+    while(isspace(*my_list)) {
+      printf("'Removed 1 space \n");
+      my_list++;
+    }
+    int list_length=strlen(my_list);
+    printf("my_list length : %d\n",list_length);
     // Trim trailing space
     end = my_list + strlen(my_list) - 1;
     while(end > my_list && isspace(*end)) end--;

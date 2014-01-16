@@ -44,11 +44,7 @@
       </PathRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-o mes_fiches.txt -f /Users/vlegrand/Desktop/golden-1.1a/data/nt_uniprot_only.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_10_first.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_misc_uniprot.txt"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "/Users/vlegrand/Desktop/golden-1.1a/data/nt_misc_uniprot_missing_doublons.txt"
+            argument = "-o output1.txt -f /Users/vlegrand/Desktop/golden-1.1a/data/nt_enzyme_only.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_10_first.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_uniprot_only.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_misc_uniprot_missing_doublons.txt"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
