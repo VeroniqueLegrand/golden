@@ -6,6 +6,16 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		2D4D33741889694900712232 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2D4D33701889694900712232 /* Dummy.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2D4D33641889694900712232;
+			remoteInfo = Dummy;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		2D4D32CD1886CACC00712232 /* aclocal.m4 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aclocal.m4; sourceTree = "<group>"; };
 		2D4D32CE1886CACC00712232 /* AUTHORS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
@@ -109,12 +119,17 @@
 		2D4D33451886CACC00712232 /* virtual.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = virtual.sh; sourceTree = "<group>"; };
 		2D4D33461886CACC00712232 /* test-driver */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "test-driver"; sourceTree = "<group>"; };
 		2D4D33471886CACC00712232 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
+		2D4D3358188968C600712232 /* prosite.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = prosite.txt; sourceTree = "<group>"; };
+		2D4D3359188968D400712232 /* rdpii.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rdpii.txt; sourceTree = "<group>"; };
+		2D4D335A188968D400712232 /* taxo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = taxo.txt; sourceTree = "<group>"; };
+		2D4D33701889694900712232 /* Dummy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Dummy.xcodeproj; path = Dummy/Dummy.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		2D4D32421886C6AB00712232 = {
 			isa = PBXGroup;
 			children = (
+				2D4D33701889694900712232 /* Dummy.xcodeproj */,
 				2D4D32CD1886CACC00712232 /* aclocal.m4 */,
 				2D4D32CE1886CACC00712232 /* AUTHORS */,
 				2D4D32CF1886CACC00712232 /* autom4te.cache */,
@@ -161,6 +176,9 @@
 		2D4D32DB1886CACC00712232 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				2D4D3359188968D400712232 /* rdpii.txt */,
+				2D4D335A188968D400712232 /* taxo.txt */,
+				2D4D3358188968C600712232 /* prosite.txt */,
 				2D4D32DC1886CACC00712232 /* genbank_ac_locus.txt */,
 				2D4D32DD1886CACC00712232 /* nt_10_first.txt */,
 				2D4D32DE1886CACC00712232 /* nt_ac_extracts.txt */,
@@ -300,6 +318,14 @@
 			path = all;
 			sourceTree = "<group>";
 		};
+		2D4D33711889694900712232 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2D4D33751889694900712232 /* Dummy */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXLegacyTarget section */
@@ -334,12 +360,28 @@
 			);
 			mainGroup = 2D4D32421886C6AB00712232;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 2D4D33711889694900712232 /* Products */;
+					ProjectRef = 2D4D33701889694900712232 /* Dummy.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				2D4D32471886C6AB00712232 /* golden-1.1a */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		2D4D33751889694900712232 /* Dummy */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = Dummy;
+			remoteRef = 2D4D33741889694900712232 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin XCBuildConfiguration section */
 		2D4D32481886C6AB00712232 /* Debug */ = {

@@ -271,9 +271,10 @@ int get_nbCards(char * my_list) {
  */
 void print_results(int nb_res,int chk,result_t * res,char * file) {
   int i;
+  /*
 #ifdef DEBUG
   printf("going to print : %d results \n",nb_res);
-#endif
+#endif*/
   // first version prints output. Don't want to change main's prototype at the beginning.
   for (i=0; i<nb_res; i++) {
     if (res[i].filenb==NOT_FOUND) continue; // only call print for results that were found. 
