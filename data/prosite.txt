@@ -1,0 +1,12 @@
+prosite:ADENYLOSUCCIN_SYN_2
+prosite:ACTINS_ACT_LIKE
+prosite:PS00048
+prosite:PS00062
+prosite:ACETATE_KINASE_2
+prosite:PS00068
+prosite:PS00029
+prosite:PS00007
+prosite:ACETATE_KINASE_2
+prosite:PS00005
+prosite:PS00004
+prosite:AA_TRNA_LIGASE_II_ALA
