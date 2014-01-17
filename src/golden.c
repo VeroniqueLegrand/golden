@@ -252,14 +252,14 @@ int get_nbCards(char * my_list) {
     char * tmp_list=my_list;
     char * blank_pos;
     int nb_cards=0;
-    blank_pos=strstr(tmp_list," ");
+    blank_pos=strstr(tmp_list,":");
     while (blank_pos!=NULL) {
         nb_cards++;
         tmp_list=blank_pos;
         tmp_list+=1;
-        blank_pos=strstr(tmp_list," ");
+        blank_pos=strstr(tmp_list,":");
     }
-    nb_cards++;
+    // nb_cards++;
     return nb_cards;
 }
 

@@ -123,6 +123,7 @@
 		2D4D3359188968D400712232 /* rdpii.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rdpii.txt; sourceTree = "<group>"; };
 		2D4D335A188968D400712232 /* taxo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = taxo.txt; sourceTree = "<group>"; };
 		2D4D33701889694900712232 /* Dummy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Dummy.xcodeproj; path = Dummy/Dummy.xcodeproj; sourceTree = "<group>"; };
+		2D4D339218897B9E00712232 /* misc_all1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = misc_all1.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -176,6 +177,7 @@
 		2D4D32DB1886CACC00712232 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				2D4D339218897B9E00712232 /* misc_all1.txt */,
 				2D4D3359188968D400712232 /* rdpii.txt */,
 				2D4D335A188968D400712232 /* taxo.txt */,
 				2D4D3358188968C600712232 /* prosite.txt */,

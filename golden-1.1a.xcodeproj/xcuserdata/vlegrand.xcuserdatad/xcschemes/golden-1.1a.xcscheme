@@ -44,7 +44,7 @@
       </PathRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-i taxodb:100018"
+            argument = "-f /Users/vlegrand/Desktop/golden-1.1a/data/misc_all1.txt"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
