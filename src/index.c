@@ -152,7 +152,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
 	 min = 0; max = (long)indnb - 1;
    i=-1; // to avoid pb in case indnb=0 and i is not initialized.
 #ifdef DEBUG
-   printf("entering while search loop : min=%d max=%d\n",min,max);
+   printf("entering while search loop : min=%ld max=%ld\n",min,max);
 #endif
 	 while(min <= max)
 	 {

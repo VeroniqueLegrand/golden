@@ -90,7 +90,7 @@ static PyObject *Golden_access(PyObject *self, PyObject *args) {
     return NULL; }
 
   /* Search indexes for name */
-  // res = access_search(bank, name,NULL);
+  res = access_search_deprecated(bank, name);
   if (res == NULL) {
     return Py_BuildValue("s", NULL); }
 

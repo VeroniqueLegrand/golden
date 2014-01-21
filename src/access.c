@@ -18,6 +18,27 @@
 #include "index.h"
 
 
+/*
+ keep that for compatibility with old export python.
+ */
+result_t * access_search_deprecated(char *dbase, char *name) {
+  result_t * res;
+  // result_t * adr_res=&res;
+  int nb_AC_not_found;
+  
+  if ((res=malloc(sizeof(result_t)))==NULL) error_fatal("memory", NULL);
+  
+  res->name=strdup(name);
+  res->dbase=strdup(dbase);
+  
+  WDBQueryData wData;
+  wData.len_l=1;
+  wData.start_l=&res;
+  
+  access_search(wData,dbase,&nb_AC_not_found);
+  return res;}
+
+
 
 /* Search in accession indexes */
 /* VL: keep db_name parameter for recursive calls when searching in virtual database indexes.
