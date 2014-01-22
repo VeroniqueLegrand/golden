@@ -51,11 +51,11 @@ void print_wrk_struct(result_t ** lst_work, int nb_cards, int missing_only) {
     int i=0;
     result_t * cur_res;
     while (i<nb_cards) {
-  	  cur_res=lst_work[i];
+      cur_res=lst_work[i];
       if ((missing_only && (cur_res->filenb==NOT_FOUND)) || (!missing_only)){
         printf("%s:%s ",cur_res->dbase,cur_res->name);
       }
-  	  i++;
+      i++;
     }
     printf("\n");
 }
@@ -64,10 +64,8 @@ void print_wrk_struct(result_t ** lst_work, int nb_cards, int missing_only) {
 /* Get golden indexes directory */
 const char *index_dir(void) {
   const char *p;
-
   if ((p = getenv("GOLDENDATA")) == NULL) {
     p = DATADIR; }
-
   return p; }
 
 
@@ -120,7 +118,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
     error_fatal(file, NULL); }
 
 #ifdef DEBUG
-	 printf("index_search called on : %s\n",file);
+    printf("index_search called on : %s\n",file);
 #endif
 
 
@@ -135,52 +133,51 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
       indnb = iswap64(indnb); }
 
   int idx_card;
-
+  printf("lst_size=%d\n",lst_size);
   for (idx_card=0;idx_card<lst_size;idx_card++)
   {
     result_t * cur_res=lst[idx_card];
     if (cur_res->filenb!=NOT_FOUND) continue;
     char * name=cur_res->name;
 #ifdef DEBUG
-	  printf("name : %s\n",name);
+    printf("name : %s\n",name);
 #endif
-	  len = strlen(name);
-	  if (len > NAMLEN) {
-	     error_fatal(name, "name too long");
-	  }
+    len = strlen(name);
+    if (len > NAMLEN) {
+      error_fatal(name, "name too long");
+    }
 
-	 min = 0; max = (long)indnb - 1;
-   i=-1; // to avoid pb in case indnb=0 and i is not initialized.
+    min = 0; max = (long)indnb - 1;
+    i=-1; // to avoid pb in case indnb=0 and i is not initialized.
 #ifdef DEBUG
-   printf("entering while search loop : min=%ld max=%ld\n",min,max);
+    printf("entering while search loop : min=%ld max=%ld\n",min,max);
 #endif
-	 while(min <= max)
-	 {
-		 /* Set current position */
-	     cur = (min + max) / 2;
-	   	 pos = sizeof(indnb) + cur * sizeof(inx);
-	   	 if (fseeko(f, pos, SEEK_SET) == -1) {
-	   		 error_fatal(file, NULL); }
-	   	 /* Check current name */
-	   	 if (fread(&inx, sizeof(inx), 1, f) != 1) {
-	   		error_fatal(file, NULL); }
-	     if ((i = strcmp(name, inx.name)) == 0) break;
-
-	    /* Set new limits */
-	    if (i < 0) { max = cur - 1; }
-	   	if (i > 0) { min = cur + 1; }
-	 }
-   if (i==0) { // found
+    while(min <= max)
+    {
+    /* Set current position */
+      cur = (min + max) / 2;
+      pos = sizeof(indnb) + cur * sizeof(inx);
+      if (fseeko(f, pos, SEEK_SET) == -1) {
+        error_fatal(file, NULL); }
+        /* Check current name */
+      if (fread(&inx, sizeof(inx), 1, f) != 1) {
+        error_fatal(file, NULL); }
+        if ((i = strcmp(name, inx.name)) == 0) break;
+        /* Set new limits */
+        if (i < 0) { max = cur - 1; }
+        if (i > 0) { min = cur + 1; }
+    }
+    if (i==0) { // found
       (*nb_not_found)--;
-	   	cur_res->filenb = inx.filenb;
-	   	cur_res->offset = inx.offset;
-	   	// printf("index_search, setting db_name to : %s", db_name);
-	   	cur_res->real_dbase=strdup(db_name);
-	   	if (swap == 1) {
-	   		cur_res->filenb = iswap32(cur_res->filenb);
-	   		cur_res->offset = iswap64(cur_res->offset); }
-	   	nb_found++;
-	 }
+      cur_res->filenb = inx.filenb;
+      cur_res->offset = inx.offset;
+      cur_res->real_dbase=strdup(db_name);
+      if (swap == 1) {
+        cur_res->filenb = iswap32(cur_res->filenb);
+        cur_res->offset = iswap64(cur_res->offset);
+      }
+      nb_found++;
+    }
     if (*nb_not_found==0) break;
   }
   if (fclose(f) == EOF) {
@@ -239,13 +236,13 @@ int index_merge(char *file, long nb, indix_t *ind) {
     /* Insert new entries */
     while(newnb && (i = index_compare(cur, &old)) < 0) {
       if (fwrite(cur, sizeof(*cur), 1, f) != 1) {
-	error_fatal(new, NULL); }
+        error_fatal(new, NULL); }
       newnb--; cur++; totnb++; }
 
     /* Update existing entries */
     if (newnb && i == 0) {
       if (fwrite(cur, sizeof(*cur), 1, f) != 1) {
-	error_fatal(new, NULL); }
+        error_fatal(new, NULL); }
       newnb--; oldnb--; cur++; totnb++; continue; }
 
     /* Write old entry */

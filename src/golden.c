@@ -45,7 +45,6 @@
 /* Functions prototypes */
 static void usage(int);
 void res_display(result_t res, int chk, char * file);
-int goldenLstQuery(result_t** ,int, int ,int);
 int performGoldenQuery(WAllQueryData, int,int);
 static int compare_dbase (void const *a, void const *b);
 char * build_query(const int from_file, int optind, const int argc, char ** argv);
@@ -64,7 +63,6 @@ static char *prog;
 
 /* Main function */
 int main(int argc, char **argv) {
-  FILE  *h;
   int i, loc, acc, chk, nb_res,from_file;
   int nb_cards;
   char *file=NULL;
@@ -197,7 +195,7 @@ char * build_query_from_str(int optind, const int argc, char ** argv) {
       strcat(my_list," ");
       // my_list[prev_siz-1]=' ';
       // printf("%s\n",my_list);
-      int new_len=strlen(my_list);
+      // int new_len=strlen(my_list);
       strncat(my_list,argv[optind],arg_len-1);
       // printf("%s\n",my_list);
     }
@@ -214,7 +212,7 @@ char * build_query_from_str(int optind, const int argc, char ** argv) {
  Returns this string. The caller must free the memory allocated for the returned string.
  */
 char * build_query(const int from_file, int optind, const int argc, char ** argv) {
-    int new_siz,prev_siz=0;
+    // int new_siz,prev_siz=0;
     char * my_list=NULL;
     if (from_file) {
       my_list=build_query_from_files(optind, argc, argv);
@@ -228,7 +226,7 @@ char * build_query(const int from_file, int optind, const int argc, char ** argv
       // printf("'Removed 1 space \n");
       my_list++;
     }
-    int list_length=strlen(my_list);
+    // int list_length=strlen(my_list);
     // printf("my_list length : %d\n",list_length);
     // Trim trailing space
     end = my_list + strlen(my_list) - 1;
@@ -278,17 +276,16 @@ void print_results(int nb_res,int chk,result_t * res,char * file) {
   // first version prints output. Don't want to change main's prototype at the beginning.
   for (i=0; i<nb_res; i++) {
     if (res[i].filenb==NOT_FOUND) continue; // only call print for results that were found. 
-	  res_display(res[i],chk, file);
-	  printf("###############################################################################");
-	  printf("                                                                               ");
-	  result_t cur_res;
-	  cur_res=res[i];
-	  free(cur_res.name); free(cur_res.dbase);
-	  if (cur_res.real_dbase!=NULL) {
-		  free(cur_res.real_dbase);
-	  }
+      res_display(res[i],chk, file);
+      printf("###############################################################################");
+      printf("                                                                               ");
+      result_t cur_res;
+      cur_res=res[i];
+      free(cur_res.name); free(cur_res.dbase);
+      if (cur_res.real_dbase!=NULL) {
+        free(cur_res.real_dbase);
+      }
   }
-
 }
 
 
@@ -320,51 +317,51 @@ static int compare_dbase (void const *a, void const *b)
  //  free(res);
  */
 void res_display(result_t res, int chk, char * file) {
-	char * p;
-	FILE *f, *g;
-	/* Get database flat file name */
-	if (res.filenb==NOT_FOUND || res.real_dbase==NULL) {
-		return;
-	}
-	p = list_name(res.real_dbase, res.filenb);
+    char * p;
+    FILE *f, *g;
+    /* Get database flat file name */
+    if (res.filenb==NOT_FOUND || res.real_dbase==NULL) {
+        return;
+    }
+    p = list_name(res.real_dbase, res.filenb);
 
-	/* Set output stream */
-	g = stdout;
-	if (file != NULL && (g = fopen(file, "a")) == NULL) {
-	    error_fatal(file, NULL); }
+    /* Set output stream */
+    g = stdout;
+    if (file != NULL && (g = fopen(file, "a")) == NULL) {
+        error_fatal(file, NULL); }
 
-	/* Display database entry */
-	if (chk == 0) {
-	    if ((f = fopen(p, "r")) == NULL) {
-	      error_fatal(p, NULL); }
-	    if (fseeko(f, res.offset, SEEK_SET) != 0) {
-	      error_fatal(p, NULL); }
-	    if (entry_display(f, g)) {
-	      error_fatal(p, NULL); }
-	    if (fclose(f) == EOF) {
-	      error_fatal(p, NULL); }
-	    free(p); }
+    /* Display database entry */
+    if (chk == 0) {
+        if ((f = fopen(p, "r")) == NULL) {
+          error_fatal(p, NULL); }
+        if (fseeko(f, res.offset, SEEK_SET) != 0) {
+          error_fatal(p, NULL); }
+        if (entry_display(f, g)) {
+          error_fatal(p, NULL); }
+        if (fclose(f) == EOF) {
+          error_fatal(p, NULL); }
+        free(p); }
 
 
-	if (file != NULL && fclose(g) == EOF) {
-	    error_fatal(file, NULL); }
+    if (file != NULL && fclose(g) == EOF) {
+        error_fatal(file, NULL); }
 }
 
 
 
 void logEntriesNotFound(WAllQueryData wData,int nb_notFound) {
-	fprintf(stderr, "entries not found : ");
-	result_t * cur_res;
-	int i=0;
+  fprintf(stderr, "entries not found : ");
+  result_t * cur_res;
+  int i=0;
   int j=0;
-	while ((i<wData.nb_cards) && (j<nb_notFound)) {
-		cur_res=wData.lst_work[i];
+  while ((i<wData.nb_cards) && (j<nb_notFound)) {
+    cur_res=wData.lst_work[i];
     if (cur_res->filenb==NOT_FOUND) {
       fprintf(stderr, "%s:%s ",cur_res->dbase,cur_res->name);
       j++;
     }
-		i++;
-	}
+    i++;
+  }
   fprintf(stderr, "\n");
 }
 
@@ -383,23 +380,23 @@ WAllQueryData prepareQueryData(char * my_list, result_t * res,int nb_cards) {
   int i;
   elm = strtok (my_list," ");
   for (i=0;i<nb_cards;i++) {
-	  len = strlen(elm);
-	  if (strchr(elm,':') == NULL) {
+    len = strlen(elm);
+    if (strchr(elm,':') == NULL) {
       printf("%s",elm);
       error_fatal(elm, "invalid query value"); }
-	  if ((dbase = (char *)malloc(len+1)) == NULL ||
-	  	  (name = (char *)malloc(len+1)) == NULL) {
+      if ((dbase = (char *)malloc(len+1)) == NULL ||
+         (name = (char *)malloc(len+1)) == NULL) {
       error_fatal("memory", NULL); }
-	  p=elm;
-	  q=dbase;
-	  while(*p && *p != ':') *q++ = *p++; *q = '\0'; p++;
-	  q = name; while(*p) *q++ = toupper((unsigned char)*p++); *q = '\0';
-	  res[i].dbase=dbase;
-	  res[i].name=name;
-	  res[i].filenb=NOT_FOUND;
-	  res[i].real_dbase=NULL;
-	  lst_work[i]=&res[i];
-	  elm = strtok (NULL," ");
+      p=elm;
+      q=dbase;
+      while(*p && *p != ':') *q++ = *p++; *q = '\0'; p++;
+      q = name; while(*p) *q++ = toupper((unsigned char)*p++); *q = '\0';
+      res[i].dbase=dbase;
+      res[i].name=name;
+      res[i].filenb=NOT_FOUND;
+      res[i].real_dbase=NULL;
+      lst_work[i]=&res[i];
+      elm = strtok (NULL," ");
   }
   // here, debug stuff, check that lst_work is filled correctly.
 #ifdef DEBUG
@@ -477,7 +474,7 @@ int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
     cur_dbname=(*queryDB.start_l)->dbase;
     printf("cur_dbname : %s\n",cur_dbname);
     if (acc) {
-			access_search(queryDB,cur_dbname, &nb_AC_not_found);
+      access_search(queryDB,cur_dbname, &nb_AC_not_found);
       if (nb_AC_not_found==0) loc4base=0;
       nb_locus_not_found=nb_AC_not_found;
       tot_nb_res_not_found+=nb_AC_not_found;

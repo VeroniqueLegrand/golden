@@ -40,7 +40,7 @@ static PyObject *entry_load(result_t *res) {
   size_t tlen, len = 0;
   PyObject *str;
 
-  file = list_name(res->dbase, res->filenb);
+  file = list_name(res->real_dbase, res->filenb);
   if (file == NULL) {
     PyErr_SetFromErrnoWithFilename(PyExc_IOError, res->dbase);
     return NULL; }
@@ -91,7 +91,9 @@ static PyObject *Golden_access(PyObject *self, PyObject *args) {
 
   /* Search indexes for name */
   res = access_search_deprecated(bank, name);
-  if (res == NULL) {
+  if (res->filenb == NOT_FOUND) {
+    free(res->dbase);
+    free(res->name);
     return Py_BuildValue("s", NULL); }
 
   /* Load entry if exists */
@@ -99,6 +101,9 @@ static PyObject *Golden_access(PyObject *self, PyObject *args) {
 
   free(res->dbase);
   free(res->name);
+  if (res->real_dbase!=NULL) {
+    free(res->real_dbase);
+  }
   free(res);
 
   return str; }

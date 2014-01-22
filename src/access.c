@@ -24,18 +24,23 @@
 result_t * access_search_deprecated(char *dbase, char *name) {
   result_t * res;
   // result_t * adr_res=&res;
-  int nb_AC_not_found;
+  int nb_AC_not_found=1;
   
   if ((res=malloc(sizeof(result_t)))==NULL) error_fatal("memory", NULL);
   
   res->name=strdup(name);
   res->dbase=strdup(dbase);
+  res->filenb=NOT_FOUND;
   
   WDBQueryData wData;
   wData.len_l=1;
   wData.start_l=&res;
   
   access_search(wData,dbase,&nb_AC_not_found);
+#ifdef DEBUG
+  printf("access_search_deprecated, found : \n");
+  printf("%s:%s\n,real_dbase; %s\n, filenb=%d\n, offset=%lld\n",res->dbase,res->name,res->real_dbase,res->filenb,res->offset);
+#endif
   return res;}
 
 
@@ -54,6 +59,7 @@ void access_search(WDBQueryData wData, char * db_name, int * nb_AC_not_found) {
   // cur_base may be virtual.
   /* Virtual database indexes */
   file = index_file(NULL, db_name, VIRSUF);
+  printf("Searching in file : %s \n",file);
   if (access(file, F_OK) != -1) {
     if ((f = fopen(file, "r")) == NULL) {
       error_fatal("memory", NULL); }
@@ -67,9 +73,9 @@ void access_search(WDBQueryData wData, char * db_name, int * nb_AC_not_found) {
 #endif
       if (*nb_AC_not_found!=0) {
 #ifdef DEBUG
-    	  printf("access_search : all results were not found ; continue \n");
+        printf("access_search : all results were not found ; continue \n");
 #endif
-    	  continue;
+        continue;
       }
       break;
     }
@@ -81,7 +87,7 @@ void access_search(WDBQueryData wData, char * db_name, int * nb_AC_not_found) {
   /* Real database indexes */
   file = index_file(NULL, db_name, ACCSUF);
 #ifdef DEBUG
-  //printf("Searching in file : %s \n",file);
+  printf("Searching in file : %s \n",file);
 #endif
     int nb_AC_found=index_search(file, db_name, wData, nb_AC_not_found);
 #ifdef DEBUG

@@ -8,7 +8,9 @@
 # version 0.1
 
 
-import os, sys, getopt
+import os
+import sys
+import getopt
 
 import Golden
 
@@ -148,6 +150,8 @@ def doGolden( db,ac, DE ):
     elif db in ['pir','pdb','tpg', 'tpe', 'tpd', 'prf']:
         return '','','',''
     try:
+        print "Calling Golden on : ",db,ac
+        print "GOLDENDATA=",GOLDENDATA
         flatFile = Golden.access(db,ac)
     except IOError, err:
         print >>sys.stderr, err, db, ac
@@ -211,8 +215,7 @@ options:
 
 
 if __name__=='__main__':
-    from bsddb import db as bdb
-    
+
     # tmp path
     try:
         TMP_PATH = os.environ[ 'TMPPATH' ]

@@ -38,7 +38,7 @@ void locus_search(WDBQueryData wData, char * dbase, int * nb_locus_not_found) {
 #endif
       if (*nb_locus_not_found!=0) {
 #ifdef DEBUG
-    	  printf("access_search : all results were not found ; continue \n");
+        printf("access_search : all results were not found ; continue \n");
 #endif
         continue;
       }
@@ -56,7 +56,7 @@ void locus_search(WDBQueryData wData, char * dbase, int * nb_locus_not_found) {
 #ifdef DEBUG
   printf("Searching in file : %s \n",file);
 #endif
-  int nb_found=index_search(file, dbase, wData,nb_locus_not_found);
+  index_search(file, dbase, wData,nb_locus_not_found);
   free(file);
   return ; }
 
