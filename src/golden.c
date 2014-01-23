@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <err.h>
 #include <fcntl.h>
 
 #include <stdio.h>
@@ -131,38 +132,43 @@ char * build_query_from_files(int optind, const int argc, char ** argv) {
     /* read input file(s)if any into a list of bank:AC stuff. */
     fd=open(argv[optind],O_RDONLY);
     if (fd==-1) { // maybe see errno in that case.
-      printf( "Error opening file: %s\n", strerror( errno ) );
-      error_fatal("argv[optind]", "cannot open file.");
+      err(errno,"cannot open file: %s.",argv[optind]);
     }
     if (fstat(fd, &buff)==-1) {
-      error_fatal("argv[optind]", "cannot get file size.");
+      err(errno,"cannot get file size: %s.",argv[optind]);
+      // error_fatal("argv[optind]", "cannot get file size.");
     }
+    new_siz=prev_siz+buff.st_size;
+    new_siz+=2; // add 1 for separator and 1 for 0 (end of string car).
+    if ((my_list=(char *) realloc(my_list,new_siz*sizeof(char)))==NULL) err(errno, "cannot allocate memory to store requested ACs.");
+    /*
     if (my_list==NULL) {
       new_siz=buff.st_size; // add 1 for the case where there is a \n at the end of the file or else get segmentation fault when doing printf("%s\n",my_list).
       if ((my_list=(char *) malloc(new_siz*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
-      printf("Allocated %d bytes for query. \n",new_siz);
     } else {
       prev_siz+=1; // allocate 1 car for separator
       new_siz=prev_siz+buff.st_size;
-      // new_siz+=1; // add 1 for the case where there is a \n at the end of the file.
       if ((my_list=(char *) realloc(my_list,new_siz*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
-      printf("re-allocated %d bytes for query. \n",new_siz);
       strcat(my_list," ");
-    }
+    }*/
     int nb_read;
     if ((nb_read=read(fd,&my_list[prev_siz],buff.st_size))==-1) {
-      error_fatal("argv[optind]", "cannot read file.");
+      err(errno,"cannot read file: %s.",argv[optind]);
     }
     close(fd);
-    printf("read : %d\n",nb_read);
     // remove trailing \n.
-    while (my_list[nb_read-1]=='\n') {
+    /*while (my_list[nb_read-1]=='\n') {
       my_list[nb_read-1]='\0';
       nb_read--;
       new_siz--;
+    }*/
+    if (my_list[prev_siz+nb_read-1]!='\n') {
+      my_list[prev_siz+nb_read]='\n';
+      my_list[prev_siz+nb_read+1]=0;
+      prev_siz=new_siz-1;
+    } else {
+      prev_siz=new_siz-2; // don't need the separator; \n was already at the end of the file and 0 only matters if we parsed all files.
     }
-    printf("%s\n",my_list);
-    prev_siz=new_siz;
     optind++;
   }
   return my_list;
@@ -246,18 +252,25 @@ char * build_query(const int from_file, int optind, const int argc, char ** argv
  returns the number of cards in the query.
  */
 int get_nbCards(char * my_list) {
-    // count spaces to know how many cards we are expecting.
+    // count ':' to know how many cards we are expecting.
+    int nb_cards=0;
+  /*
     char * tmp_list=my_list;
     char * blank_pos;
-    int nb_cards=0;
     blank_pos=strstr(tmp_list,":");
     while (blank_pos!=NULL) {
         nb_cards++;
         tmp_list=blank_pos;
         tmp_list+=1;
         blank_pos=strstr(tmp_list,":");
+    } */
+    int l_siz=strlen(my_list);
+    int i;
+    for (i=0;i<l_siz;i++) {
+      if (my_list[i]==':') {
+        nb_cards++;
     }
-    // nb_cards++;
+  }
     return nb_cards;
 }
 

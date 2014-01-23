@@ -26,7 +26,7 @@ void locus_search(WDBQueryData wData, char * dbase, int * nb_locus_not_found) {
   
   /* Virtual database indexes */
   file = index_file(NULL, dbase, VIRSUF);
-   if (access(file, F_OK) != -1) {
+  if (access(file, F_OK) != -1) {
     if ((f = fopen(file, "r")) == NULL) {
       error_fatal("memory", NULL); }
     while (fgets(buf, 1023, f) != NULL) {
