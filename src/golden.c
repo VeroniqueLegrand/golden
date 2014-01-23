@@ -122,6 +122,7 @@ int main(int argc, char **argv) {
 char * build_query_from_files(int optind, const int argc, char ** argv) {
   struct stat buff;
   int fd;
+  int nb_read;
   int new_siz,prev_siz=0;
   char * my_list=NULL;
 #ifdef DEBUG
@@ -141,27 +142,11 @@ char * build_query_from_files(int optind, const int argc, char ** argv) {
     new_siz=prev_siz+buff.st_size;
     new_siz+=2; // add 1 for separator and 1 for 0 (end of string car).
     if ((my_list=(char *) realloc(my_list,new_siz*sizeof(char)))==NULL) err(errno, "cannot allocate memory to store requested ACs.");
-    /*
-    if (my_list==NULL) {
-      new_siz=buff.st_size; // add 1 for the case where there is a \n at the end of the file or else get segmentation fault when doing printf("%s\n",my_list).
-      if ((my_list=(char *) malloc(new_siz*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
-    } else {
-      prev_siz+=1; // allocate 1 car for separator
-      new_siz=prev_siz+buff.st_size;
-      if ((my_list=(char *) realloc(my_list,new_siz*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
-      strcat(my_list," ");
-    }*/
-    int nb_read;
+    
     if ((nb_read=read(fd,&my_list[prev_siz],buff.st_size))==-1) {
       err(errno,"cannot read file: %s.",argv[optind]);
     }
     close(fd);
-    // remove trailing \n.
-    /*while (my_list[nb_read-1]=='\n') {
-      my_list[nb_read-1]='\0';
-      nb_read--;
-      new_siz--;
-    }*/
     if (my_list[prev_siz+nb_read-1]!='\n') {
       my_list[prev_siz+nb_read]='\n';
       my_list[prev_siz+nb_read+1]=0;
@@ -178,36 +163,31 @@ char * build_query_from_files(int optind, const int argc, char ** argv) {
  Builds query from arguments from the command line.
  */
 char * build_query_from_str(int optind, const int argc, char ** argv) {
+  int arg_len,str_len;
   int new_siz,prev_siz=0;
   char * my_list=NULL;
+  int first_arg=1;
   // argv[optind] looks like: "base:name"
   while (optind<argc) {
-    //printf("%s\n",argv[optind]);
-    if (my_list==NULL) {
-      new_siz=strlen(argv[optind]);
-      // printf("Allocating %d bytes for my_list\n",new_siz);
-      if ((my_list=(char *) malloc(new_siz*sizeof(char)))==NULL) error_fatal("memory", "cannot allocate memory to store requested ACs.");
-      strncpy(my_list,argv[optind],strlen(argv[optind]));
-    } else {
-      prev_siz+=1; // allocate space for separator
-      int arg_len=strlen(argv[optind])+1; //keep place for the \0 char.
-      new_siz=prev_siz+arg_len;
-      my_list = (char *) realloc(my_list,new_siz*sizeof(char));
-      // printf("Re-allocating %d bytes for my_list\n",new_siz);
-      if (my_list == NULL) {
-        error_fatal("memory", "cannot allocate memory to store requested ACs.");
-      }
-      //printf("%s\n",my_list);
-      strcat(my_list," ");
-      // my_list[prev_siz-1]=' ';
-      // printf("%s\n",my_list);
-      // int new_len=strlen(my_list);
-      strncat(my_list,argv[optind],arg_len-1);
-      // printf("%s\n",my_list);
+    arg_len=strlen(argv[optind]);
+    new_siz=prev_siz+arg_len;
+    new_siz+=1; // add 1 for \n separator
+    if (optind+1==argc) { // last argument in the command line
+      // add 1 for the "end of string" caracter.
+      new_siz+=1;
     }
+    if ((my_list = (char *) realloc(my_list,new_siz*sizeof(char))) == NULL) err(errno, "cannot allocate memory to store requested ACs.");
+    if (first_arg) {
+      strncpy(my_list,argv[optind],arg_len);
+      first_arg=0;
+    } else strncat(my_list,argv[optind],arg_len);
+    
+    str_len=strlen(my_list);
+    my_list[str_len]='\n';
     prev_siz=new_siz;
     optind++;
   }
+  my_list[str_len+1]=0;
   return my_list;
 }
 
