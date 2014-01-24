@@ -3341,3 +3341,107 @@ SQ   Sequence 195790 BP; 57041 A; 39982 C; 42358 G; 56204 T; 205 other;
      ggaaagcatc cctatcaaca ttgcaatttt ctcttaataa ttcctaggga agcatcttac    195780
      ccatgaattc                                                           195790
 //
+ID   X52703; SV 1; linear; genomic DNA; STD; MAM; 410 BP.
+XX
+AC   X52703; X17460;
+XX
+DT   13-JUL-1990 (Rel. 24, Created)
+DT   22-JUN-1992 (Rel. 32, Last updated, Version 3)
+XX
+DE   Blue Whale heavy satellite DNA
+XX
+KW   satellite DNA.
+XX
+OS   Balaenoptera musculus (Blue whale)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Mysticeti;
+OC   Balaenopteridae; Balaenoptera.
+XX
+RN   [1]
+RP   1-410
+RX   DOI; 10.1007/BF00292384.
+RX   PUBMED; 2612291.
+RA   Arnason U., Widegren B.;
+RT   "Composition and chromosomal localization of cetacean highly repetitive DNA
+RT   with special reference to the blue whale, Balaenoptera musculus";
+RL   Chromosoma 98(5):323-329(1989).
+XX
+CC   See also <X52700-2> for 1,760 bp common cetacean component clones
+CC   and <X52703-6>,<X53811-4> for the 422 bp heavy satellite clones.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..410
+FT                   /organism="Balaenoptera musculus"
+FT                   /mol_type="genomic DNA"
+FT                   /clone="1"
+FT                   /db_xref="taxon:9771"
+FT   misc_feature    1..410
+FT                   /note="heavy satellite DNA"
+XX
+SQ   Sequence 410 BP; 102 A; 56 C; 135 G; 117 T; 0 other;
+     ttgttattaa acctatccca ctctctagat accccgtagc acgtaaagga atattatttg        60
+     ggggtccagt catggagaag agtttagaca ctaggataag attaggaaca cacccattct       120
+     aaagaaatca cattaggatt ctctttttaa gctgttcctt aaaacactag tgcttaggaa       180
+     atgtattgga ggcagaagca ctcaagggta gcctaaggtt atggttaggc ttagggttag       240
+     ctgtagggta cggcttaagg tacgggtttg gggaggggtt cgggtacggc gtagcgtatg       300
+     ggttagggtt agggttaggg ttagggctcg gtttagggta cgggttagga ttagggtacg       360
+     tgttagggtt agggtagggg ttagggttag ggtacgcgtt agggttaggg                  410
+//
+ID   X17276; SV 1; linear; genomic DNA; STD; MAM; 556 BP.
+XX
+AC   X17276;
+XX
+DT   08-MAR-1990 (Rel. 23, Created)
+DT   26-FEB-1992 (Rel. 31, Last updated, Version 2)
+XX
+DE   Giant Panda satellite 1 DNA
+XX
+KW   satellite 1 DNA; satellite DNA.
+XX
+OS   Ailuropoda melanoleuca (giant panda)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Laurasiatheria; Carnivora; Caniformia; Ursidae; Ailuropoda.
+XX
+RN   [1]
+RP   1-556
+RA   Gall J.;
+RT   ;
+RL   Submitted (12-DEC-1989) to the INSDC.
+RL   Gall J., Carnegie Institution , 115 West University Parkway, Baltimore MD 
+RL   21210, U S A.
+XX
+RN   [2]
+RP   1-556
+RX   DOI; 10.1093/nar/18.4.1054.
+RX   PUBMED; 2315021.
+RA   Wu Z., Liu W.X., Murphy C., Gall J.;
+RT   "Satellite 1 DNA sequence from genomic DNA of the giant panda Ailuropoda
+RT   melanoleuca";
+RL   Nucleic Acids Res. 18(4):1054-1054(1990).
+XX
+CC   Data kindly reviewed (17-APR-1990) by Gall J.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..556
+FT                   /organism="Ailuropoda melanoleuca"
+FT                   /mol_type="genomic DNA"
+FT                   /dev_stage="adult"
+FT                   /clone_lib="pBR322"
+FT                   /clone="pAmeS1-5"
+FT                   /tissue_type="liver"
+FT                   /db_xref="taxon:9646"
+XX
+SQ   Sequence 556 BP; 106 A; 148 C; 134 G; 168 T; 0 other;
+     gatcctcccc aggcccctac acccaatgtg gaaccggggt cccgaatgaa aatgctgctg        60
+     ttccctggag gtgttttcct ggacgctctg ctttgttacc aatgagaagg gcgctgaatc       120
+     ctcgaaaatc ctgacccttt taattcatgc tcccttactc acgagagatg atgatcgttg       180
+     atatttccct ggactgtgtg gggtctcaga gaccactatg gggcactctc gtcaggcttc       240
+     cgcgaccacg ttccctcatg tttccctatt aacgaagggt gatgatagtg ctaagacggt       300
+     ccctgtacgg tgttgtttct gacagacgtg ttttgggcct tttcgttcca ttgccgccag       360
+     cagttttgac aggatttccc cagggagcaa acttttcgat ggaaacgggt tttggccgaa       420
+     ttgtctttct cagtgctgtg ttcgtcgtgt ttcactcacg gtaccaaaac accttgatta       480
+     ttgttccacc ctccataagg ccgtcgtgac ttcaagggct ttcccctcaa actttgtttc       540
+     ttggttctac gggctg                                                       556
+//

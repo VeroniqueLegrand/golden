@@ -45,7 +45,19 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-f /Users/vlegrand/Desktop/golden-1.1a/data/nt_uniprot_only.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_10_first.txt /Users/vlegrand/Desktop/golden-1.1a/data/misc_all1.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_10_first.txt /Users/vlegrand/Desktop/golden-1.1a/data/nt_uniprot_only.txt"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "genbank:M37253 genbank:M37254"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "embl:X52703 embl:X17276"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "prosite:ADENYLOSUCCIN_SYN_2 prosite:ACTINS_ACT_LIKE"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "genbank:JX841180 uniprot:028R_FRG3G embl:X55027 refseq:XM_004227550 uniprot:toto refseq:XM_004227550"

@@ -1,0 +1,2 @@
+prosite:ADENYLOSUCCIN_SYN_2
+prosite:ACTINS_ACT_LIKE

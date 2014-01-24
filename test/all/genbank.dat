@@ -4155,3 +4155,82 @@ ORIGIN
    176641 acttgggctt atgggtacag gatgtgtttg taaaaatgaa aaacaaaaaa cccgaaacag
    176701 aaacagagtg atcctattag gtttatggga attc
 //
+LOCUS       MUSASPT05                232 bp    DNA     linear   ROD 27-APR-1993
+DEFINITION  Mouse mitochondrial aspartate aminotransferase gene, exon 5.
+ACCESSION   M37254
+VERSION     M37254.1  GI:192043
+KEYWORDS    aspartate aminotransferase; mAspATase.
+SEGMENT     5 of 10
+SOURCE      Mus musculus (house mouse)
+  ORGANISM  Mus musculus
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Glires; Rodentia;
+            Sciurognathi; Muroidea; Muridae; Murinae; Mus; Mus.
+REFERENCE   1  (bases 1 to 232)
+  AUTHORS   Tsuzuki,T., Obaru,K., Setoyama,C. and Shimada,K.
+  TITLE     Structural organization of the mouse mitochondrial aspartate
+            aminotransferase gene
+  JOURNAL   J. Mol. Biol. 198 (1), 21-31 (1987)
+   PUBMED   2828632
+COMMENT     Original source text: Mouse (strain C3H/He) male liver DNA, clones
+            mmAspAT-[1-4].
+FEATURES             Location/Qualifiers
+     source          1..232
+                     /organism="Mus musculus"
+                     /mol_type="genomic DNA"
+                     /db_xref="taxon:10090"
+     intron          order(M37253.1:101..140,1..40)
+                     /gene="mAspATase"
+                     /number=4
+     prim_transcript <1..>232
+                     /gene="mAspATase"
+                     /note="mAspATase mRNA and introns"
+     exon            41..202
+                     /gene="mAspATase"
+                     /product="mitochondrial aspartate aminotransferase"
+                     /number=5
+ORIGIN      About 2.2 kbp after segment 4.
+        1 ctttcttcat tttctcattc ccttttatcc cgacttttag caaaggtttt ttaagttcag
+       61 ccgagatgtc tttctgccca aaccatcctg gggaaatcac acgcccatct tcagggatgc
+      121 cggcatgcag ctccaaggtt atcgctacta tgaccccaag acttgcggtt ttgacttctc
+      181 cggagcccta gaagacatat cagtaagtgt ggctttccag gcccgacttc tg
+//
+LOCUS       MUSASPT04                140 bp    DNA     linear   ROD 27-APR-1993
+DEFINITION  Mouse mitochondrial aspartate aminotransferase gene, exon 4.
+ACCESSION   M37253
+VERSION     M37253.1  GI:192042
+KEYWORDS    aspartate aminotransferase; mAspATase.
+SEGMENT     4 of 10
+SOURCE      Mus musculus (house mouse)
+  ORGANISM  Mus musculus
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Glires; Rodentia;
+            Sciurognathi; Muroidea; Muridae; Murinae; Mus; Mus.
+REFERENCE   1  (bases 1 to 140)
+  AUTHORS   Tsuzuki,T., Obaru,K., Setoyama,C. and Shimada,K.
+  TITLE     Structural organization of the mouse mitochondrial aspartate
+            aminotransferase gene
+  JOURNAL   J. Mol. Biol. 198 (1), 21-31 (1987)
+   PUBMED   2828632
+COMMENT     Original source text: Mouse (strain C3H/He) male liver DNA, clones
+            mmAspAT-[1-4].
+FEATURES             Location/Qualifiers
+     source          1..140
+                     /organism="Mus musculus"
+                     /mol_type="genomic DNA"
+                     /db_xref="taxon:10090"
+     intron          order(M37252.1:169..200,1..40)
+                     /gene="mAspATase"
+                     /number=3
+     prim_transcript <1..>140
+                     /gene="mAspATase"
+                     /note="mAspATase mRNA and introns"
+     exon            41..100
+                     /gene="mAspATase"
+                     /product="mitochondrial aspartate aminotransferase"
+                     /number=4
+ORIGIN      About 1.2 kbp after segment 3.
+        1 tgtaaagggt agagagagtg actctgtgta tcccctgcag ttcgtcactg tgcagaccat
+       61 ttccgggact ggagccttaa gggtcggggc cagttttctg gtcagtggaa ctctttcaag
+      121 aatgaatctt ttggggtggc
+//

@@ -25,8 +25,17 @@ done
 lst="foo bar nul"
 for e in $lst; do
   ../src/golden all:$e 2>/dev/null || exit 1
-  (../src/golden all:$e 2>&1 | grep 'no such entry') && exit 1
+##  (../src/golden all:$e 2>&1 | grep 'no such entry') && exit 1
 done
+
+(../src/golden all:foo all:bar all:null 2>&1 | grep 'entries not found : all:FOO all:BAR all:NULL') && exit 1
+
+## check multiple existing entries from command line
+../src/golden all:AC007218 all:HSA395L14 all:1PYMA all:ASX_HYDROXYL >/dev/null || exit 1
+
+## check multiple existing entries from files given in command line
+../src/golden -f genbank_in.txt prosite_in.txt embl_in.txt>/dev/null || exit 1
+
 
 ## Check compatibility (without dir prefix)
 mv all.dbx all.dbx.new
