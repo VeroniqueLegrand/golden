@@ -48,18 +48,18 @@ static void usage(int);
 void res_display(result_t res, int chk, char * file);
 int performGoldenQuery(WAllQueryData, int,int);
 static int compare_dbase (void const *a, void const *b);
-char * build_query(const int from_file, int optind, const int argc, char ** argv);
+// char * build_query(const int from_file, int optind, const int argc, char ** argv);
 WAllQueryData prepareQueryData(char *, result_t * ,int);
 void freeQueryData(WAllQueryData wData);
 int get_nbCards(char * my_list);
 void print_results(int nb_res,int chk, result_t * res,char * file);
 void logEntriesNotFound(WAllQueryData wData,int nb_notFound);
+char * build_query_from_files(int optind, const int argc, char ** argv);
+char * build_query_from_str(int optind, const int argc, char ** argv);
+
 
 /* Global variables */
 static char *prog;
-
-// for sepqrqting elements in the list containing the AC.
-// const char* separator=" ";
 
 
 /* Main function */
@@ -100,17 +100,19 @@ int main(int argc, char **argv) {
   if (optind==argc) {
       error_fatal("arguments", "no input file or list of bank:AC provided.");
   }
-  my_list=build_query(from_file,optind, argc, argv);
+  if (from_file) {
+    my_list=build_query_from_files(optind, argc, argv);
+  } else {
+    my_list=build_query_from_str(optind, argc, argv);
+  }
   nb_cards=get_nbCards(my_list);
   // instantiate storage for query results.
   res=(result_t*) malloc(sizeof(result_t)*nb_cards);
   WAllQueryData wData=prepareQueryData(my_list,res,nb_cards);
   nb_res=performGoldenQuery(wData,acc,loc);
-  
   logEntriesNotFound(wData,nb_cards-nb_res);
   // print results
   print_results(wData.nb_cards,chk,res,file);
-  
   free(my_list);
   freeQueryData(wData);
   free(res);
@@ -137,7 +139,6 @@ char * build_query_from_files(int optind, const int argc, char ** argv) {
     }
     if (fstat(fd, &buff)==-1) {
       err(errno,"cannot get file size: %s.",argv[optind]);
-      // error_fatal("argv[optind]", "cannot get file size.");
     }
     new_siz=prev_siz+buff.st_size;
     new_siz+=2; // add 1 for separator and 1 for 0 (end of string car).
@@ -194,56 +195,11 @@ char * build_query_from_str(int optind, const int argc, char ** argv) {
 
 
 /*
- From input arguments provided by the user, build a char string containing a list of bank:AC stuff separated by blanks.
- Returns this string. The caller must free the memory allocated for the returned string.
- */
-char * build_query(const int from_file, int optind, const int argc, char ** argv) {
-    // int new_siz,prev_siz=0;
-    char * my_list=NULL;
-    if (from_file) {
-      my_list=build_query_from_files(optind, argc, argv);
-    } else {
-      my_list=build_query_from_str(optind, argc, argv);
-    }
-    char *end;
-    printf("%s\n",my_list);
-    // Trim leading space
-    while(isspace(*my_list)) {
-      // printf("'Removed 1 space \n");
-      my_list++;
-    }
-    // int list_length=strlen(my_list);
-    // printf("my_list length : %d\n",list_length);
-    // Trim trailing space
-    end = my_list + strlen(my_list) - 1;
-    while(end > my_list && isspace(*end)) end--;
-    // Write new null terminator
-    *(end+1) = 0;
-    // replace '\n' with spaces.
-    char * p_cr;
-    while ((p_cr=strchr(my_list,'\n')) != NULL) {
-        *p_cr=' ';
-    }
-    return my_list;
-}
-
-
-/*
  returns the number of cards in the query.
  */
 int get_nbCards(char * my_list) {
     // count ':' to know how many cards we are expecting.
     int nb_cards=0;
-  /*
-    char * tmp_list=my_list;
-    char * blank_pos;
-    blank_pos=strstr(tmp_list,":");
-    while (blank_pos!=NULL) {
-        nb_cards++;
-        tmp_list=blank_pos;
-        tmp_list+=1;
-        blank_pos=strstr(tmp_list,":");
-    } */
     int l_siz=strlen(my_list);
     int i;
     for (i=0;i<l_siz;i++) {
@@ -289,7 +245,6 @@ static int compare_dbase (void const *a, void const *b)
 {
    result_t const * const *pa = a;
    result_t const * const *pb = b;
-
    /*
 #ifdef DEBUG
    printf("\nComparing  pa->dbase and  pb->dbase : ");
@@ -306,9 +261,7 @@ static int compare_dbase (void const *a, void const *b)
 /*
  *Utility method that displays one result.
  * Note : it is up to the caller to free the memory allocated for res after display:
- // free(res->name); free(res->dbase);
- //  free(res);
- */
+*/
 void res_display(result_t res, int chk, char * file) {
     char * p;
     FILE *f, *g;
@@ -341,7 +294,9 @@ void res_display(result_t res, int chk, char * file) {
 }
 
 
-
+/*
+ Displays the list of entries that were not found.
+ */
 void logEntriesNotFound(WAllQueryData wData,int nb_notFound) {
   fprintf(stderr, "entries not found : ");
   result_t * cur_res;
@@ -371,7 +326,7 @@ WAllQueryData prepareQueryData(char * my_list, result_t * res,int nb_cards) {
   int len;
   char * dbase, *name, *p, *q;
   int i;
-  elm = strtok (my_list," ");
+  elm = strtok (my_list,"\n");
   for (i=0;i<nb_cards;i++) {
     len = strlen(elm);
     if (strchr(elm,':') == NULL) {
@@ -389,7 +344,7 @@ WAllQueryData prepareQueryData(char * my_list, result_t * res,int nb_cards) {
       res[i].filenb=NOT_FOUND;
       res[i].real_dbase=NULL;
       lst_work[i]=&res[i];
-      elm = strtok (NULL," ");
+      elm = strtok (NULL,"\n");
   }
   // here, debug stuff, check that lst_work is filled correctly.
 #ifdef DEBUG
@@ -448,7 +403,6 @@ void freeQueryData(WAllQueryData wData) {
  returns :
     tot_nb_res_found : total number of cards found
 */
-
 int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
   int loc4base,idx_db,nb_db;
   char * cur_dbname;
@@ -461,18 +415,18 @@ int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
   
   for (idx_db=0;idx_db<nb_db;idx_db++) {
     queryDB=wData.meta_lst_work.l_infoDB[idx_db];
-    loc4base=loc;
+    // loc4base=loc;
     nb_AC_not_found=queryDB.len_l;
     nb_locus_not_found=queryDB.len_l;
     cur_dbname=(*queryDB.start_l)->dbase;
     printf("cur_dbname : %s\n",cur_dbname);
     if (acc) {
       access_search(queryDB,cur_dbname, &nb_AC_not_found);
-      if (nb_AC_not_found==0) loc4base=0;
+      //if (nb_AC_not_found==0) loc4base=0;
       nb_locus_not_found=nb_AC_not_found;
       tot_nb_res_not_found+=nb_AC_not_found;
     }
-    if (loc4base) {
+    if (nb_AC_not_found && loc) {
       locus_search(queryDB,cur_dbname,&nb_locus_not_found);
       tot_nb_res_not_found+=nb_locus_not_found;
     } else {
@@ -490,7 +444,7 @@ int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
 static void usage(int status) {
   FILE *f = stdout;
 
-  (void)fprintf(f, "usage: %s [options] <dbase:name>\n\n", prog);
+  (void)fprintf(f, "usage: %s [options] <dbase:name> <dbase:name> <dbase:name>...\n\n", prog);
   (void)fprintf(f, "options:\n");
   (void)fprintf(f, "  -a        ... Search query by accession number.\n");
   (void)fprintf(f, "  -c        ... Check query.\n");
@@ -498,5 +452,5 @@ static void usage(int status) {
   (void)fprintf(f, "  -i        ... Search query by entry name.\n");
   (void)fprintf(f, "  -l        ... List available databases.\n");
   (void)fprintf(f, "  -o <file> ... Place output into <file>.\n");
-
+  (void)fprintf(f, "  -f <file1> <file2> <file3>... Read input from <file1> <file2> <file3>.\n");
   exit(status); }
