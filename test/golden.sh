@@ -28,7 +28,7 @@ for e in $lst; do
 ##  (../src/golden all:$e 2>&1 | grep 'no such entry') && exit 1
 done
 
-(../src/golden all:foo all:bar all:null 2>&1 | grep 'entries not found : all:FOO all:BAR all:NULL') && exit 1
+(../src/golden all:foo all:bar all:null 2>&1 | grep 'entries not found : all:FOO all:BAR all:NULL') || exit 1
 
 ## check multiple existing entries from command line
 ../src/golden all:AC007218 all:HSA395L14 all:1PYMA all:ASX_HYDROXYL >/dev/null || exit 1
@@ -53,8 +53,8 @@ for f in $lst; do
 done
 
 ## Cleanup
-test $srcdir != . && rm -f all
-rm -f *.acx *.idx *.dbx
+## test $srcdir != . && rm -f all
+## rm -f *.acx *.idx *.dbx
 
 ## Normal end
 exit 0

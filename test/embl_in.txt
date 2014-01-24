@@ -1,2 +1,2 @@
-embl:X52703
-embl:X17276
+all:X52703
+all:X17276
