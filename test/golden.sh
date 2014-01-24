@@ -53,8 +53,8 @@ for f in $lst; do
 done
 
 ## Cleanup
-## test $srcdir != . && rm -f all
-## rm -f *.acx *.idx *.dbx
+test $srcdir != . && rm -f all
+rm -f *.acx *.idx *.dbx
 
 ## Normal end
 exit 0
