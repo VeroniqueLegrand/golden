@@ -1,5 +1,11 @@
 What's new in ?:
 
+* multiple queries in 1 sigle run for golden.
+
+* new -f flag to pass names of files containing query values .
+
+What's new in ?:
+
 * Indexes files use now fixed size records. This breaks compatibility
   with old indexes, but allow the same files to be accessed on both 32
   and 64 bits hosts.

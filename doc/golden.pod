@@ -11,7 +11,7 @@
 
 =over 4
 
-=item B<golden> [B<-achil>] [B<-o> F<file>] E<lt>F<dbase>:F<name>E<gt>
+=item B<golden> [B<-achil>] [B<-o> F<file>] [B<-f> F<file1> F<file2> F<file3> F<...> F<fileN>] E<lt>F<dbase>:F<name> F<dbase>:F<name> ... F<dbase>:F<name>E<gt>
 
 =back
 
@@ -45,6 +45,12 @@ List all available databanks.
 
 Output result in F<file>.
 
+=item -f F<file1> F<file2> F<file3> F<...> F<fileN>
+
+Input query values read from F<file1> F<file2> F<file3> F<...> F<fileN>
+These files must contain F<dbase>:F<name> information separated by \n.
+See the example part for more information.
+
 =back
 
 =head1 DESCRIPTION
@@ -63,18 +69,33 @@ names. Setting both flags will restore the default search behaviour.
 
 =over 4
 
-=item golden genbank:mmvasp
+=item golden genbank:mmvasp embl:stuff1 embl:stuff2 genbank:otherAC uniprot:anotherLocus embl:stuff3
 
-Search an entry named `mmvasp' in `genbank' databank in both entry
-names and accession number indexes (default = both).
+Search:
+ entries named `mmvasp' and 'otherAC' in `genbank' databank,
+ entries named 'stuff1', 'stuff2' and 'stuff3 in 'embl' databank' 
+ entry named 'anotherLocus' in 'uniprot' databank.
+Search is performed in both entry names and accession number indexes (default = both).
 
-=item golden -i genbank:mmvasp
+=item golden -i genbank:mmvasp embl:stuff1 embl:stuff2 genbank:otherAC uniprot:anotherLocus embl:stuff3
 
 Same search but in entry names indexes only.
 
 =item golden -l
 
 List all available (indexed) databanks.
+
+=item golden -f file1 file2 file3
+
+Search all entries listed in file1, file2 and file3.
+File format must be as follows:
+
+genbank:mmvasp
+embl:stuff1
+embl:stuff2
+genbank:otherAC
+uniprot:anotherLocus
+embl:stuff3
 
 =back
 
@@ -98,4 +119,4 @@ Used to specify an alternate golden indexes directory.
 
 =head1 AUTHOR
 
-Nicolas Joly (njoly@pasteur.fr), Institut Pasteur.
+Nicolas Joly (njoly@pasteur.fr), Véronique Legrand (vlegrand@pasteur.fr) Institut Pasteur.

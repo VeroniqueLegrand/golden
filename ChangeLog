@@ -1,3 +1,8 @@
+2014-27-01 Veronique Legrand <vlegrand@pasteur.fr>
+
+  * src/*.c: Added the possibilty to perform several queries in a single golden run.
+  Query values can be passed as command-line arguments or in files via the new -f option.
+
 2013-03-11  Nicolas Joly  <njoly@pasteur.fr>
 
 	* python/Golden.c: Cache previous bank existence checks. No need
