@@ -161,9 +161,11 @@ List all available databanks.
 Output result in \fIfile\fR.
 .IP "\-f \fIfile1\fR \fIfile2\fR \fIfile3\fR \fI...\fR \fIfileN\fR" 4
 .IX Item "-f file1 file2 file3 ... fileN"
-Input query values read from \fIfile1\fR \fIfile2\fR \fIfile3\fR \fI...\fR \fIfileN\fR
-These files must contain \fIdbase\fR:\fIname\fR information separated by \en.
-See the example part for more information.
+.Vb 3
+\& Input query values read from F<file1> F<file2> F<file3> F<...> F<fileN>.
+\& These files must contain F<dbase>:F<name> information separated by \en.
+\& See the example part for more information.
+.Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
 \&\fBgolden\fR is a databank flat files entry retriever.
@@ -183,6 +185,7 @@ Search:
  entries named `mmvasp' and 'otherAC' in `genbank' databank,
  entries named 'stuff1', 'stuff2' and 'stuff3 in 'embl' databank' 
  entry named 'anotherLocus' in 'uniprot' databank.
+.Sp
 Search is performed in both entry names and accession number indexes (default = both).
 .IP "golden \-i genbank:mmvasp embl:stuff1 embl:stuff2 genbank:otherAC uniprot:anotherLocus embl:stuff3" 4
 .IX Item "golden -i genbank:mmvasp embl:stuff1 embl:stuff2 genbank:otherAC uniprot:anotherLocus embl:stuff3"
@@ -193,14 +196,14 @@ List all available (indexed) databanks.
 .IP "golden \-f file1 file2 file3" 4
 .IX Item "golden -f file1 file2 file3"
 Search all entries listed in file1, file2 and file3.
-File format must be as follows:
 .Sp
-genbank:mmvasp
-embl:stuff1
-embl:stuff2
-genbank:otherAC
-uniprot:anotherLocus
-embl:stuff3
+File format must be as follows:
+ genbank:mmvasp\en
+ embl:stuff1\en
+ embl:stuff2\en
+ genbank:otherAC\en
+ uniprot:anotherLocus\en
+ embl:stuff3
 .SH "ENVIRONMENT"
 .IX Header "ENVIRONMENT"
 .IP "\s-1GOLDENDATA\s0" 10
@@ -212,4 +215,4 @@ Used to specify an alternate golden indexes directory.
 .IX Item "goldin(1)"
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-Nicolas Joly (njoly@pasteur.fr), VA\*~Xronique Legrand (vlegrand@pasteur.fr) Institut Pasteur.
+Nicolas Joly (njoly@pasteur.fr), Veronique Legrand (vlegrand@pasteur.fr) Institut Pasteur.
