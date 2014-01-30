@@ -6,6 +6,7 @@
 
 #include <sys/types.h>
 
+#include <fcntl.h>
 #include <stdio.h>
 #ifdef STDC_HEADERS
 #include <stdlib.h>
@@ -96,9 +97,12 @@ int entry_parse(FILE *f, entry_t *ent) {
 
 
 /* Display database flat file entry */
-int entry_display(FILE *f, FILE *g) {
-  char *buf;
-  int len;
+int entry_display(FILE *f, int fd) {
+  static char *buf;
+  int len,read_len;
+  // int MAX_BUFSIZE=1024000; // use BUF_MAX instead
+ // static char * write_buf;
+  // static int prev_bsiz=0;
 
   len = BUFINC;
   if ((buf = (char *)malloc((size_t)len+1)) == NULL) {
@@ -107,7 +111,11 @@ int entry_display(FILE *f, FILE *g) {
   while(fgets(buf, len, f) != NULL) {
 
     /* Print entry line */
-    (void)fprintf(g, "%s", buf);
+    // (void)fprintf(g, "%s", buf); // seems to be time consumming
+    //prev_bsiz+=len;
+    // write_buf=(char *) realloc(prev_bsiz);
+    read_len=strlen(buf);
+    write(fd,buf,read_len);
 
     /* Checks for entry end */
     if (*buf == '/' && *(buf+1) == '/') { break; }

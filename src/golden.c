@@ -38,14 +38,14 @@
 #define off_t long
 #endif
 
-#define DEBUG
+//#define DEBUG
 
 
 
 
 /* Functions prototypes */
 static void usage(int);
-void res_display(result_t res, int chk, char * file);
+void res_display(result_t res, int chk, int file);
 int performGoldenQuery(WAllQueryData, int,int);
 static int compare_dbase (void const *a, void const *b);
 // char * build_query(const int from_file, int optind, const int argc, char ** argv);
@@ -211,6 +211,24 @@ int get_nbCards(char * my_list) {
 }
 
 
+/*
+ * Utility method that compares 2 result_t structures based on result_t.dbase comparison.
+ */
+static int compare_dbase (void const *a, void const *b)
+{
+  result_t const * const *pa = a;
+  result_t const * const *pb = b;
+  /*
+   #ifdef DEBUG
+   printf("\nComparing  pa->dbase and  pb->dbase : ");
+   printf("%s ",(*pa)->dbase);
+   printf("%s ",(*pb)->dbase);
+   #endif*/
+  int res=strcmp((*pa)->dbase, (*pb)->dbase);
+  return res;
+}
+
+
 
 /*
  prints results to screen or file and free memory allocated for strings in result_t structures.
@@ -218,16 +236,16 @@ int get_nbCards(char * my_list) {
  */
 void print_results(int nb_res,int chk,result_t * res,char * file) {
   int i;
-  /*
-#ifdef DEBUG
-  printf("going to print : %d results \n",nb_res);
-#endif*/
+  int g=fileno(stdout);
+  /* Set output stream */
+  // g = stdout;
+  if (file != NULL && (g = open(file, O_WRONLY|O_CREAT)) == -1) err(errno,"cannot open file: %s.",file);
+
   // first version prints output. Don't want to change main's prototype at the beginning.
   for (i=0; i<nb_res; i++) {
     if (res[i].filenb==NOT_FOUND) continue; // only call print for results that were found. 
-      res_display(res[i],chk, file);
-      printf("###############################################################################");
-      printf("                                                                               ");
+      res_display(res[i],chk, g);
+      printf("\n#####\n");
       result_t cur_res;
       cur_res=res[i];
       free(cur_res.name); free(cur_res.dbase);
@@ -235,26 +253,8 @@ void print_results(int nb_res,int chk,result_t * res,char * file) {
         free(cur_res.real_dbase);
       }
   }
+  if (file!=NULL) close(g);
 }
-
-
-/*
- * Utility method that compares 2 result_t structures based on result_t.dbase comparison.
- */
-static int compare_dbase (void const *a, void const *b)
-{
-   result_t const * const *pa = a;
-   result_t const * const *pb = b;
-   /*
-#ifdef DEBUG
-   printf("\nComparing  pa->dbase and  pb->dbase : ");
-   printf("%s ",(*pa)->dbase);
-   printf("%s ",(*pb)->dbase);
-#endif*/
-   int res=strcmp((*pa)->dbase, (*pb)->dbase);
-   return res;
-}
-
 
 
 
@@ -262,19 +262,14 @@ static int compare_dbase (void const *a, void const *b)
  *Utility method that displays one result.
  * Note : it is up to the caller to free the memory allocated for res after display:
 */
-void res_display(result_t res, int chk, char * file) {
+void res_display(result_t res, int chk, int fd) {
     char * p;
-    FILE *f, *g;
+    FILE *f;
     /* Get database flat file name */
     if (res.filenb==NOT_FOUND || res.real_dbase==NULL) {
         return;
     }
     p = list_name(res.real_dbase, res.filenb);
-
-    /* Set output stream */
-    g = stdout;
-    if (file != NULL && (g = fopen(file, "a")) == NULL) {
-        error_fatal(file, NULL); }
 
     /* Display database entry */
     if (chk == 0) {
@@ -282,15 +277,11 @@ void res_display(result_t res, int chk, char * file) {
           error_fatal(p, NULL); }
         if (fseeko(f, res.offset, SEEK_SET) != 0) {
           error_fatal(p, NULL); }
-        if (entry_display(f, g)) {
+        if (entry_display(f, fd)) {
           error_fatal(p, NULL); }
         if (fclose(f) == EOF) {
           error_fatal(p, NULL); }
         free(p); }
-
-
-    if (file != NULL && fclose(g) == EOF) {
-        error_fatal(file, NULL); }
 }
 
 
@@ -404,7 +395,7 @@ void freeQueryData(WAllQueryData wData) {
     tot_nb_res_found : total number of cards found
 */
 int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
-  int loc4base,idx_db,nb_db;
+  int idx_db,nb_db;
   char * cur_dbname;
   WDBQueryData queryDB;
   int tot_nb_res_found=0;

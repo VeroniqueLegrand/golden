@@ -161,10 +161,11 @@ List all available databanks.
 Output result in \fIfile\fR.
 .IP "\-f \fIfile1\fR \fIfile2\fR \fIfile3\fR \fI...\fR \fIfileN\fR" 4
 .IX Item "-f file1 file2 file3 ... fileN"
-.Vb 3
-\& Input query values read from F<file1> F<file2> F<file3> F<...> F<fileN>.
+.Vb 4
+\& Input query values are read from F<file1> F<file2> F<file3> F<...> F<fileN>.
 \& These files must contain F<dbase>:F<name> information separated by \en.
-\& See the example part for more information.
+\& Query results are sorted in the same order as query values are provided in input.
+\& See the example part for more information on file format.
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"

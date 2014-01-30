@@ -133,7 +133,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
       indnb = iswap64(indnb); }
 
   int idx_card;
-  printf("lst_size=%d\n",lst_size);
+  //printf("lst_size=%d\n",lst_size);
   for (idx_card=0;idx_card<lst_size;idx_card++)
   {
     result_t * cur_res=lst[idx_card];

@@ -1,5 +1,5 @@
 /* entry.h - Databases entries functions */
-#define DEBUG
+// #define DEBUG
 #ifndef __ENTRY_H_
 #define __ENTRY_H_
 
@@ -16,6 +16,7 @@ typedef struct {
 
 /* Functions prototypes */
 int entry_parse(FILE *, entry_t *);
-int entry_display(FILE *, FILE *);
+// int entry_display(FILE *, FILE *);
+int entry_display(FILE *f, int fd);
 
 #endif /* __ENTRY_H_ */

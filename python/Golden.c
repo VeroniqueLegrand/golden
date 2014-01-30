@@ -108,9 +108,53 @@ static PyObject *Golden_access(PyObject *self, PyObject *args) {
 
   return str; }
 
+static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
+  char * l_args,elm;
+  int t_args,nb_cards;
+  static int cur_res=0;
+  
+  if (cur_res==0) { // first call perform query
+    /* get and validate list parameter*/
+    if (!PyArg_ParseTuple(args, "s", &l_args, &t_args)) {
+      return NULL; }
+  
+    if (*l_args == '\0') {
+      PyErr_SetString(PyExc_ValueError, "list of bank:AC cannot be empty.");
+      return NULL; }
+  
+    nb_cards=get_nbCards(my_list);
+    // instantiate storage for query results.
+    res=(result_t*) malloc(sizeof(result_t)*nb_cards);
+    WAllQueryData wData=prepareQueryData(my_list,res,nb_cards);
+    int nb_res=performGoldenQuery(wData,acc,loc);
+  }
+  
+  // logEntriesNotFound(wData,nb_cards-nb_res); // TODO? : How to display that to the python caller?
+  if (cur_res==nb_cards) { // iteration is over.
+    freeQueryData(wData);
+    free(res);
+    Py_RETURN_NONE;
+  }
+  if (res->filenb == NOT_FOUND) {
+    free(res->dbase);
+    free(res->name);
+    cur_res++;
+    return Py_BuildValue("Entry not found"); }
+  
+  str = entry_load(res);
+  free(res->dbase);
+  free(res->name);
+  if (res->real_dbase!=NULL) {
+    free(res->real_dbase);
+  }
+  cur_res++;
+  return str;
+}
+
 
 static PyMethodDef Golden_methods[] = {
   { "access", (PyCFunction)Golden_access, METH_VARARGS, NULL },
+  { "access_new", (PyCFunction)Golden_access_new, METH_VARARGS, NULL },
   { NULL, NULL, 0, NULL }
 };
 

@@ -129,10 +129,11 @@ class TaxOptimizerError:
 
 ##############################################################################
 #
-#            Golden
+#            Golden. Keep this for compatibility and performance testing.
 #
 ##############################################################################
 
+# def doGolden( f_cards, db,ac, DE ):
 def doGolden( db,ac, DE ):
     ########################### db ref
     if db in[ 'sp', 'sw','swissprot','tr', 'trembl']:
@@ -150,8 +151,9 @@ def doGolden( db,ac, DE ):
     elif db in ['pir','pdb','tpg', 'tpe', 'tpd', 'prf']:
         return '','','',''
     try:
-        print "Calling Golden on : ",db,ac
-        print "GOLDENDATA=",GOLDENDATA
+        #print "Calling Golden on : ",db,ac
+        #print "GOLDENDATA=",GOLDENDATA
+        #print >>f_cards, db+":"+acc
         flatFile = Golden.access(db,ac)
     except IOError, err:
         print >>sys.stderr, err, db, ac
@@ -166,11 +168,19 @@ def doGolden( db,ac, DE ):
 
 ##############################################################################
 #
+#            Golden Multi. Using new version of golden.
+#
+# input_flag : indicates if input must be read from files whose names are given in l_input.
+# l_input : Depending on input_flag, a list of files or a list of bank:AC bank:locus...
+##############################################################################
+def doGoldenMulti(l_input,input_flag):
+    if input_flag
+
+##############################################################################
+#
 #            Taxonomy
 #
 ##############################################################################
-
-    
 def extractTaxoFrom_osVSocBDB( acc, allTaxo, allTaxId, BDB ):
     taxonomy = allTaxo[acc]['taxoLight']
     orgName = allTaxo[acc]['orgName']
@@ -294,7 +304,13 @@ if __name__=='__main__':
     except EOFError, err:
         print >>sys.stderr, err
         sys.exit()
-    
+    # VL : to get sample only
+    # try :
+    #     f_cards=open('/tmp/all_requested_cards.txt','w')
+    # except:
+    #     print "Cannot trace requests"
+    #     sys.exit()
+
     while line:
         description = ''
         fld = line.split()
@@ -355,7 +371,8 @@ if __name__=='__main__':
             description = allTaxo[acc]['DE']
         else:
             allTaxo[acc]={'db':db }
-            allTaxo[acc]['orgName'], allTaxo[acc]['taxId'], allTaxo[acc]['taxoLight'], allTaxo[acc]['DE'] = doGolden( db, acc, DE )
+            # print >>f_cards, db,":",acc
+            allTaxo[acc]['orgName'], allTaxo[acc]['taxId'], allTaxo[acc]['taxoLight'], allTaxo[acc]['DE'] = doGolden( db, acc, DE ) # doGolden( f_cards, db, acc, DE )
             taxonomy = allTaxo[acc]['taxoLight']
             
         if taxonomy:
@@ -376,5 +393,5 @@ if __name__=='__main__':
         lineNb+=1
         
     tabfhin.close()
-    
+    # f_cards.close()
         
