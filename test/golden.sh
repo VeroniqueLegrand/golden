@@ -34,7 +34,7 @@ done
 ../src/golden all:AC007218 all:HSA395L14 all:1PYMA all:ASX_HYDROXYL >/dev/null || exit 1
 
 ## check multiple existing entries from files given in command line
-../src/golden -f genbank_in.txt prosite_in.txt embl_in.txt>/dev/null || exit 1
+../src/golden -f $srcdir/data/genbank_in.txt $srcdir/data/prosite_in.txt $srcdir/data/embl_in.txt>/dev/null || exit 1
 
 
 ## Check compatibility (without dir prefix)

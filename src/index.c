@@ -105,7 +105,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
   int nb_found;
 
   nb_found=0;
-  result_t ** start_l=wData.start_l; // for printing debug nfo only.
+
   result_t ** lst=wData.start_l; // for work
   int lst_size=wData.len_l;
   
@@ -118,6 +118,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
     error_fatal(file, NULL); }
 
 #ifdef DEBUG
+  	result_t ** start_l=wData.start_l; // for printing debug info only.
     printf("index_search called on : %s\n",file);
 #endif
 

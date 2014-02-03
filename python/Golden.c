@@ -7,6 +7,8 @@
 
 #include "access.h"
 #include "list.h"
+#include "query.h"
+#include "index.h"
 
 #define MAXNAME 100
 
@@ -109,46 +111,52 @@ static PyObject *Golden_access(PyObject *self, PyObject *args) {
   return str; }
 
 static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
-  char * l_args,elm;
-  int t_args,nb_cards;
-  static int cur_res=0;
+  char * l_args;
+  static int nb_cards;
+  static int idx_cur_res=0;
+  static result_t * res;
+  static WAllQueryData wData;
+  PyObject *str;
   
-  if (cur_res==0) { // first call perform query
+  printf("%d call to Golden_access_new\n",idx_cur_res);
+  if (idx_cur_res==0) { // first call perform query
     /* get and validate list parameter*/
-    if (!PyArg_ParseTuple(args, "s", &l_args, &t_args)) {
+    if (!PyArg_ParseTuple(args, "s", &l_args)) {
       return NULL; }
   
     if (*l_args == '\0') {
       PyErr_SetString(PyExc_ValueError, "list of bank:AC cannot be empty.");
       return NULL; }
   
-    nb_cards=get_nbCards(my_list);
+    nb_cards=get_nbCards(l_args);
     // instantiate storage for query results.
     res=(result_t*) malloc(sizeof(result_t)*nb_cards);
-    WAllQueryData wData=prepareQueryData(my_list,res,nb_cards);
-    int nb_res=performGoldenQuery(wData,acc,loc);
+    wData=prepareQueryData(l_args,res,nb_cards);
+    int nb_res=performGoldenQuery(wData,1,0);
   }
   
   // logEntriesNotFound(wData,nb_cards-nb_res); // TODO? : How to display that to the python caller?
-  if (cur_res==nb_cards) { // iteration is over.
-    freeQueryData(wData);
+  if (idx_cur_res==nb_cards) { // iteration is over.
+	printf("iteration over results is over, free memory\n");
+    freeQueryData(wData); // get an ImportError with that symbol; try without it
+	/*free(wData.lst_work);
+	free(wData.meta_lst_work.l_infoDB);*/
     free(res);
     Py_RETURN_NONE;
   }
-  if (res->filenb == NOT_FOUND) {
-    free(res->dbase);
-    free(res->name);
-    cur_res++;
-    return Py_BuildValue("Entry not found"); }
-  
-  str = entry_load(res);
-  free(res->dbase);
-  free(res->name);
-  if (res->real_dbase!=NULL) {
-    free(res->real_dbase);
+  result_t cur_res=res[idx_cur_res];
+  if (cur_res.filenb == NOT_FOUND) {
+	str=Py_BuildValue("ss",cur_res.name," Entry not found");
+  } else {
+	str = entry_load(&cur_res);
   }
-  cur_res++;
-  return str;
+  free(cur_res.dbase);
+  free(cur_res.name);
+  if (cur_res.real_dbase!=NULL) {
+      free(cur_res.real_dbase);
+  }
+  idx_cur_res++;
+  return  str;
 }
 
 

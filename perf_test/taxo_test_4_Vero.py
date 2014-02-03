@@ -170,11 +170,23 @@ def doGolden( db,ac, DE ):
 #
 #            Golden Multi. Using new version of golden.
 #
-# input_flag : indicates if input must be read from files whose names are given in l_input.
-# l_input : Depending on input_flag, a list of files or a list of bank:AC bank:locus...
+# l_input : Depending on input_flag, a list of bank:AC bank:locus separated by '\n'
+#  so, bank:AC\nbank:locus...
 ##############################################################################
-def doGoldenMulti(l_input,input_flag):
-    if input_flag
+def doGoldenMulti(l_input,ac,DE):
+    try:
+        flatFile=Golden.Golden_access_new(l_input)
+        while (flatFile!=None):
+            flatFile=Golden.Golden_access_new(l_input)
+    except IOError, err:
+        print >>sys.stderr, err, db, ac
+        sys.exit()
+    if flatFile:
+        orgName, taxId, taxoLight, description =  parse(flatFile , DE ) #orgName, taxId, taxoLight, description
+        flatFile = '' # buffer free
+        return orgName, taxId, taxoLight, description
+    else:
+        return '','','',''
 
 ##############################################################################
 #

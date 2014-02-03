@@ -7,8 +7,8 @@ from distutils.core import setup, Extension
 from distutils.util import change_root
 
 Goldenmod = Extension( "Golden",
-  sources = [ "Golden.c", "../src/access.c", "../src/index.c",
-              "../src/list.c", "../src/error.c" ],
+  sources = [ "Golden.c", "../src/access.c", "../src/locus.c", "../src/index.c",
+              "../src/list.c", "../src/error.c", "../src/query.c" ],
   include_dirs = [ '../src' ],
   define_macros = [ ("HAVE_CONFIG_H", "1") ] )
 

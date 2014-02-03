@@ -17,6 +17,8 @@
 #include "error.h"
 #include "index.h"
 
+#define DEBUG
+
 
 /*
  keep that for compatibility with old export python.

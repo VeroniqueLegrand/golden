@@ -74,7 +74,7 @@ am__v_AR_1 =
 libgolden_a_AR = $(AR) $(ARFLAGS)
 libgolden_a_LIBADD =
 am__objects_1 = access.$(OBJEXT) entry.$(OBJEXT) error.$(OBJEXT) \
-	index.$(OBJEXT) list.$(OBJEXT) locus.$(OBJEXT)
+	index.$(OBJEXT) list.$(OBJEXT) locus.$(OBJEXT) query.$(OBJEXT)
 am_libgolden_a_OBJECTS = $(am__objects_1)
 libgolden_a_OBJECTS = $(am_libgolden_a_OBJECTS)
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgdatadir)"
@@ -178,10 +178,10 @@ AUTOCONF = ${SHELL} /Users/vlegrand/Desktop/golden-1.1a/missing autoconf
 AUTOHEADER = ${SHELL} /Users/vlegrand/Desktop/golden-1.1a/missing autoheader
 AUTOMAKE = ${SHELL} /Users/vlegrand/Desktop/golden-1.1a/missing automake-1.13
 AWK = awk
-CC = gcc -g -Wall
+CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g
-CPP = gcc -g -Wall -E
+CFLAGS = -g -O2
+CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
@@ -223,7 +223,7 @@ abs_builddir = /Users/vlegrand/Desktop/golden-1.1a/src
 abs_srcdir = /Users/vlegrand/Desktop/golden-1.1a/src
 abs_top_builddir = /Users/vlegrand/Desktop/golden-1.1a
 abs_top_srcdir = /Users/vlegrand/Desktop/golden-1.1a
-ac_ct_CC = gcc -g -Wall
+ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
 am__quote = 
@@ -271,8 +271,8 @@ golden_LDADD = libgolden.a
 goldin_SOURCES = goldin.c
 goldin_LDADD = libgolden.a
 libgolden_a_SOURCES = $(SRC)
-SRC = access.c entry.c error.c index.c list.c locus.c
-HDR = access.h entry.h error.h index.h list.h locus.h
+SRC = access.c entry.c error.c index.c list.c locus.c query.c
+HDR = access.h entry.h error.h index.h list.h locus.h query.h
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -393,6 +393,7 @@ include ./$(DEPDIR)/goldin.Po
 include ./$(DEPDIR)/index.Po
 include ./$(DEPDIR)/list.Po
 include ./$(DEPDIR)/locus.Po
+include ./$(DEPDIR)/query.Po
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

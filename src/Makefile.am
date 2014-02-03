@@ -15,8 +15,8 @@ goldin_SOURCES = goldin.c
 goldin_LDADD = libgolden.a
 
 libgolden_a_SOURCES = $(SRC)
-SRC = access.c entry.c error.c index.c list.c locus.c
-HDR = access.h entry.h error.h index.h list.h locus.h
+SRC = access.c entry.c error.c index.c list.c locus.c query.c
+HDR = access.h entry.h error.h index.h list.h locus.h query.h
 
 ## Maintainer parano check
 parano:

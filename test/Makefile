@@ -290,10 +290,10 @@ AUTOCONF = ${SHELL} /Users/vlegrand/Desktop/golden-1.1a/missing autoconf
 AUTOHEADER = ${SHELL} /Users/vlegrand/Desktop/golden-1.1a/missing autoheader
 AUTOMAKE = ${SHELL} /Users/vlegrand/Desktop/golden-1.1a/missing automake-1.13
 AWK = awk
-CC = gcc -g -Wall
+CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
-CPP = gcc -g -Wall -E
+CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
@@ -335,7 +335,7 @@ abs_builddir = /Users/vlegrand/Desktop/golden-1.1a/test
 abs_srcdir = /Users/vlegrand/Desktop/golden-1.1a/test
 abs_top_builddir = /Users/vlegrand/Desktop/golden-1.1a
 abs_top_srcdir = /Users/vlegrand/Desktop/golden-1.1a
-ac_ct_CC = gcc -g -Wall
+ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
 am__quote = 
@@ -377,7 +377,7 @@ AM_COLOR_TESTS = no
 LOG_COMPILER = $(SHELL)
 TESTS = goldin.sh golden.sh virtual.sh
 EXTRA_DIST = $(TESTS) all/embl.dat all/genbank.dat all/nrl_3d.dat \
-	all/prosite.dat
+	data/prosite.dat data/embl_in.dat data/genbank_in.dat data/prosite_in.txt
 
 CLEANFILES = *.acx *.dbx *.idx *.vix
 all: all-am
