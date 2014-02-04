@@ -18,6 +18,7 @@
 		2D4D338F1889699000712232 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D4D33821889699000712232 /* list.c */; };
 		2D4D33901889699000712232 /* locus.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D4D33841889699000712232 /* locus.c */; };
 		2D4D33911889699000712232 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 2D4D33861889699000712232 /* Makefile */; };
+		2DB799E118A118B7001A857C /* query.c in Sources */ = {isa = PBXBuildFile; fileRef = 2DB799DF18A118B7001A857C /* query.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,6 +57,8 @@
 		2D4D33861889699000712232 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = Makefile; path = ../src/Makefile; sourceTree = "<group>"; };
 		2D4D33871889699000712232 /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = ../src/Makefile.am; sourceTree = "<group>"; };
 		2D4D33881889699000712232 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.in; path = ../src/Makefile.in; sourceTree = "<group>"; };
+		2DB799DF18A118B7001A857C /* query.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = query.c; path = ../src/query.c; sourceTree = "<group>"; };
+		2DB799E018A118B7001A857C /* query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = query.h; path = ../src/query.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +75,8 @@
 		2D4D335B1889694900712232 = {
 			isa = PBXGroup;
 			children = (
+				2DB799DF18A118B7001A857C /* query.c */,
+				2DB799E018A118B7001A857C /* query.h */,
 				2D4D33761889699000712232 /* access.c */,
 				2D4D33771889699000712232 /* access.h */,
 				2D4D33781889699000712232 /* config.h */,
@@ -168,6 +173,7 @@
 				2D4D33901889699000712232 /* locus.c in Sources */,
 				2D4D338D1889699000712232 /* goldin.c in Sources */,
 				2D4D338A1889699000712232 /* entry.c in Sources */,
+				2DB799E118A118B7001A857C /* query.c in Sources */,
 				2D4D338C1889699000712232 /* golden.c in Sources */,
 				2D4D338F1889699000712232 /* list.c in Sources */,
 				2D4D33681889694900712232 /* main.c in Sources */,
@@ -281,6 +287,7 @@
 				2D4D336F1889694900712232 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

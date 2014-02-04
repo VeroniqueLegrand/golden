@@ -2,7 +2,7 @@
 
 # Corinne Maufrais
 # Institut Pasteur, Projets et developpements bioinformatiques
-# maufrais@pasteur.fr
+# maufrais@pasteur.fr, vlegrand@pasteur.fr
 #
 
 # version 0.1
@@ -135,7 +135,6 @@ class TaxOptimizerError:
 
 # def doGolden( f_cards, db,ac, DE ):
 def doGolden( db,ac, DE ):
-    #print "inside doGolden, GOLDENDATA=",GOLDENDATA
     ########################### db ref
     if db in[ 'sp', 'sw','swissprot','tr', 'trembl']:
         db = 'uniprot'
@@ -167,6 +166,32 @@ def doGolden( db,ac, DE ):
         return '','','','' 
 
 
+# Builds query input string
+def buildQueryStr(db, acc,l_cards,cnt_cards,allTaxo):
+    if db in[ 'sp', 'sw','swissprot','tr', 'trembl']:
+        db = 'uniprot'
+    elif db in ['emb', 'dbj']:
+        db = 'embl'
+    elif db in ['gb']:
+        db = 'genbank'
+    elif db in ['gp']:
+        db = 'genpept'
+    elif db in ['ref']:
+        db = 'refseq'
+    elif db in ['rdpii']:
+        db = 'rdpii'
+    elif db in ['pir','pdb','tpg', 'tpe', 'tpd', 'prf']:
+        #return '','','',''
+        pass
+
+    l_cards+=db
+    l_cards+=":"
+    l_cards+=acc
+    l_cards+="\n"
+    cnt_cards+=1
+    allTaxo[acc]={'db':db }
+    return l_cards,cnt_cards,allTaxo
+
 ##############################################################################
 #
 #            Golden Multi. Using new version of golden.
@@ -174,14 +199,20 @@ def doGolden( db,ac, DE ):
 # l_input : Depending on input_flag, a list of bank:AC bank:locus separated by '\n'
 #  so, bank:AC\nbank:locus...
 ##############################################################################
-def doGoldenMulti(l_input,ac,DE):
+def doGoldenMulti(allTaxo,l_input,DE):
+    idx_res=0
+    lst_input=l_input.split("\n")
     try:
-        flatFile=Golden.Golden_access_new(l_input)
+        flatFile=Golden.access_new(l_input)
         while (flatFile!=None):
-            orgName, taxId, taxoLight, description =  parse(flatFile , DE ) #orgName, taxId, taxoLight, description
-            flatFile=Golden.Golden_access_new(l_input)
+            db_acc=lst_input[idx_res]
+            l_db_acc=db_acc.split(":")
+            acc=l_db_acc[1]
+            allTaxo[acc]['orgName'], allTaxo[acc]['taxId'], allTaxo[acc]['taxoLight'], allTaxo[acc]['DE'] =  parse(flatFile , DE ) #orgName, taxId, taxoLight, description
+            flatFile=Golden.access_new(l_input)
+            return allTaxo
     except IOError, err:
-        print >>sys.stderr, err, db, ac
+        print >>sys.stderr, err, l_input
         sys.exit()
 
 
@@ -234,7 +265,8 @@ options:
 
 
 if __name__=='__main__':
-
+    max_cards=1000 # for Golden
+    cnt_cards=0
     # tmp path
     try:
         TMP_PATH = os.environ[ 'TMPPATH' ]
@@ -320,6 +352,7 @@ if __name__=='__main__':
     #     print "Cannot trace requests"
     #     sys.exit()
 
+    l_cards=""
     while line:
         description = ''
         fld = line.split()
@@ -371,27 +404,37 @@ if __name__=='__main__':
                 print >>sys.stderr, TaxOptimizerError ( "in line %s" % (lineNb) )
                 sys.exit()
             continue 
-        taxonomy = ''
-        if allTaxo.has_key(acc):
-            if allTaxo[acc].has_key('taxoFull'):
-                taxonomy = allTaxo[acc]['taxoFull']
-            else:
-                taxonomy = allTaxo[acc]['taxoLight']
-            description = allTaxo[acc]['DE']
+        # taxonomy = ''
+        # if allTaxo.has_key(acc):
+        #     if allTaxo[acc].has_key('taxoFull'):
+        #         taxonomy = allTaxo[acc]['taxoFull']
+        #     else:
+        #         taxonomy = allTaxo[acc]['taxoLight']
+        #     description = allTaxo[acc]['DE']
         else:
-            allTaxo[acc]={'db':db }
+            # l_cards+=db
+            # l_cards+=":"
+            # l_cards+=acc
+            # l_cards+="\n"
+            # cnt_cards+=1
+            # allTaxo[acc]={'db':db }
+            l_cards,cnt_cards,allTaxo=buildQueryStr(db, acc,l_cards,cnt_cards,allTaxo)
+            if cnt_cards == max_cards:
+                allTaxo=doGoldenMulti(allTaxo,l_cards,DE)
+                l_cards=""
+                cnt_cards=0
             # print >>f_cards, db,":",acc
-            print db,":",acc
-            allTaxo[acc]['orgName'], allTaxo[acc]['taxId'], allTaxo[acc]['taxoLight'], allTaxo[acc]['DE'] = doGolden( db, acc, DE ) # doGolden( f_cards, db, acc, DE )
-            taxonomy = allTaxo[acc]['taxoLight']
+            #allTaxo[acc]['orgName'], allTaxo[acc]['taxId'], allTaxo[acc]['taxoLight'], allTaxo[acc]['DE'] = doGolden( db, acc, DE ) # doGolden( f_cards, db, acc, DE )
+            #doGoldenMulti(,acc,DE)
+            #taxonomy = allTaxo[acc]['taxoLight']
             
-        if taxonomy:
-            print >>outfh, line[:-1], "\t%s\t%s\t%s" % (allTaxo[acc]['orgName'], taxonomy, allTaxo[acc]['DE'] )
-        else:
-            if noTaxoFile:
-                print >>notaxfhout, line[:-1]
-            if not splitFile:
-                print >>outfh, line[:-1]
+        # if taxonomy:
+        #     print >>outfh, line[:-1], "\t%s\t%s\t%s" % (allTaxo[acc]['orgName'], taxonomy, allTaxo[acc]['DE'] )
+        # else:
+        #     if noTaxoFile:
+        #         print >>notaxfhout, line[:-1]
+        #     if not splitFile:
+        #         print >>outfh, line[:-1]
         try:
             line = tabfhin.readline()
             lineNb+=1
@@ -401,7 +444,11 @@ if __name__=='__main__':
 
             sys.exit()
         lineNb+=1
-        
+
+    if cnt_cards !=0:
+        allTaxo=doGoldenMulti(allTaxo,l_cards,acc,DE)
     tabfhin.close()
+    # write results
+    print allTaxo
     # f_cards.close()
         

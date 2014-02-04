@@ -1,0 +1,31 @@
+import os
+import sys
+import getopt
+
+import Golden
+
+try:
+    GOLDENDATA =  os.environ['GOLDENDATA']
+except:
+    GOLDENDATA = "/local/gensoft2/exe/golden/1.1a/share/golden/db/"
+    #GOLDENDATA = "/local/gensoft/share/golden/db"
+    os.environ['GOLDENDATA'] = GOLDENDATA
+
+
+if __name__=='__main__':
+    l_cards="uniprot:A3KPN5\nuniprot:Q8K051\nuniprot:Q8BM59\nuniprot:Q5I0I0\nuniprot:Q497C1\nuniprot:Q3KR60\nuniprot:F1LP79\nuniprot:F1LP64\nuniprot:Q0P5M6\nuniprot:F7FC33"
+    l_cards="uniprot:F1RCR6"
+# uniprot:F7FC20
+# uniprot:F7FC15
+# uniprot:F7FAS7
+# uniprot:F7EYN5
+# uniprot:F7EIN3"
+    try:
+        flatFile=Golden.access_new(l_cards)
+        while (flatFile!=None):
+            print flatFile
+            print"########"
+            flatFile=Golden.access_new(l_cards)
+    except IOError, err:
+        print >>sys.stderr, err
+        sys.exit()

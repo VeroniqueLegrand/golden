@@ -11,6 +11,7 @@
 #include "index.h"
 
 #define MAXNAME 100
+//#define DEBUG
 
 static int bank_exist(char *bank, char *suf) {
   static char sav[MAXNAME];
@@ -23,6 +24,8 @@ static int bank_exist(char *bank, char *suf) {
 
   dir = index_dir(); ret = 0;
   file = index_file(dir, bank, VIRSUF);
+  /*printf("inside bank_exists: \n");
+	 printf("%s",file);*/
   if (access(file, F_OK) != -1) { ret++; }
   free(file);
   file = index_file(dir, bank, suf);
@@ -88,6 +91,9 @@ static PyObject *Golden_access(PyObject *self, PyObject *args) {
 
   /* Ensure that the bank exists */
   if (bank_exist(bank, ACCSUF) == 0) {
+#ifdef DEBUG
+    printf("Bank doesn't exist\n");
+#endif
     PyErr_SetFromErrnoWithFilename(PyExc_IOError, bank);
     return NULL; }
 
@@ -118,7 +124,7 @@ static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
   static WAllQueryData wData;
   PyObject *str;
   
-  printf("%d call to Golden_access_new\n",idx_cur_res);
+  //printf("%d call to Golden_access_new\n",idx_cur_res);
   if (idx_cur_res==0) { // first call perform query
     /* get and validate list parameter*/
     if (!PyArg_ParseTuple(args, "s", &l_args)) {
@@ -137,7 +143,7 @@ static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
   
   // logEntriesNotFound(wData,nb_cards-nb_res); // TODO? : How to display that to the python caller?
   if (idx_cur_res==nb_cards) { // iteration is over.
-	printf("iteration over results is over, free memory\n");
+	// printf("iteration over results is over, free memory\n");
     freeQueryData(wData); // get an ImportError with that symbol; try without it
 	/*free(wData.lst_work);
 	free(wData.meta_lst_work.l_infoDB);*/

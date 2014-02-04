@@ -17,7 +17,7 @@
 #include "error.h"
 #include "index.h"
 
-#define DEBUG
+//#define DEBUG
 
 
 /*
@@ -66,7 +66,7 @@ void access_search(WDBQueryData wData, char * db_name, int * nb_AC_not_found) {
   // cur_base may be virtual.
   /* Virtual database indexes */
   file = index_file(NULL, db_name, VIRSUF);
-  // printf("Searching in file : %s \n",file);
+  //printf("Searching in file : %s \n",file);
   if (access(file, F_OK) != -1) {
     if ((f = fopen(file, "r")) == NULL) {
       error_fatal("memory", NULL); }

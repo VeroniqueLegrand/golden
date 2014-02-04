@@ -127,6 +127,10 @@
 		2DAA48061892BBE900CE9F9A /* embl_in.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = embl_in.txt; sourceTree = "<group>"; };
 		2DAA48071892BBE900CE9F9A /* genbank_in.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = genbank_in.txt; sourceTree = "<group>"; };
 		2DAA48081892BBE900CE9F9A /* prosite_in.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = prosite_in.txt; sourceTree = "<group>"; };
+		2DB799DC18A1184B001A857C /* query.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = query.c; path = src/query.c; sourceTree = SOURCE_ROOT; };
+		2DB799DD18A1184B001A857C /* query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = query.h; path = src/query.h; sourceTree = SOURCE_ROOT; };
+		2DB799E218A14D92001A857C /* taxo_test_golden_multi.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = taxo_test_golden_multi.py; sourceTree = "<group>"; };
+		2DB799E318A14D92001A857C /* test_golden_multi */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_golden_multi; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -224,6 +228,8 @@
 		2D4D32FA1886CACC00712232 /* perf_test */ = {
 			isa = PBXGroup;
 			children = (
+				2DB799E218A14D92001A857C /* taxo_test_golden_multi.py */,
+				2DB799E318A14D92001A857C /* test_golden_multi */,
 				2D4D32FB1886CACC00712232 /* taxo_test_4_Vero.py */,
 			);
 			path = perf_test;
@@ -246,7 +252,9 @@
 			children = (
 				2D4D330E1886CACC00712232 /* .deps */,
 				2D4D33171886CACC00712232 /* .gdbinit */,
+				2DB799DD18A1184B001A857C /* query.h */,
 				2D4D33181886CACC00712232 /* .lldbinit */,
+				2DB799DC18A1184B001A857C /* query.c */,
 				2D4D33191886CACC00712232 /* access.c */,
 				2D4D331A1886CACC00712232 /* access.h */,
 				2D4D331B1886CACC00712232 /* access.o */,
