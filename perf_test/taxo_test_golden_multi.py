@@ -40,6 +40,12 @@ class ParserWarning:
         return "[ParserWarning] " + self.err
 
 
+class InputLine:
+    def __init__(self,orig_line, acc):
+        self.orig_line=orig_line
+        self.acc=acc
+
+
 def parseUniprot( flatFile , DE ):
     """
     parse uniprot or embl like flat file
@@ -167,7 +173,7 @@ def doGolden( db,ac, DE ):
 
 
 # Builds query input string
-def buildQueryStr(db, acc,l_cards,cnt_cards,allTaxo):
+def buildQueryStr(txt_line,db, acc,l_cards,cnt_cards,allTaxo,all_lines):
     if db in[ 'sp', 'sw','swissprot','tr', 'trembl']:
         db = 'uniprot'
     elif db in ['emb', 'dbj']:
@@ -190,7 +196,28 @@ def buildQueryStr(db, acc,l_cards,cnt_cards,allTaxo):
     l_cards+="\n"
     cnt_cards+=1
     allTaxo[acc]={'db':db }
-    return l_cards,cnt_cards,allTaxo
+    li=InputLine(txt_line,acc)
+    all_lines.append(li)
+    return l_cards,cnt_cards,allTaxo,all_lines
+
+# display results from allTaxo dictionnary.
+def printResults(l_lines,allTaxo):
+    for li in l_lines:
+        #acc=li.acc
+        taxonomy = ''
+        if allTaxo[li.acc].has_key('taxoFull'):
+            taxonomy = allTaxo[li.acc]['taxoFull']
+        else:
+            taxonomy = allTaxo[li.acc]['taxoLight']
+        description = allTaxo[li.acc]['DE']
+
+        if taxonomy:
+            print >>outfh, li.orig_line, "\t%s\t%s\t%s" % (allTaxo[li.acc]['orgName'], taxonomy, allTaxo[li.acc]['DE'] )
+        else:
+            if noTaxoFile:
+                print >>notaxfhout, li.orig_line
+            if not splitFile:
+                print >>outfh, li.orig_line
 
 ##############################################################################
 #
@@ -210,7 +237,8 @@ def doGoldenMulti(allTaxo,l_input,DE):
             acc=l_db_acc[1]
             allTaxo[acc]['orgName'], allTaxo[acc]['taxId'], allTaxo[acc]['taxoLight'], allTaxo[acc]['DE'] =  parse(flatFile , DE ) #orgName, taxId, taxoLight, description
             flatFile=Golden.access_new(l_input)
-            return allTaxo
+            idx_res+=1
+        return allTaxo
     except IOError, err:
         print >>sys.stderr, err, l_input
         sys.exit()
@@ -267,6 +295,7 @@ options:
 if __name__=='__main__':
     max_cards=1000 # for Golden
     cnt_cards=0
+    l_lines=[]
     # tmp path
     try:
         TMP_PATH = os.environ[ 'TMPPATH' ]
@@ -404,37 +433,16 @@ if __name__=='__main__':
                 print >>sys.stderr, TaxOptimizerError ( "in line %s" % (lineNb) )
                 sys.exit()
             continue 
-        # taxonomy = ''
-        # if allTaxo.has_key(acc):
-        #     if allTaxo[acc].has_key('taxoFull'):
-        #         taxonomy = allTaxo[acc]['taxoFull']
-        #     else:
-        #         taxonomy = allTaxo[acc]['taxoLight']
-        #     description = allTaxo[acc]['DE']
+
         else:
-            # l_cards+=db
-            # l_cards+=":"
-            # l_cards+=acc
-            # l_cards+="\n"
-            # cnt_cards+=1
-            # allTaxo[acc]={'db':db }
-            l_cards,cnt_cards,allTaxo=buildQueryStr(db, acc,l_cards,cnt_cards,allTaxo)
+            l_cards,cnt_cards,allTaxo,l_lines=buildQueryStr(line[:-1],db, acc,l_cards,cnt_cards,allTaxo,l_lines)
             if cnt_cards == max_cards:
                 allTaxo=doGoldenMulti(allTaxo,l_cards,DE)
+                printResults(l_lines,allTaxo)
                 l_cards=""
+                l_lines=[]
                 cnt_cards=0
-            # print >>f_cards, db,":",acc
-            #allTaxo[acc]['orgName'], allTaxo[acc]['taxId'], allTaxo[acc]['taxoLight'], allTaxo[acc]['DE'] = doGolden( db, acc, DE ) # doGolden( f_cards, db, acc, DE )
-            #doGoldenMulti(,acc,DE)
-            #taxonomy = allTaxo[acc]['taxoLight']
-            
-        # if taxonomy:
-        #     print >>outfh, line[:-1], "\t%s\t%s\t%s" % (allTaxo[acc]['orgName'], taxonomy, allTaxo[acc]['DE'] )
-        # else:
-        #     if noTaxoFile:
-        #         print >>notaxfhout, line[:-1]
-        #     if not splitFile:
-        #         print >>outfh, line[:-1]
+
         try:
             line = tabfhin.readline()
             lineNb+=1
@@ -447,8 +455,10 @@ if __name__=='__main__':
 
     if cnt_cards !=0:
         allTaxo=doGoldenMulti(allTaxo,l_cards,acc,DE)
+        printResults(l_lines,allTaxo)
     tabfhin.close()
     # write results
-    print allTaxo
+    #print allTaxo
+
     # f_cards.close()
         

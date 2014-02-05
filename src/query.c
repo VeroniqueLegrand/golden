@@ -19,7 +19,7 @@
 #include "locus.h"
 #include "query.h"
 
-#define DEBUG
+// #define DEBUG
 
 /*
  returns the number of cards in the query.
@@ -74,7 +74,7 @@ WAllQueryData prepareQueryData(char * my_list, result_t * res,int nb_cards) {
   for (i=0;i<nb_cards;i++) {
     len = strlen(elm);
     if (strchr(elm,':') == NULL) {
-      printf("%s",elm);
+      //printf("%s",elm);
       err(errno,"invalid query value: %s.",elm);
       }
       if ((dbase = (char *)malloc(len+1)) == NULL ||

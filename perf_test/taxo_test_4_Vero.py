@@ -329,7 +329,6 @@ if __name__=='__main__':
         try:
             fldInfo = fld[column].split(separator)
         except:
-            
             print >>sys.stderr,  TaxOptimizerError("Parsing: column error: couldn't parse line: %s\n --> %s" % (lineNb))
             sys.exit()
             #continue
@@ -381,7 +380,7 @@ if __name__=='__main__':
         else:
             allTaxo[acc]={'db':db }
             # print >>f_cards, db,":",acc
-            print db,":",acc
+            #print db,":",acc
             allTaxo[acc]['orgName'], allTaxo[acc]['taxId'], allTaxo[acc]['taxoLight'], allTaxo[acc]['DE'] = doGolden( db, acc, DE ) # doGolden( f_cards, db, acc, DE )
             taxonomy = allTaxo[acc]['taxoLight']
             
