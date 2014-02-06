@@ -174,6 +174,7 @@ def doGolden( db,ac, DE ):
 
 # Builds query input string
 def buildQueryStr(txt_line,db, acc,l_cards,cnt_cards,allTaxo,all_lines):
+    skip_db=False
     if db in[ 'sp', 'sw','swissprot','tr', 'trembl']:
         db = 'uniprot'
     elif db in ['emb', 'dbj']:
@@ -188,14 +189,18 @@ def buildQueryStr(txt_line,db, acc,l_cards,cnt_cards,allTaxo,all_lines):
         db = 'rdpii'
     elif db in ['pir','pdb','tpg', 'tpe', 'tpd', 'prf']:
         #return '','','',''
-        pass
-
-    l_cards+=db
-    l_cards+=":"
-    l_cards+=acc
-    l_cards+="\n"
+        skip_db=True
+    if not skip_db:
+        l_cards+=db
+        l_cards+=":"
+        l_cards+=acc
+        l_cards+="\n"
     cnt_cards+=1
     allTaxo[acc]={'db':db }
+    allTaxo[acc]['orgName']=''
+    allTaxo[acc]['taxId']=''
+    allTaxo[acc]['taxoLight']=''
+    allTaxo[acc]['DE']=''
     li=InputLine(txt_line,acc)
     all_lines.append(li)
     return l_cards,cnt_cards,allTaxo,all_lines
@@ -293,7 +298,7 @@ options:
 
 
 if __name__=='__main__':
-    max_cards=1000 # for Golden
+    max_cards=500 # for Golden
     cnt_cards=0
     l_lines=[]
     # tmp path
@@ -454,7 +459,7 @@ if __name__=='__main__':
         lineNb+=1
 
     if cnt_cards !=0:
-        allTaxo=doGoldenMulti(allTaxo,l_cards,acc,DE)
+        allTaxo=doGoldenMulti(allTaxo,l_cards,DE)
         printResults(l_lines,allTaxo)
     tabfhin.close()
     # write results

@@ -156,7 +156,7 @@ int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
     nb_AC_not_found=queryDB.len_l;
     nb_locus_not_found=queryDB.len_l;
     cur_dbname=(*queryDB.start_l)->dbase;
-    printf("cur_dbname : %s\n",cur_dbname);
+    // printf("cur_dbname : %s\n",cur_dbname);
     if (acc) {
       access_search(queryDB,cur_dbname, &nb_AC_not_found);
       //if (nb_AC_not_found==0) loc4base=0;

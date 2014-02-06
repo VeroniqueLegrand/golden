@@ -92,30 +92,33 @@ int main(int argc, char **argv) {
     if ((f = fopen(file, "r")) == NULL)
       error_fatal(file, NULL);
     while(entry_parse(f, &ent) != 1) {
-
       /* Checks for reallocation */
       if (locnb >= indnb || accnb >= indnb) {
-	indnb += BUFINC; len = (size_t)indnb * sizeof(indix_t);
-	if ((locind = (indix_t *)realloc(locind, len)) == NULL ||
-	    (accind = (indix_t *)realloc(accind, len)) == NULL)
-	  error_fatal("memory", NULL); }
-
+        indnb += BUFINC; len = (size_t)indnb * sizeof(indix_t);
+        if ((locind = (indix_t *)realloc(locind, len)) == NULL ||
+            (accind = (indix_t *)realloc(accind, len)) == NULL)
+          error_fatal("memory", NULL);
+      }
       /* Store entry name & accession number indexes */
       if (loc && ent.locus[0] != '\0') {
-	cur = locind + locnb; locnb++;
-	(void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
-	(void)strncpy(cur->name, ent.locus, (size_t)NAMLEN);
-	p = cur->name; while (*p) { *p = toupper((unsigned char)*p); p++; }
-	cur->filenb = nb; cur->offset = ent.offset; }
+        cur = locind + locnb; locnb++;
+        (void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
+        (void)strncpy(cur->name, ent.locus, (size_t)NAMLEN);
+        p = cur->name;
+        while (*p) { *p = toupper((unsigned char)*p); p++;
+        }
+        cur->filenb = nb; cur->offset = ent.offset;
+      }
       if (acc && ent.access[0] != '\0') {
-	cur = accind + accnb; accnb++;
-	(void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
-	(void)strncpy(cur->name, ent.access, (size_t)NAMLEN);
-	p = cur->name; while (*p) { *p = toupper((unsigned char)*p); p++; }
-	cur->filenb = nb; cur->offset = ent.offset; }
-
+        cur = accind + accnb; accnb++;
+        (void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
+        (void)strncpy(cur->name, ent.access, (size_t)NAMLEN);
+        p = cur->name;
+        while (*p) { *p = toupper((unsigned char)*p); p++;
+        }
+        cur->filenb = nb; cur->offset = ent.offset;
+      }
     }
-
     if (fclose(f) == EOF)
       error_fatal(file, NULL);
 
@@ -126,12 +129,11 @@ int main(int argc, char **argv) {
     /* Merge indexes */
     if (loc) {
       if (locus_merge(dbase, locnb, locind))
-	error_fatal(dbase, "entry names indexes failed"); }
+        error_fatal(dbase, "entry names indexes failed"); }
     if (acc) {
       if (access_merge(dbase, accnb, accind))
-	error_fatal(dbase, "accession numbers indexes failed"); }
-
-  }
+        error_fatal(dbase, "accession numbers indexes failed"); }
+    }
 
   free(accind); free(locind);
 

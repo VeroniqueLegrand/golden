@@ -143,18 +143,17 @@ static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
   
   // logEntriesNotFound(wData,nb_cards-nb_res); // TODO? : How to display that to the python caller?
   if (idx_cur_res==nb_cards) { // iteration is over.
-	// printf("iteration over results is over, free memory\n");
-    freeQueryData(wData); // get an ImportError with that symbol; try without it
-	/*free(wData.lst_work);
-	free(wData.meta_lst_work.l_infoDB);*/
+    // printf("iteration over results is over, free memory\n");
+    freeQueryData(wData);
     free(res);
+    idx_cur_res=0;
     Py_RETURN_NONE;
   }
   result_t cur_res=res[idx_cur_res];
   if (cur_res.filenb == NOT_FOUND) {
-	str=Py_BuildValue("ss",cur_res.name," Entry not found");
+    str=Py_BuildValue("ss",cur_res.name," Entry not found");
   } else {
-	str = entry_load(&cur_res);
+    str = entry_load(&cur_res);
   }
   free(cur_res.dbase);
   free(cur_res.name);
