@@ -14,6 +14,8 @@ typedef struct {
   char access[NAMLEN+1];
   off_t offset; } entry_t;
 
+
+
 /* Functions prototypes */
 int entry_parse(FILE *, entry_t *);
 // int entry_display(FILE *, FILE *);

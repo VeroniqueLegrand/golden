@@ -20,8 +20,10 @@
 #include "access.h"
 #include "entry.h"
 #include "error.h"
+#include <errno.h>
 #include "list.h"
 #include "locus.h"
+#include <err.h>
 
 
 #ifndef EXIT_SUCCESS
@@ -31,8 +33,15 @@
 
 #define BUFINC 100
 
+// #define PERF_PROFILE
+
+#ifdef PERF_PROFILE
+#include <time.h>
+#endif
+
 /* Functions prototypes */
 static void usage(int);
+all_indix_t create_index(char *,int,int );
 
 /* Global variables */
 static char *prog;
@@ -48,6 +57,9 @@ int main(int argc, char **argv) {
   indix_t *cur, *locind, *accind;
   size_t len;
   struct stat st;
+
+  clock_t cpu_time_start;
+  time_t wall_time_start;
 
   /* Inits */
   prog = basename(*argv);
@@ -86,58 +98,117 @@ int main(int argc, char **argv) {
 
     /* Add file to list */
     nb = list_append(dbase, dir, file);
+    all_indix_t file_l_indix=create_index(file,loc,acc);
 
-    /* Proceed all flat file entries */
-    locnb = accnb = 0;
-    if ((f = fopen(file, "r")) == NULL)
-      error_fatal(file, NULL);
-    while(entry_parse(f, &ent) != 1) {
-      /* Checks for reallocation */
-      if (locnb >= indnb || accnb >= indnb) {
-        indnb += BUFINC; len = (size_t)indnb * sizeof(indix_t);
-        if ((locind = (indix_t *)realloc(locind, len)) == NULL ||
-            (accind = (indix_t *)realloc(accind, len)) == NULL)
-          error_fatal("memory", NULL);
-      }
-      /* Store entry name & accession number indexes */
-      if (loc && ent.locus[0] != '\0') {
-        cur = locind + locnb; locnb++;
-        (void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
-        (void)strncpy(cur->name, ent.locus, (size_t)NAMLEN);
-        p = cur->name;
-        while (*p) { *p = toupper((unsigned char)*p); p++;
-        }
-        cur->filenb = nb; cur->offset = ent.offset;
-      }
-      if (acc && ent.access[0] != '\0') {
-        cur = accind + accnb; accnb++;
-        (void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
-        (void)strncpy(cur->name, ent.access, (size_t)NAMLEN);
-        p = cur->name;
-        while (*p) { *p = toupper((unsigned char)*p); p++;
-        }
-        cur->filenb = nb; cur->offset = ent.offset;
-      }
-    }
-    if (fclose(f) == EOF)
-      error_fatal(file, NULL);
-
+#ifdef PERF_PROFILE
+    clock_t cpu_time_stop=clock();
+    time_t wall_time_stop=time(NULL);
+    
+    // compute time spent reading flat files
+    clock_t cpu_time_read_flat=cpu_time_stop-cpu_time_start;
+    time_t wall_time_read_flat=wall_time_stop-wall_time_start;
+    
+    printf("processor time spent reading flat file %s : %lu clock ticks\n",file,(unsigned long)	cpu_time_read_flat);
+    printf("wall time spent reading flat files %s : %ld seconds \n",file,(long)	wall_time_read_flat);
+#endif
+    
     if (wrn && (locnb + accnb) == 0) {
       error_warn(file, "file contains no entries");
       continue; }
 
+#ifdef PERF_PROFILE
+    cpu_time_start=clock();
+    wall_time_start=time(NULL);
+#endif
     /* Merge indexes */
     if (loc) {
-      if (locus_merge(dbase, locnb, locind))
+      if (locus_merge(dbase, locnb, file_l_indix.l_locind))
         error_fatal(dbase, "entry names indexes failed"); }
     if (acc) {
-      if (access_merge(dbase, accnb, accind))
+      if (access_merge(dbase, accnb, file_l_indix.l_accind))
         error_fatal(dbase, "accession numbers indexes failed"); }
+#ifdef PERF_PROFILE
+    cpu_time_stop=clock();
+    wall_time_stop=time(NULL);
+    
+    // compute time spent reading flat files
+    clock_t cpu_time_merge_index=cpu_time_stop-cpu_time_start;
+    time_t wall_time_merge_index=wall_time_stop-wall_time_start;
+    
+    printf("processor time spent merging indexes : %lu clock ticks\n",(unsigned long)	cpu_time_merge_index);
+    printf("wall time spent merging indexes: %ld seconds\n",(long)	wall_time_merge_index);
+#endif
+    freeAllIndix(file_l_indix);
+  }
+  // free(accind); free(locind);
+
+  return EXIT_SUCCESS;
+}
+
+/*
+ * First step : create indexes for given file.
+ */
+all_indix_t create_index(char * file, int loc, int acc) {
+  FILE *f;
+  char *p;
+  long locnb, accnb,indnb;
+  entry_t ent;
+  size_t len;
+  indix_t *cur;
+  int nb;
+  all_indix_t fic_indix;
+
+  locnb = accnb = 0;
+  indnb = 0;
+  fic_indix.l_locind=NULL;
+  fic_indix.l_accind=NULL;
+  fic_indix.flatfile_name=strdup(file);
+#ifdef PERF_PROFILE
+  clock_t cpu_time_start=clock();
+  time_t wall_time_start=time(NULL);
+  srand(wall_time_start);
+#endif
+  if ((f = fopen(file, "r")) == NULL)
+	  err(errno,"cannot open file: %s.",file);
+  while(entry_parse(f, &ent) != 1) {
+    /* Checks for reallocation */
+    if (locnb >= indnb || accnb >= indnb) {
+      indnb += BUFINC; len = (size_t)indnb * sizeof(indix_t);
+      if ((fic_indix.l_locind = (indix_t *)realloc(fic_indix.l_locind, len)) == NULL ||
+          (fic_indix.l_accind = (indix_t *)realloc(fic_indix.l_accind, len)) == NULL)
+    	err(errno,"cannot reallocate memory");
     }
+    /* Store entry name & accession number indexes */
+    if (loc && ent.locus[0] != '\0') {
+      cur = fic_indix.l_locind + locnb; locnb++;
+      (void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
+      (void)strncpy(cur->name, ent.locus, (size_t)NAMLEN);
+      p = cur->name;
+      while (*p) { *p = toupper((unsigned char)*p); p++;
+      }
+      cur->filenb = nb; cur->offset = ent.offset;
+    }
+    if (acc && ent.access[0] != '\0') {
+      cur = fic_indix.l_accind + accnb; accnb++;
+      (void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
+      (void)strncpy(cur->name, ent.access, (size_t)NAMLEN);
+      p = cur->name;
+      while (*p) { *p = toupper((unsigned char)*p); p++;
+      }
+      cur->filenb = nb; cur->offset = ent.offset;
+    }
+    
+#ifdef PERF_PROFILE
+    // for the needs of performance testing, modify cur->name so that index file grows bigger and bigger.
+    sprintf(cur->name,"%d",rand());
+#endif
+  }
+  if (fclose(f) == EOF)
+    err(errno,"cannot close file: %s.",file);
+	  // error_fatal(file, NULL);
 
-  free(accind); free(locind);
-
-  return EXIT_SUCCESS; }
+  return fic_indix;
+}
 
 
 /* Usage display */

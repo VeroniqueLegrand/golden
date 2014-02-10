@@ -66,7 +66,7 @@ int locus_merge(char *dbase, long nb, indix_t *ind) {
   int i;
   char *file;
 
-  file = index_file(".", dbase, LOCSUF);
+  file = index_file(".", dbase, LOCSUF); // temporary replace "."
   i = index_merge(file, nb, ind);
   free(file);
 

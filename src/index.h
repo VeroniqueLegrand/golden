@@ -18,6 +18,11 @@
 /* constants used to indicate that an AC or entry name was found nowhere. */
 #define NOT_FOUND -1
 
+/* Modes for index_dump */
+#define APPEND_INDEXES 1
+#define REPLACE_INDEXES 2
+#define MERGE_INDEXES 3
+
 
 
 /* Index structure definition */
@@ -25,6 +30,15 @@ typedef struct {
   char name[NAMLEN+1];
   uint32_t filenb;
   uint64_t offset; } indix_t;
+
+  /* Storage structures for information on flat files that were just parsed.*/
+  typedef struct {
+    char * flatfile_name;// name of the flat file.
+    indix_t *l_locind; //array of index for the flat file
+    indix_t *l_accind;
+    } all_indix_t;
+
+  void freeAllIndix(); // free memory allocated for the elements of the all_indix_t structure.
 
 typedef struct {
   char *name, *dbase;
@@ -50,7 +64,6 @@ typedef struct {
   int nb_cards; // size of the previous array.
   LWDBQueryData meta_lst_work; // meta information about the array ; pointer to "sub arays" for each db_name + size of sub array.
 } WAllQueryData;
-
 
 
 /* Functions prototypes */

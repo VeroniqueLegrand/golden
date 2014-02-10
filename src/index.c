@@ -359,3 +359,25 @@ static uint32_t iswap32(uint32_t val) {
          ((val <<  8) & 0x00ff0000) |
          ((val >>  8) & 0x0000ff00) |
          ((val >> 24) & 0x000000ff); }
+
+
+void freeAllIndix(all_indix_t sToFree) {
+  free(sToFree.flatfile_name);
+  free(sToFree.l_locind);
+  free(sToFree.l_accind);
+}
+
+
+/*
+ Dump all indexes to the file given in input.
+ If file doesn't exist, it is created.
+ If mode is set to APPEND_INDEXES, new indexes are added at the end of the file.
+ If mode is set to REPLACE_INDEXES, file is erased, only new indexes will be in it.
+ If mode is set to MERGE_INDEXES, new indexes are merged with old ones.
+    Prerequisite: old indexes must have been sorted previously. 
+    This is the default behavior that was in previous goldin version.
+ */
+int index_dump(char *file, int mode, long nb, indix_t *ind) {
+  if (mode==MERGE_INDEXES) index_merge(file,nb,ind);
+  
+}

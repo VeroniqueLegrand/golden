@@ -109,7 +109,7 @@ int access_merge(char *dbase, long nb, indix_t *ind) {
   int i;
   char *file;
 
-  file = index_file(".", dbase, ACCSUF);
+  file = index_file(".", dbase, ACCSUF); // change that temporarily: don't want the huge index files to be generated in my work directory
   i = index_merge(file, nb, ind);
   free(file);
 
