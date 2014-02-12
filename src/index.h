@@ -24,21 +24,24 @@
 #define MERGE_INDEXES 3
 
 
-
 /* Index structure definition */
 typedef struct {
   char name[NAMLEN+1];
   uint32_t filenb;
   uint64_t offset; } indix_t;
 
-  /* Storage structures for information on flat files that were just parsed.*/
-  typedef struct {
-    char * flatfile_name;// name of the flat file.
-    indix_t *l_locind; //array of index for the flat file
-    indix_t *l_accind;
-    } all_indix_t;
+/* Storage structures for information on flat files that were just parsed.*/
+typedef struct {
+  char * flatfile_name;// name of the flat file.
+  indix_t *l_locind; //array of index for the flat file
+  long locnb; // size of l_locind.
+  indix_t *l_accind;
+  long accnb; // size of l_accind.
+} all_indix_t;
 
-  void freeAllIndix(); // free memory allocated for the elements of the all_indix_t structure.
+
+void freeAllIndix(); // free memory allocated for the elements of the all_indix_t structure.
+all_indix_t create_index(char *,int,int );
 
 typedef struct {
   char *name, *dbase;

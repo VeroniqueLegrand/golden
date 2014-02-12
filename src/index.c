@@ -18,8 +18,12 @@
 
 #include "error.h"
 #include "index.h"
+#include <errno.h>
 
-// #include <mcheck.h>
+#include <sys/mman.h>
+
+// buffer size for reading file.
+#define BUFINC 100
 
 
 #ifndef HAVE_FSEEKO
@@ -60,6 +64,71 @@ void print_wrk_struct(result_t ** lst_work, int nb_cards, int missing_only) {
     printf("\n");
 }
 
+/*
+ * First step : create indexes for given file.
+ */
+all_indix_t create_index(char * file, int loc, int acc) {
+  FILE *f;
+  char *p;
+  long indnb;
+  entry_t ent;
+  size_t len;
+  indix_t *cur;
+  int nb;
+  all_indix_t fic_indix;
+
+  fic_indix.locnb = 0;
+  fic_indix.accnb = 0;
+  indnb = 0;
+  fic_indix.l_locind=NULL;
+  fic_indix.l_accind=NULL;
+  fic_indix.flatfile_name=strdup(file);
+#ifdef PERF_PROFILE
+  clock_t cpu_time_start=clock();
+  time_t wall_time_start=time(NULL);
+  srand(wall_time_start);
+#endif
+  if ((f = fopen(file, "r")) == NULL)
+    err(errno,"cannot open file: %s.",file);
+  while(entry_parse(f, &ent) != 1) {
+    /* Checks for reallocation */
+    if (fic_indix.locnb >= indnb || fic_indix.accnb >= indnb) {
+      indnb += BUFINC; len = (size_t)indnb * sizeof(indix_t);
+      if ((fic_indix.l_locind = (indix_t *)realloc(fic_indix.l_locind, len)) == NULL ||
+          (fic_indix.l_accind = (indix_t *)realloc(fic_indix.l_accind, len)) == NULL)
+      err(errno,"cannot reallocate memory");
+    }
+    /* Store entry name & accession number indexes */
+    if (loc && ent.locus[0] != '\0') {
+      cur = fic_indix.l_locind + fic_indix.locnb; fic_indix.locnb++;
+      (void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
+      (void)strncpy(cur->name, ent.locus, (size_t)NAMLEN);
+      p = cur->name;
+      while (*p) { *p = toupper((unsigned char)*p); p++;
+      }
+      cur->filenb = nb; cur->offset = ent.offset;
+    }
+    if (acc && ent.access[0] != '\0') {
+      cur = fic_indix.l_accind + fic_indix.accnb; fic_indix.accnb++;
+      (void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
+      (void)strncpy(cur->name, ent.access, (size_t)NAMLEN);
+      p = cur->name;
+      while (*p) { *p = toupper((unsigned char)*p); p++;
+      }
+      cur->filenb = nb; cur->offset = ent.offset;
+    }
+
+#ifdef PERF_PROFILE
+    // for the needs of performance testing, modify cur->name so that index file grows bigger and bigger.
+    sprintf(cur->name,"%d",rand());
+#endif
+  }
+  if (fclose(f) == EOF)
+    err(errno,"cannot close file: %s.",file);
+    // error_fatal(file, NULL);
+
+  return fic_indix;
+}
 
 /* Get golden indexes directory */
 const char *index_dir(void) {
@@ -188,6 +257,55 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
   print_wrk_struct(start_l,lst_size, 1);
 #endif
   return nb_found;}
+
+void create_missing_idxfile(char *file) {
+  FILE *g;
+  /* Create empty index file*/
+  if ((g = fopen(file, "w")) == NULL) {
+     error_fatal(file, NULL); }
+  if (fwrite(0, sizeof(uint64_t), 1, g) != 1) {
+     error_fatal(file, NULL); }
+  if (fclose(g) == EOF) error_fatal(file, NULL);
+}
+
+/* Only used for testing for the moment; optimized version of index_merge.*/
+void index_sort(char *file, long nb, indix_t *ind) {
+  FILE *g;
+  const char *dir;
+  indix_t * old;
+
+  if (nb == 0) return;
+  if ((dir = getenv("TMPDIR")) == NULL) { dir = TMPDIR; }
+
+  if (access(file, F_OK) != 0) err(errno, "file doesn't exist : %s",file);// create_missing_idxfile(file);
+  // figure out how big it is
+  struct stat statbuf;
+  int result = stat (file, &statbuf);
+  if (result == -1) err(errno, "Cannot stat file : %s",file);
+  size_t length = statbuf.st_size;
+  if ((g = fopen(file, "r")) == NULL) err(errno, "Cannot open file : %s",file);
+
+  // mmap it
+  old = (indix_t *) mmap (NULL, length, PROT_READ | PROT_WRITE, MAP_SHARED, g, 0);
+  if (old == NULL) err(errno, "Cannot mmap file : %s",file);
+  /* Sort indexes */
+  qsort(old, (size_t)nb, sizeof(*ind), index_compare);
+
+#ifdef DEBUG
+  // to check that it works.
+  printf("AC/locus sorted in alphabetical order:\n.");
+  int i;
+  for (i=0;i<nb;i++) {
+    printf("%s\n",old);
+    old++;
+  }
+#endif
+
+  if (fclose(g) == EOF) err(errno, "Cannot close file : %s",file);
+  if (munmap(old,length) == -1) err(errno, "Cannot unmap file : %s",file);
+
+  return;
+}
 
 
 /* Merge indexes */
@@ -378,6 +496,26 @@ void freeAllIndix(all_indix_t sToFree) {
     This is the default behavior that was in previous goldin version.
  */
 int index_dump(char *file, int mode, long nb, indix_t *ind) {
-  if (mode==MERGE_INDEXES) index_merge(file,nb,ind);
+  char * o_flg;
+  FILE *f;
+  int i;
+  if (mode==MERGE_INDEXES) return index_merge(file,nb,ind);
+  
+  if (mode==APPEND_INDEXES) o_flg="a";
+  else o_flg="w";
+    
+  if ((f = fopen(file, o_flg)) == NULL) {
+    err(errno,"cannot open file: %s.",file); }
+  
+  i=0;
+  while(i<nb) {
+    if (fwrite(ind, sizeof(*ind), 1, f) != 1) {
+      err(errno,"eror writing index"); }
+    i++;
+    ind++;
+  }
+  
+  if (fclose(f) == EOF)
+    err(errno,"cannot close file: %s.",file);
   
 }

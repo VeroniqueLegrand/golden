@@ -31,7 +31,7 @@
 #define EXIT_FAILURE 1
 #endif
 
-#define BUFINC 100
+
 
 // #define PERF_PROFILE
 
@@ -41,7 +41,7 @@
 
 /* Functions prototypes */
 static void usage(int);
-all_indix_t create_index(char *,int,int );
+
 
 /* Global variables */
 static char *prog;
@@ -145,70 +145,7 @@ int main(int argc, char **argv) {
   return EXIT_SUCCESS;
 }
 
-/*
- * First step : create indexes for given file.
- */
-all_indix_t create_index(char * file, int loc, int acc) {
-  FILE *f;
-  char *p;
-  long locnb, accnb,indnb;
-  entry_t ent;
-  size_t len;
-  indix_t *cur;
-  int nb;
-  all_indix_t fic_indix;
 
-  locnb = accnb = 0;
-  indnb = 0;
-  fic_indix.l_locind=NULL;
-  fic_indix.l_accind=NULL;
-  fic_indix.flatfile_name=strdup(file);
-#ifdef PERF_PROFILE
-  clock_t cpu_time_start=clock();
-  time_t wall_time_start=time(NULL);
-  srand(wall_time_start);
-#endif
-  if ((f = fopen(file, "r")) == NULL)
-	  err(errno,"cannot open file: %s.",file);
-  while(entry_parse(f, &ent) != 1) {
-    /* Checks for reallocation */
-    if (locnb >= indnb || accnb >= indnb) {
-      indnb += BUFINC; len = (size_t)indnb * sizeof(indix_t);
-      if ((fic_indix.l_locind = (indix_t *)realloc(fic_indix.l_locind, len)) == NULL ||
-          (fic_indix.l_accind = (indix_t *)realloc(fic_indix.l_accind, len)) == NULL)
-    	err(errno,"cannot reallocate memory");
-    }
-    /* Store entry name & accession number indexes */
-    if (loc && ent.locus[0] != '\0') {
-      cur = fic_indix.l_locind + locnb; locnb++;
-      (void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
-      (void)strncpy(cur->name, ent.locus, (size_t)NAMLEN);
-      p = cur->name;
-      while (*p) { *p = toupper((unsigned char)*p); p++;
-      }
-      cur->filenb = nb; cur->offset = ent.offset;
-    }
-    if (acc && ent.access[0] != '\0') {
-      cur = fic_indix.l_accind + accnb; accnb++;
-      (void)memset(cur->name, 0x0, (size_t)NAMLEN+1);
-      (void)strncpy(cur->name, ent.access, (size_t)NAMLEN);
-      p = cur->name;
-      while (*p) { *p = toupper((unsigned char)*p); p++;
-      }
-      cur->filenb = nb; cur->offset = ent.offset;
-    }
-    
-#ifdef PERF_PROFILE
-    // for the needs of performance testing, modify cur->name so that index file grows bigger and bigger.
-    sprintf(cur->name,"%d",rand());
-#endif
-  }
-  if (fclose(f) == EOF)
-    err(errno,"cannot close file: %s.",file);
-	  // error_fatal(file, NULL);
-
-  return fic_indix;
-}
 
 
 /* Usage display */

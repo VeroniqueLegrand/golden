@@ -1,0 +1,183 @@
+CC   -----------------------------------------------------------------------
+CC
+CC   ENZYME nomenclature database
+CC
+CC   -----------------------------------------------------------------------
+CC   Release of 22-Jan-2014.
+CC   -----------------------------------------------------------------------
+CC
+CC   Ioannis Xenarios and Kristian Axelsen
+CC   SIB Swiss Institute of Bioinformatics
+CC   Centre Medical Universitaire (CMU)
+CC   1, rue Michel Servet
+CC   1211 Geneva 4
+CC   Switzerland
+CC
+CC   Email: enzyme@isb-sib.ch
+CC
+CC   WWW server: http://enzyme.expasy.org/
+CC
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the SIB Swiss Institute of Bioinformatics. 
+CC   There are no restrictions on its use by any institutions as long as
+CC   its content is in no way modified.
+CC   -----------------------------------------------------------------------
+//
+ID   1.1.1.36
+DE   Acetoacetyl-CoA reductase.
+CA   (R)-3-hydroxyacyl-CoA + NADP(+) = 3-oxoacyl-CoA + NADPH.
+PR   PROSITE; PDOC00060;
+DR   P50203, PHAB_ACISR ;  P50204, PHAB_PARDE ;  P45375, PHBB_ALLVD ;
+DR   P14697, PHBB_CUPNH ;  P50205, PHBB_RHIME ;  P23238, PHBB_ZOORA ;
+//
+ID   2.7.1.128
+DE   Transferred entry: 2.7.11.27.
+//
+ID   2.7.1.129
+DE   Transferred entry: 2.7.11.7.
+//
+ID   1.1.1.26
+DE   Glyoxylate reductase.
+AN   Glycolate reductase.
+AN   Glyoxylic acid reductase.
+AN   NADH-dependent glyoxylate reductase.
+CA   Glycolate + NAD(+) = glyoxylate + NADH.
+CC   -!- Reduces glyoxylate to glycolate or hydroxypyruvate to D-glycerate.
+PR   PROSITE; PDOC00063;
+DR   P53839, GOR1_YEAST ;  Q9YAW4, GYAR_AERPE ;  B1L765, GYAR_KORCO ;
+DR   Q9UYR1, GYAR_PYRAB ;  Q8U3Y2, GYAR_PYRFU ;  O58320, GYAR_PYRHO ;
+DR   C5A1V0, GYAR_THEGJ ;  Q5JEZ2, GYAR_THEKO ;  Q9C4M5, GYAR_THELI ;
+DR   B6YWH0, GYAR_THEON ;  A1RYE4, GYAR_THEPD ;
+//
+ID   1.1.1.6
+DE   Glycerol dehydrogenase.
+AN   NAD-linked glycerol dehydrogenase.
+CA   Glycerol + NAD(+) = glycerone + NADH.
+CC   -!- Also acts on 1,2-propanediol.
+PR   PROSITE; PDOC00059;
+DR   O13702, GLD1_SCHPO ;  P45511, GLDA_CITFR ;  P0A9S6, GLDA_ECOL6 ;
+DR   P0A9S5, GLDA_ECOLI ;  P32816, GLDA_GEOSE ;  P50173, GLDA_PSEPU ;
+DR   Q9WYQ4, GLDA_THEMA ;
+//
+ID   1.1.1.22
+DE   UDP-glucose 6-dehydrogenase.
+CA   UDP-glucose + 2 NAD(+) + H(2)O = UDP-glucuronate + 2 NADH.
+CC   -!- Also acts on UDP-2-deoxyglucose.
+DR   D4GYH5, AGLM_HALVD ;  O32271, TUAD_BACSU ;  Q47329, UDG5_ECOLX ;
+DR   O33952, UDG8_ECOLX ;  Q04872, UDG_ECO11  ;  Q7DBF9, UDG_ECO57  ;
+DR   Q8FG45, UDG_ECOL6  ;  P76373, UDG_ECOLI  ;  O86422, UDG_PSEAE  ;
+DR   O54068, UDG_RHIME  ;  Q1RKF8, UDG_RICBR  ;  Q92GB1, UDG_RICCN  ;
+DR   Q4UK39, UDG_RICFE  ;  O05973, UDG_RICPR  ;  Q68VX0, UDG_RICTY  ;
+DR   Q04873, UDG_SALTY  ;  P37791, UDG_SHIFL  ;  Q57346, UDG_STREE  ;
+DR   P0C0F5, UDG_STRP1  ;  P0DG68, UDG_STRP3  ;  Q5X9A8, UDG_STRP6  ;
+DR   Q8NKX0, UDG_STRP8  ;  P0DG69, UDG_STRPQ  ;  P0C0F4, UDG_STRPY  ;
+DR   Q9FZE1, UGDH1_ARATH;  Q75GS4, UGDH1_ORYSJ;  Q96558, UGDH1_SOYBN;
+DR   Q9LIA8, UGDH2_ARATH;  B7F958, UGDH2_ORYSJ;  Q9LF33, UGDH3_ARATH;
+DR   Q9AUV6, UGDH3_ORYSJ;  Q9FM01, UGDH4_ARATH;  Q2QS14, UGDH4_ORYSJ;
+DR   Q2QS13, UGDH5_ORYSJ;  P12378, UGDH_BOVIN ;  Q19905, UGDH_CAEEL ;
+DR   Q5F3T9, UGDH_CHICK ;  O02373, UGDH_DROME ;  O60701, UGDH_HUMAN ;
+DR   O70475, UGDH_MOUSE ;  Q5R7B3, UGDH_PONAB ;  O70199, UGDH_RAT   ;
+DR   O34862, YTCA_BACSU ;  P96718, YWQF_BACSU ;
+//
+ID   1.1.1.5
+DE   Transferred entry: 1.1.1.303 and 1.1.1.304.
+//
+ID   7.1.1.1
+DE   D-arabinitol 4-dehydrogenase.
+CA   D-arabinitol + NAD(+) = D-xylulose + NADH.
+DR   O52720, DALD_KLEPN ;  P58708, DALD_RALSO ;  P58709, DALD_YERPE ;
+//
+ID   2.7.1.119
+DE   Hygromycin-B 7''-O-kinase.
+AN   APH(7'').
+AN   Hygromycin B phosphotransferase.
+AN   Hygromycin-B kinase.
+CA   ATP + hygromycin B = ADP + 7''-O-phosphohygromycin B.
+CC   -!- Phosphorylates the antibiotics hygromycin B, 1-N-hygromycin B and
+CC       destomycin, but not hygromycin B2, at the 7''-hydroxy group in the
+CC       destomic acid ring.
+DR   P09979, KHYB_STRHY ;
+//
+ID   2.7.1.120
+DE   Transferred entry: 2.7.11.17.
+//
+ID   2.7.1.121
+DE   Phosphoenolpyruvate--glycerone phosphotransferase.
+CA   Phosphoenolpyruvate + glycerone = pyruvate + glycerone phosphate.
+//
+ID   2.7.1.122
+DE   Xylitol kinase.
+AN   Xylitol phosphotransferase.
+CA   ATP + xylitol = ADP + xylitol 5-phosphate.
+//
+ID   7.1.1.2
+DE   D-arabinitol 4-dehydrogenase.
+CA   D-arabinitol + NAD(+) = D-xylulose + NADH.
+DR   O52720, DALD_KLEPN ;  P58708, DALD_RALSO ;  P58709, DALD_YERPE ;
+//
+ID   6.4.1.5
+DE   Geranoyl-CoA carboxylase.
+AN   Geranyl-CoA carboxylase.
+CA   ATP + geranoyl-CoA + HCO(3)(-) = ADP + phosphate + 3-(4-methylpent-3-
+CA   en-1-yl)pent-2-enedioyl-CoA.
+CF   Biotin.
+CC   -!- Also carboxylates dimethylpropenoyl-CoA and farnesoyl-CoA.
+PR   PROSITE; PDOC00167;
+//
+ID   6.4.1.6
+DE   Acetone carboxylase.
+CA   Acetone + CO(2) + ATP + 2 H(2)O = acetoacetate + AMP + 2 phosphate.
+CF   Magnesium.
+CC   -!- The enzyme from Xanthobacter sp. strain Py2 also carboxylates butan-
+CC       2-one to 3-oxopentanoate.
+DR   Q8RM04, ACXA_XANP2 ;  Q8RM03, ACXB_XANP2 ;  Q8RM02, ACXC_XANP2 ;
+//
+ID   7.1.1.3
+DE   D-arabinitol 4-dehydrogenase.
+CA   D-arabinitol + NAD(+) = D-xylulose + NADH.
+DR   O52720, DALD_KLEPN ;  P58708, DALD_RALSO ;  P58709, DALD_YERPE ;
+//
+ID   6.3.5.7
+DE   Glutaminyl-tRNA synthase (glutamine-hydrolyzing).
+AN   Glu-AdT.
+AN   Glu-tRNA(Gln) amidotransferase.
+AN   Glutamyl-tRNA(Gln) amidotransferase.
+CA   ATP + L-glutamyl-tRNA(Gln) + L-glutamine = ADP + phosphate +
+CA   L-glutaminyl-tRNA(Gln) + L-glutamate.
+CC   -!- In systems lacking discernible EC 6.1.1.18, glutaminyl-tRNA(Gln) is
+CC       formed by a two-enzyme system.
+CC   -!- In the first step, a nondiscriminating ligase (EC 6.1.1.24)
+CC       mischarges tRNA(Gln) with glutamate, forming glutamyl-tRNA(Gln).
+CC   -!- The glutamyl-tRNA(Gln) is not used in protein synthesis until the
+CC       present enzyme converts it into glutaminyl-tRNA(Gln) (glutamyl-
+CC       tRNA(Glu) is not a substrate for this reaction).
+CC   -!- Ammonia or asparagine can substitute for the preferred substrate
+CC       glutamine.
+PR   PROSITE; PDOC00948;
+//
+ID   6.3.5.8
+DE   Transferred entry: 2.6.1.85.
+//
+ID   2.7.1.106
+DE   Glucose-1,6-bisphosphate synthase.
+AN   Glucose 1,6-diphosphate synthase.
+AN   Glucose-1,6-bisphosphate synthetase.
+CA   3-phospho-D-glyceroyl phosphate + alpha-D-glucose 1-phosphate =
+CA   3-phospho-D-glycerate + alpha-D-glucose 1,6-bisphosphate.
+CC   -!- Alpha-D-glucose 6-phosphate can act as acceptor, forming alpha-D-
+CC       glucose 1,6-bisphosphate.
+DR   Q6PCE3, PGM2L_HUMAN;  Q8CAA7, PGM2L_MOUSE;  Q5R979, PGM2L_PONAB;
+//
+ID   6.3.5.9
+DE   Hydrogenobyrinic acid a,c-diamide synthase (glutamine-hydrolyzing).
+CA   2 ATP + hydrogenobyrinic acid + 2 L-glutamine + 2 H(2)O = 2 ADP +
+CA   2 phosphate + hydrogenobyrinic acid a,c-diamide + 2 L-glutamate.
+CC   -!- This step in the aerobic biosynthesis of cobalamin generates
+CC       hydrogenobyrinic acid a,c-diamide, the substrate required by
+CC       EC 6.6.1.2, which adds cobalt to the macrocycle.
+//
+ID   7.1.1.4
+DE   D-arabinitol 4-dehydrogenase.
+CA   D-arabinitol + NAD(+) = D-xylulose + NADH.
+DR   O52720, DALD_KLEPN ;  P58708, DALD_RALSO ;  P58709, DALD_YERPE ;
+//
