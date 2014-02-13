@@ -13,6 +13,7 @@
 #include <string.h>
 #endif
 #include <ctype.h>
+#include <unistd.h>
 
 #include "error.h"
 #include "entry.h"

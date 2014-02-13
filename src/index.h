@@ -14,6 +14,10 @@
 #define LSTSUF "dbx"
 #define VIRSUF "vix"
 
+// to indicate whether we are loading acc indexes or locus indexes.
+#define LOC_IDX 0
+#define ACC_IDX 1
+
 
 /* constants used to indicate that an AC or entry name was found nowhere. */
 #define NOT_FOUND -1
@@ -39,18 +43,11 @@ typedef struct {
   long accnb; // size of l_accind.
 } all_indix_t;
 
-
-void freeAllIndix(); // free memory allocated for the elements of the all_indix_t structure.
-all_indix_t create_index(char *,int,int );
-
 typedef struct {
   char *name, *dbase;
   char *real_dbase;
   int filenb;
   off_t offset; } result_t;
-
-void print_wrk_struct(result_t ** lst_work,int nb_cards,int);
-
 
 typedef struct {
   result_t ** start_l;
@@ -74,6 +71,12 @@ int index_merge(char *, long, indix_t *);
 int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_found);
 const char *index_dir(void);
 char *index_file(const char *, const char *, const char *);
+void freeAllIndix(); // free memory allocated for the elements of the all_indix_t structure.
+all_indix_t create_index(char *,int,int );
+int index_dump(char *, int, long, indix_t *);
+all_indix_t index_load(char * ,char *, int );
+void print_wrk_struct(result_t ** lst_work,int nb_cards,int);
+void index_sort(char *, long);
 
 #endif /* __INDEX_H_ */
 

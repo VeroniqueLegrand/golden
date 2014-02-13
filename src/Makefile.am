@@ -15,6 +15,7 @@ goldin_SOURCES = goldin.c
 goldin_LDADD = libgolden.a
 
 unit_tests_SOURCES = unit_tests.c
+unit_tests_LDADD = libgolden.a
 
 libgolden_a_SOURCES = $(SRC)
 SRC = access.c entry.c error.c index.c list.c locus.c query.c

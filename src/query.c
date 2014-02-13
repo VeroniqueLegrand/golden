@@ -13,6 +13,7 @@
 
 #include <errno.h>
 #include <err.h>
+#include <ctype.h>
 
 #include "index.h"
 #include "access.h"

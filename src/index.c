@@ -19,6 +19,8 @@
 #include "error.h"
 #include "index.h"
 #include <errno.h>
+#include <err.h>
+#include <ctype.h>
 
 #include <sys/mman.h>
 
@@ -48,7 +50,7 @@ static uint32_t iswap32(uint32_t);
 
 
 /*
-  Debug utility : prints content of data structure used for work (array of adresses of result_t structures).
+  Debug utility : prints content of data structure used for work (array of addresses of result_t structures).
  */
 void print_wrk_struct(result_t ** lst_work, int nb_cards, int missing_only) {
     printf("\nlst_work content :");
@@ -268,8 +270,8 @@ void create_missing_idxfile(char *file) {
   if (fclose(g) == EOF) error_fatal(file, NULL);
 }
 
-/* Only used for testing for the moment; optimized version of index_merge.*/
-void index_sort(char *file, long nb, indix_t *ind) {
+/* Only used for performance testing for the moment; optimized version of index_merge.*/
+void index_sort(char *file, long nb) {
   FILE *g;
   const char *dir;
   indix_t * old;
@@ -289,7 +291,7 @@ void index_sort(char *file, long nb, indix_t *ind) {
   old = (indix_t *) mmap (NULL, length, PROT_READ | PROT_WRITE, MAP_SHARED, g, 0);
   if (old == NULL) err(errno, "Cannot mmap file : %s",file);
   /* Sort indexes */
-  qsort(old, (size_t)nb, sizeof(*ind), index_compare);
+  qsort(old, (size_t)nb, sizeof(*old), index_compare);
 
 #ifdef DEBUG
   // to check that it works.
@@ -510,12 +512,41 @@ int index_dump(char *file, int mode, long nb, indix_t *ind) {
   i=0;
   while(i<nb) {
     if (fwrite(ind, sizeof(*ind), 1, f) != 1) {
-      err(errno,"eror writing index"); }
+      err(errno,"error writing index"); }
     i++;
     ind++;
   }
   
   if (fclose(f) == EOF)
     err(errno,"cannot close file: %s.",file);
-  
+  return 0;
+}
+
+
+/*
+ Load an index file into a memory structure. Mostly used for unit tests. Or else,trying to load huge files (X Gb) in memory
+ would fail.
+ */
+all_indix_t index_load(char * flat_filename, char * file,int typ) {
+  FILE * g;
+  indix_t cur;
+  uint64_t nb_idx;
+  all_indix_t fic_indix;
+  int i=0;
+  fic_indix.flatfile_name=strdup(flat_filename);
+  if ((g = fopen(file, "r")) == NULL) err(errno,"cannot open file: %s.",file);
+  if (fread(&nb_idx, sizeof(nb_idx), 1, g) != 1) err(errno,"cannot read index from file: %s.",file);
+  if (typ==LOC_IDX) {
+    fic_indix.locnb=nb_idx;
+    if ((fic_indix.l_locind = (indix_t *)realloc(fic_indix.l_locind, nb_idx)) == NULL) err(errno,"cannot allocate memory");
+  } else {
+    fic_indix.accnb=nb_idx;
+    if ((fic_indix.l_accind = (indix_t *)realloc(fic_indix.l_accind, nb_idx)) == NULL) err(errno,"cannot reallocate memory");
+  }
+
+  while(i<nb_idx) {
+    if (fread(&cur, sizeof(cur), 1, g) != 1) err(errno,"cannot read index from file: %s.",file);
+  }
+  if (fclose(g) == EOF) err(errno,"error closing file: %s.",file);
+  return fic_indix;
 }
