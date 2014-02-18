@@ -30,7 +30,6 @@
 
 #define BUFINC 100
 
-
 /* Append database flat file list && return file nb */
 int list_append(char *dbase, char *dir, char *file) {
   FILE *f;
@@ -53,17 +52,17 @@ int list_append(char *dbase, char *dir, char *file) {
 
       /* Checks for long line */
       if ((p = strrchr(buf, '\n')) == NULL) {
-	len += BUFINC;
-	if ((buf = (char *)realloc(buf, len+1)) == NULL)
-	  error_fatal("memory", NULL);
-	if (fseeko(f, -1 * (off_t)strlen(buf), SEEK_CUR) != 0)
-	  error_fatal(name, NULL);
-	continue; }
+  len += BUFINC;
+  if ((buf = (char *)realloc(buf, len+1)) == NULL)
+    error_fatal("memory", NULL);
+  if (fseeko(f, -1 * (off_t)strlen(buf), SEEK_CUR) != 0)
+    error_fatal(name, NULL);
+  continue; }
 
       /* Checks for existing file */
       *p = '\0';
       if (strcmp(buf, q) == 0)
-	error_warn(q, "duplicate file in database");
+  error_warn(q, "duplicate file in database");
 
       nb++; }
 
@@ -82,6 +81,7 @@ int list_append(char *dbase, char *dir, char *file) {
   free(name);
 
   return (nb+1); }
+
 
 
 /* Get database list flat file name */

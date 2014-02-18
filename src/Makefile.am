@@ -18,7 +18,7 @@ unit_tests_SOURCES = unit_tests.c
 unit_tests_LDADD = libgolden.a
 
 libgolden_a_SOURCES = $(SRC)
-SRC = access.c entry.c error.c index.c list.c locus.c query.c
+SRC = access.c entry.c error.c index.c list.c locus.c query.c index_utils.c
 HDR = access.h entry.h error.h index.h list.h locus.h query.h
 
 TESTS = unit_tests.sh

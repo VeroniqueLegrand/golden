@@ -43,6 +43,8 @@ typedef struct {
   long accnb; // size of l_accind.
 } all_indix_t;
 
+void init_all_indix_t();
+
 typedef struct {
   char *name, *dbase;
   char *real_dbase;
@@ -72,11 +74,18 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
 const char *index_dir(void);
 char *index_file(const char *, const char *, const char *);
 void freeAllIndix(); // free memory allocated for the elements of the all_indix_t structure.
-all_indix_t create_index(char *,int,int );
-int index_dump(char *, int, long, indix_t *);
-all_indix_t index_load(char * ,char *, int );
+all_indix_t create_index(char *,int,int,int );
+int index_dump(char *, int , long , indix_t *,char *);
+// all_indix_t index_load(char * ,char *, int );
+all_indix_t index_load(char *,char *);
 void print_wrk_struct(result_t ** lst_work,int nb_cards,int);
 void index_sort(char *, long);
+void create_missing_idxfile(char *);
+char *index_temp(const char *dir);
+int index_compare(const void *a, const void *b);
+uint64_t iswap64(uint64_t val);
+uint32_t iswap32(uint32_t val);
+int list_append(char *dbase, char *dir, char *file);
 
 #endif /* __INDEX_H_ */
 

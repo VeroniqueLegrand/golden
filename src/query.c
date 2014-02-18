@@ -28,7 +28,7 @@
 int get_nbCards(char * my_list) {
     // count ':' to know how many cards we are expecting.
     int nb_cards=0;
-    int l_siz=strlen(my_list);
+    int l_siz=(int) strlen(my_list);
     int i;
     for (i=0;i<l_siz;i++) {
       if (my_list[i]==':') {
@@ -73,7 +73,7 @@ WAllQueryData prepareQueryData(char * my_list, result_t * res,int nb_cards) {
 #endif
   elm = strtok (my_list,"\n");
   for (i=0;i<nb_cards;i++) {
-    len = strlen(elm);
+    len = (int) strlen(elm);
     if (strchr(elm,':') == NULL) {
       //printf("%s",elm);
       err(errno,"invalid query value: %s.",elm);

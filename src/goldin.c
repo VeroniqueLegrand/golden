@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
 
     /* Add file to list */
     nb = list_append(dbase, dir, file);
-    all_indix_t file_l_indix=create_index(file,loc,acc);
+    all_indix_t file_l_indix=create_index(file,nb,loc,acc);
 
 #ifdef PERF_PROFILE
     clock_t cpu_time_stop=clock();
