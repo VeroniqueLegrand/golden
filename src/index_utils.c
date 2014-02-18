@@ -50,9 +50,9 @@ void init_all_indix_t(all_indix_t * sToInit) {
 
 
 void freeAllIndix(all_indix_t sToFree) {
-  free(sToFree.flatfile_name);
-  free(sToFree.l_locind);
-  free(sToFree.l_accind);
+  if (sToFree.flatfile_name!=NULL) free(sToFree.flatfile_name);
+  if (sToFree.l_locind!=NULL) free(sToFree.l_locind);
+  if (sToFree.l_accind!=NULL) free(sToFree.l_accind);
 }
 
 

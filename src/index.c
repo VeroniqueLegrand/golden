@@ -433,6 +433,7 @@ int index_dump(char *dbase, int mode, long nb, indix_t *ind,char * SUF) {
   } else if (fwrite(&nb_idx, sizeof(nb_idx), 1, f) != 1) err(errno,"error initializing number of indexes");
 
   i=0;
+  
   while(i<nb) {
     if (fwrite(ind, sizeof(*ind), 1, f) != 1) {
       err(errno,"error writing index"); }

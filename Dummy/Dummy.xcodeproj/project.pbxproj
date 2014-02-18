@@ -19,6 +19,7 @@
 		2D4D33901889699000712232 /* locus.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D4D33841889699000712232 /* locus.c */; };
 		2D4D33911889699000712232 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 2D4D33861889699000712232 /* Makefile */; };
 		2D6295F018B22851001CC177 /* unit_tests.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D6295EF18B22851001CC177 /* unit_tests.c */; };
+		2D6295F418B3B583001CC177 /* index_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D6295F318B3B583001CC177 /* index_utils.c */; };
 		2DB799E118A118B7001A857C /* query.c in Sources */ = {isa = PBXBuildFile; fileRef = 2DB799DF18A118B7001A857C /* query.c */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +60,7 @@
 		2D4D33871889699000712232 /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = ../src/Makefile.am; sourceTree = "<group>"; };
 		2D4D33881889699000712232 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.in; path = ../src/Makefile.in; sourceTree = "<group>"; };
 		2D6295EF18B22851001CC177 /* unit_tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = unit_tests.c; path = ../src/unit_tests.c; sourceTree = "<group>"; };
+		2D6295F318B3B583001CC177 /* index_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = index_utils.c; path = ../src/index_utils.c; sourceTree = "<group>"; };
 		2DB799DF18A118B7001A857C /* query.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = query.c; path = ../src/query.c; sourceTree = "<group>"; };
 		2DB799E018A118B7001A857C /* query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = query.h; path = ../src/query.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -77,6 +79,7 @@
 		2D4D335B1889694900712232 = {
 			isa = PBXGroup;
 			children = (
+				2D6295F318B3B583001CC177 /* index_utils.c */,
 				2D6295EF18B22851001CC177 /* unit_tests.c */,
 				2DB799DF18A118B7001A857C /* query.c */,
 				2DB799E018A118B7001A857C /* query.h */,
@@ -179,6 +182,7 @@
 				2D4D338A1889699000712232 /* entry.c in Sources */,
 				2DB799E118A118B7001A857C /* query.c in Sources */,
 				2D4D338C1889699000712232 /* golden.c in Sources */,
+				2D6295F418B3B583001CC177 /* index_utils.c in Sources */,
 				2D4D338F1889699000712232 /* list.c in Sources */,
 				2D4D33681889694900712232 /* main.c in Sources */,
 				2D4D338E1889699000712232 /* index.c in Sources */,

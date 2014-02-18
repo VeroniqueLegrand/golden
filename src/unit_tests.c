@@ -77,12 +77,21 @@ void test_index_dump_load(all_indix_t t_idx) {
 
   ret=index_dump(rac_filename,REPLACE_INDEXES,t_idx.locnb, t_idx.l_locind,LOCSUF);
   assert( stat(icx_file, &st)!= -1);
-  assert(st.st_size!=8 && st.st_size!=0);
+  assert(st.st_size>16);
   int old_size=st.st_size;
   
   all_indix_t t_idx3=index_load(rac_filename,LOCSUF);
   assert(t_idx3.accnb==0);
   assert(t_idx3.locnb==21);
+  
+  // printf("Taille des index a dumper : %d\n",sizeof(*t_idx3.l_locind));
+  
+  qsort(t_idx3.l_locind, (size_t) t_idx3.locnb, sizeof(*t_idx3.l_locind), index_compare);
+  ret=index_dump(rac_filename,REPLACE_INDEXES,t_idx3.locnb, t_idx3.l_locind,LOCSUF);
+  assert( stat(icx_file, &st)!= -1);
+  assert(st.st_size==old_size);
+  
+  freeAllIndix(t_idx3);
 
   ret=index_dump(rac_filename,MERGE_INDEXES,t_idx.locnb, t_idx.l_locind,LOCSUF);
   assert( stat(icx_file, &st)!= -1);
@@ -91,7 +100,8 @@ void test_index_dump_load(all_indix_t t_idx) {
   ret=index_dump(rac_filename,APPEND_INDEXES,t_idx.locnb, t_idx.l_locind,LOCSUF);
   assert( stat(icx_file, &st)!= -1);
   int expected_size=2*old_size;
-  assert(st.st_size==2*old_size);
+  expected_size=expected_size-8;
+  assert(st.st_size==expected_size);
 
   ret=index_dump(rac_filename,REPLACE_INDEXES,t_idx.locnb, t_idx.l_locind,LOCSUF);
   assert( stat(icx_file, &st)!= -1);
@@ -104,7 +114,7 @@ void test_index_dump_load(all_indix_t t_idx) {
   // assert(strcmp(t_idx2.flatfile_name,data_file)==0);
   assert(t_idx2.accnb==0);
   assert(t_idx2.locnb==0);
-  assert(t_idx2.l_accind==NULL);
+  // assert(t_idx2.l_accind==NULL);
   assert(t_idx2.l_locind==NULL);
 
   t_idx2=index_load(rac_filename,LOCSUF);
@@ -115,6 +125,7 @@ void test_index_dump_load(all_indix_t t_idx) {
   assert(t_idx2.l_locind!=NULL);
 
   freeAllIndix(t_idx2);
+  
 }
 
 
