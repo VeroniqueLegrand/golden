@@ -43,14 +43,14 @@ all_indix_t test_index_create() {
   int nb;
   nb = list_append(data_file, data_file, data_file);
   all_indix_t t_idx=create_index(data_file,nb,0,1);
-  assert(strcmp(t_idx.flatfile_name,data_file)==0);
+  // assert(strcmp(t_idx.flatfile_name,data_file)==0);
   //assert(NULL==t_idx.l_accind);
   assert(t_idx.accnb==0);
   //assert(t_idx.l_locind==NULL);
   assert(t_idx.locnb==0);
 
   t_idx=create_index(data_file,nb,1,0);
-  assert(strcmp(t_idx.flatfile_name,data_file)==0);
+  // assert(strcmp(t_idx.flatfile_name,data_file)==0);
   assert(t_idx.accnb==0);
   assert(t_idx.locnb==21);
   //assert(t_idx.l_accind==NULL);
@@ -110,7 +110,7 @@ void test_index_dump_load(all_indix_t t_idx) {
   // all_indix_t t_idx2=index_load(datta_file,acx_file,ACC_IDX);
   
   all_indix_t t_idx2=index_load(rac_filename,ACCSUF);
-  t_idx2.flatfile_name=strdup(data_file);
+  //t_idx2.flatfile_name=strdup(data_file);
   // assert(strcmp(t_idx2.flatfile_name,data_file)==0);
   assert(t_idx2.accnb==0);
   assert(t_idx2.locnb==0);

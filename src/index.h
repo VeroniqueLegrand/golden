@@ -36,7 +36,7 @@ typedef struct {
 
 /* Storage structures for information on flat files that were just parsed.*/
 typedef struct {
-  char * flatfile_name;// name of the flat file.
+  // char * flatfile_name;// name of the flat file. // never ued; remove it.
   indix_t *l_locind; //array of index for the flat file
   long locnb; // size of l_locind.
   indix_t *l_accind;

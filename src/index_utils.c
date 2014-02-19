@@ -42,7 +42,7 @@ void print_wrk_struct(result_t ** lst_work, int nb_cards, int missing_only) {
 
 void init_all_indix_t(all_indix_t * sToInit) {
   sToInit->accnb=0;
-  sToInit->flatfile_name=NULL;
+  // sToInit->flatfile_name=NULL;
   sToInit->l_accind=NULL;
   sToInit->l_locind=NULL;
   sToInit->locnb=0;
@@ -50,7 +50,7 @@ void init_all_indix_t(all_indix_t * sToInit) {
 
 
 void freeAllIndix(all_indix_t sToFree) {
-  if (sToFree.flatfile_name!=NULL) free(sToFree.flatfile_name);
+  // if (sToFree.flatfile_name!=NULL) free(sToFree.flatfile_name);
   if (sToFree.l_locind!=NULL) free(sToFree.l_locind);
   if (sToFree.l_accind!=NULL) free(sToFree.l_accind);
 }
@@ -78,10 +78,10 @@ all_indix_t index_load(char * dbase,char * suff) {
   if (fread(&nb_idx, sizeof(nb_idx), 1, g) != 1) err(errno,"cannot read index from file: %s.",file);
   if (suff==LOCSUF) {
     fic_indix.locnb=nb_idx;
-    if ((fic_indix.l_locind = (indix_t *)realloc(fic_indix.l_locind, nb_idx)) == NULL) err(errno,"cannot allocate memory");
+    if ((fic_indix.l_locind = (indix_t *)realloc(fic_indix.l_locind, nb_idx*sizeof(indix_t))) == NULL) err(errno,"cannot allocate memory");
   } else {
     fic_indix.accnb=nb_idx;
-    if ((fic_indix.l_accind = (indix_t *)realloc(fic_indix.l_accind, nb_idx)) == NULL) err(errno,"cannot reallocate memory");
+    if ((fic_indix.l_accind = (indix_t *)realloc(fic_indix.l_accind, nb_idx*sizeof(indix_t))) == NULL) err(errno,"cannot reallocate memory");
   }
 
   while(i<nb_idx) {

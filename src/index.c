@@ -68,7 +68,7 @@ all_indix_t create_index(char * file, int filenb, int loc, int acc) {
   indnb = 0;
   fic_indix.l_locind=NULL;
   fic_indix.l_accind=NULL;
-  fic_indix.flatfile_name=strdup(file);
+  // fic_indix.flatfile_name=strdup(file);
 #ifdef PERF_PROFILE
   clock_t cpu_time_start=clock();
   time_t wall_time_start=time(NULL);
