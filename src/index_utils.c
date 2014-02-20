@@ -55,27 +55,15 @@ void freeAllIndix(all_indix_t sToFree) {
   if (sToFree.l_accind!=NULL) free(sToFree.l_accind);
 }
 
-
-/*
- Load an index file into a memory structure. Mostly used for unit tests. Or else,trying to load huge files (X Gb) in memory
- would fail.
- */
-// all_indix_t index_load(char * flat_filename, char * file,int typ) {
-all_indix_t index_load(char * dbase,char * suff) {
+all_indix_t fic_index_load(char * file,char * suff) {
   FILE * g;
-  char * file;
-  indix_t cur;
   uint64_t nb_idx;
   all_indix_t fic_indix;
+  indix_t cur;
   int i=0;
-  // fic_indix.flatfile_name=strdup(flat_filename);
-  fic_indix.locnb=0;
-  fic_indix.accnb=0;
-  fic_indix.l_locind=NULL;
-  fic_indix.l_accind=NULL;
-  file = index_file(".", dbase, suff);
+  init_all_indix_t(&fic_indix);
   if ((g = fopen(file, "r")) == NULL) err(errno,"cannot open file: %s.",file);
-  if (fread(&nb_idx, sizeof(nb_idx), 1, g) != 1) err(errno,"cannot read index from file: %s.",file);
+  if (fread(&nb_idx, sizeof(nb_idx), 1, g) != 1) err(errno,"cannot read index number from file: %s.",file);
   if (suff==LOCSUF) {
     fic_indix.locnb=nb_idx;
     if ((fic_indix.l_locind = (indix_t *)realloc(fic_indix.l_locind, nb_idx*sizeof(indix_t))) == NULL) err(errno,"cannot allocate memory");
@@ -83,7 +71,7 @@ all_indix_t index_load(char * dbase,char * suff) {
     fic_indix.accnb=nb_idx;
     if ((fic_indix.l_accind = (indix_t *)realloc(fic_indix.l_accind, nb_idx*sizeof(indix_t))) == NULL) err(errno,"cannot reallocate memory");
   }
-
+  
   while(i<nb_idx) {
     if (fread(&cur, sizeof(cur), 1, g) != 1) err(errno,"cannot read index from file: %s.",file);
     if (suff==LOCSUF) fic_indix.l_locind[i]=cur;
@@ -92,6 +80,18 @@ all_indix_t index_load(char * dbase,char * suff) {
   }
   if (fclose(g) == EOF) err(errno,"error closing file: %s.",file);
   return fic_indix;
+}
+
+
+/*
+ Load an index file into a memory structure. Mostly used for unit tests. Or else,trying to load huge files (X Gb) in memory
+ would fail.
+ */
+// all_indix_t index_load(char * flat_filename, char * file,int typ) {
+all_indix_t index_load(char * dbase,char * suff) {
+  char * file;
+  file = index_file(".", dbase, suff);
+  return fic_index_load(file,suff);
 }
 
 void create_missing_idxfile(char *file) {

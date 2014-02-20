@@ -21,6 +21,9 @@ It is lower level.
 //#include <stdlib.h>
 #include <assert.h>
 #include <sys/stat.h>
+#include <err.h>
+#include <errno.h>
+#include <fcntl.h>
 
 #include "list.h"
 #include "index.h"
@@ -28,14 +31,50 @@ It is lower level.
 char * data_file="../test/unit/enzyme_extract.dat";
 char * acx_file="enzyme_extract_idx1.acx";
 char * icx_file="enzyme_extract_idx1.idx";
+char * icx_unsorted_file="../test/unit/enzyme_extract_unsorted_idx1.idx";
 char * rac_filename="enzyme_extract_idx1";
 
 // void test_index_sort();
 all_indix_t test_index_create();
 
+// utility method to copy a file before sorting it. Only used for unit tests.
+void copy_file(char* fsource, char* fdest) {
+  char mode[]="0777";
+  int mod;
+  struct stat st;
+  int fd, fd_dest,ret;
+  int nb_read;
+  char * buf;
+  mod=strtol(mode, 0, 8);
+  if (stat(fsource, &st) == -1) err(errno, "Source file does not exist.");
+  if ((fd=open(fsource,O_RDONLY))==-1) err(errno, "Cannot open source file.");
+  if ((fd_dest=open(fdest,O_WRONLY|O_CREAT))==-1) err(errno, "Cannot open destination file.");
+  if ((buf=malloc(st.st_size))==NULL) err(errno, "Cannot allocate memory");
+  if ((nb_read=read(fd,buf,st.st_size))==-1) err(errno,"Error while reading source file.");
+  if (write(fd_dest,buf,nb_read)==-1) err(errno,"Error while writing dest file.");
+  close(fd);
+  close(fd_dest);
+  if ((ret=chmod(fdest, mod)) == -1) err(errno,"Cannot set permissions.");
+}
 
 void test_index_sort() {
-  index_sort(icx_file,LOC_IDX);
+  char * tst_file="enzyme_test.idx";
+  int i=0;
+  
+  all_indix_t t_idx=fic_index_load(icx_unsorted_file,LOCSUF);
+  index_dump("enzyme_test",REPLACE_INDEXES,t_idx.locnb, t_idx.l_locind,LOCSUF); // creates tst_file
+  index_sort(tst_file,21);
+  // load test file and icx_file (already sorted), and check that both results are the same.
+  all_indix_t t_idx3=index_load("enzyme_test",LOCSUF);
+  assert(t_idx3.accnb==0);
+  assert(t_idx3.locnb==21);
+  
+  all_indix_t t_idx_ref=index_load(rac_filename,LOCSUF);
+  while (i<21) {
+    assert(strcmp(t_idx_ref.l_locind[i].name,t_idx3.l_locind[i].name)==0);
+    i++;
+  }
+  
 }
 
 
@@ -44,22 +83,17 @@ all_indix_t test_index_create() {
   nb = list_append(data_file, data_file, data_file);
   all_indix_t t_idx=create_index(data_file,nb,0,1);
   // assert(strcmp(t_idx.flatfile_name,data_file)==0);
-  //assert(NULL==t_idx.l_accind);
   assert(t_idx.accnb==0);
-  //assert(t_idx.l_locind==NULL);
   assert(t_idx.locnb==0);
 
   t_idx=create_index(data_file,nb,1,0);
   // assert(strcmp(t_idx.flatfile_name,data_file)==0);
   assert(t_idx.accnb==0);
   assert(t_idx.locnb==21);
-  //assert(t_idx.l_accind==NULL);
-  // assert(t_idx.l_locind!=NULL);
   indix_t idx=t_idx.l_locind[20];
   assert(strcmp(idx.name,"7.1.1.4")==0);
   idx=t_idx.l_locind[0];
   assert(strcmp(idx.name,"1.1.1.36")==0);
-
 
   // return indexes for later tests.
   return t_idx;
@@ -83,8 +117,6 @@ void test_index_dump_load(all_indix_t t_idx) {
   all_indix_t t_idx3=index_load(rac_filename,LOCSUF);
   assert(t_idx3.accnb==0);
   assert(t_idx3.locnb==21);
-  
-  // printf("Taille des index a dumper : %d\n",sizeof(*t_idx3.l_locind));
   
   qsort(t_idx3.l_locind, (size_t) t_idx3.locnb, sizeof(*t_idx3.l_locind), index_compare);
   ret=index_dump(rac_filename,REPLACE_INDEXES,t_idx3.locnb, t_idx3.l_locind,LOCSUF);

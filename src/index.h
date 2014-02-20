@@ -86,6 +86,7 @@ int index_compare(const void *a, const void *b);
 uint64_t iswap64(uint64_t val);
 uint32_t iswap32(uint32_t val);
 int list_append(char *dbase, char *dir, char *file);
+all_indix_t fic_index_load(char * file,char * suff);
 
 #endif /* __INDEX_H_ */
 

@@ -254,6 +254,8 @@ void index_sort(char *file, long nb) {
   int fd;
   const char *dir;
   indix_t * old;
+  void * fmap, *fmap_orig;
+  uint64_t nb_idx;
 
   if (nb == 0) return;
   if ((dir = getenv("TMPDIR")) == NULL) { dir = TMPDIR; }
@@ -267,8 +269,11 @@ void index_sort(char *file, long nb) {
   // if ((g = fopen(file, "r")) == NULL) err(errno, "Cannot open file : %s",file);
   if ((fd=open(file,O_RDWR))==-1) err(errno, "Cannot open file : %s",file);
   // mmap it
-  old = (indix_t *) mmap (NULL, (size_t) length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-  if (old == NULL) err(errno, "Cannot mmap file : %s",file);
+  fmap = (void *) mmap (NULL, (size_t) length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+  if (fmap == NULL) err(errno, "Cannot mmap file : %s",file);
+  fmap_orig=fmap;
+  fmap=fmap+sizeof(uint64_t);
+  old=(indix_t *) fmap;
   /* Sort indexes */
   qsort(old, (size_t)nb, sizeof(*old), index_compare);
 
@@ -277,13 +282,13 @@ void index_sort(char *file, long nb) {
   printf("AC/locus sorted in alphabetical order:\n.");
   int i;
   for (i=0;i<nb;i++) {
-    printf("%s\n",old);
+    printf("%s\n",old->name);
     old++;
   }
 #endif
 
   if (close(fd) == EOF) err(errno, "Cannot close file : %s",file);
-  if (munmap(old,(size_t) length) == -1) err(errno, "Cannot unmap file : %s",file);
+  if (munmap(fmap_orig,(size_t) length) == -1) err(errno, "Cannot unmap file : %s",file);
 
   return;
 }
