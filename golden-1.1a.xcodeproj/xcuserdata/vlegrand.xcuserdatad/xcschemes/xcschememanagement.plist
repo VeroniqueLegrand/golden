@@ -19,6 +19,11 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>goldin_perf_test.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
 		<key>python_ext_golden-1.1a.xcscheme</key>
 		<dict>
 			<key>orderHint</key>

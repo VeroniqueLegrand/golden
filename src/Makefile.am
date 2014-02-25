@@ -3,7 +3,7 @@ LINTDEFS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS)
 
 AM_CPPFLAGS = -DDATADIR=\"$(pkgdatadir)\"
 
-bin_PROGRAMS = golden goldin unit_tests
+bin_PROGRAMS = golden goldin unit_tests perf_tests
 noinst_LIBRARIES = libgolden.a
 noinst_HEADERS = $(HDR)
 pkgdata_DATA =
@@ -16,6 +16,9 @@ goldin_LDADD = libgolden.a
 
 unit_tests_SOURCES = unit_tests.c
 unit_tests_LDADD = libgolden.a
+
+perf_tests_SOURCES = perf_tests.c
+perf_tests_LDADD = libgolden.a
 
 libgolden_a_SOURCES = $(SRC)
 SRC = access.c entry.c error.c index.c list.c locus.c query.c index_utils.c
