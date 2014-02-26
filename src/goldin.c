@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
     printf("wall time spent reading flat files %s : %ld seconds \n",file,(long)	wall_time_read_flat);
 #endif
     
-    if (wrn && (locnb + accnb) == 0) {
+    if (wrn && (file_l_indix.locnb + file_l_indix.accnb) == 0) {
       error_warn(file, "file contains no entries");
       continue; }
 
@@ -122,16 +122,16 @@ int main(int argc, char **argv) {
 #endif
     /* Merge indexes */
     if (loc) {
-      if (locus_merge(dbase, locnb, file_l_indix.l_locind))
+      if (locus_merge(dbase, file_l_indix.locnb, file_l_indix.l_locind))
         error_fatal(dbase, "entry names indexes failed"); }
     if (acc) {
-      if (access_merge(dbase, accnb, file_l_indix.l_accind))
+      if (access_merge(dbase, file_l_indix.accnb, file_l_indix.l_accind))
         error_fatal(dbase, "accession numbers indexes failed"); }
 #ifdef PERF_PROFILE
     cpu_time_stop=clock();
     wall_time_stop=time(NULL);
     
-    // compute time spent reading flat files
+    // compute time spent merging files
     clock_t cpu_time_merge_index=cpu_time_stop-cpu_time_start;
     time_t wall_time_merge_index=wall_time_stop-wall_time_start;
     

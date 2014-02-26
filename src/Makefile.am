@@ -24,7 +24,7 @@ libgolden_a_SOURCES = $(SRC)
 SRC = access.c entry.c error.c index.c list.c locus.c query.c index_utils.c
 HDR = access.h entry.h error.h index.h list.h locus.h query.h
 
-TESTS = unit_tests.sh
+## TESTS = unit_tests.sh ## for a later use.
 
 ## Maintainer parano check
 parano:
