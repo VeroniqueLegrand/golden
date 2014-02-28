@@ -19,6 +19,9 @@
 #include <unistd.h>
 #endif
 
+#include <errno.h>
+#include <err.h>
+
 #include "error.h"
 #include "index.h"
 #include "list.h"
@@ -30,57 +33,55 @@
 
 #define BUFINC 100
 
-/* Append database flat file list && return file nb */
-int list_append(char *dbase, char *dir, char *file) {
+/* Append database flat file list && return file nb
+ * The files argument is a list of file names separated by blanks.*/
+int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   FILE *f;
   int nb;
   char *p, *q, *buf, *name;
   size_t len;
+  char * file;
 
   nb = 0;
-  name = index_file(".", dbase, LSTSUF);
-  q = file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
+  name = index_file(new_index_dir, dbase, LSTSUF);
+
 
   if (access(name, F_OK) != -1) {
-    if ((f = fopen(name, "r")) == NULL)
-      error_fatal(name, NULL);
+    if ((f = fopen(name, "r+")) == NULL) err(errno,"Cannot open file : %s",name);
     len = BUFINC;
-    if ((buf = (char *)malloc(len+1)) == NULL)
-      error_fatal("memory", NULL);
-
+    if ((buf = (char *)malloc(len+1)) == NULL) err(errno,"memory");
     while(fgets(buf, (int)len, f) != NULL) {
-
       /* Checks for long line */
       if ((p = strrchr(buf, '\n')) == NULL) {
-  len += BUFINC;
-  if ((buf = (char *)realloc(buf, len+1)) == NULL)
-    error_fatal("memory", NULL);
-  if (fseeko(f, -1 * (off_t)strlen(buf), SEEK_CUR) != 0)
-    error_fatal(name, NULL);
-  continue; }
-
+        len += BUFINC;
+        if ((buf = (char *)realloc(buf, len+1)) == NULL) err(errno, "memory");
+        if (fseeko(f, -1 * (off_t)strlen(buf), SEEK_CUR) != 0) err(errno,"error seeking in file : %s", name);
+        continue;
+      }
       /* Checks for existing file */
       *p = '\0';
-      if (strcmp(buf, q) == 0)
-  error_warn(q, "duplicate file in database");
-
-      nb++; }
-
+      file=strtok(files," ");
+      while (file!=NULL) {
+        q = file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
+        if (strcmp(buf, q) == 0) warn("%s",q, "duplicate file in database");
+        file=strtok(NULL," ");
+      }
+      nb++;
+    }
     free(buf);
-
-    if (fclose(f) == EOF)
-      error_fatal(name, NULL); }
-
-  /* Append new file to list */
-  if ((f = fopen(name, "a")) == NULL)
-    error_fatal(name, NULL);
-  (void)fprintf(f, "%s/%s\n", dir, q);
-  if (fclose(f) == EOF)
-    error_fatal(name, NULL);
-
+    /* Append new files to list */
+    file=strtok(files," ");
+    while (file!=NULL) {
+      q = file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
+      (void)fprintf(f, "%s/%s\n", dir, q);
+      nb++;
+      file=strtok(NULL," ");
+    }
+    if (fclose(f) == EOF) error_fatal(name, NULL);
+  }
   free(name);
-
-  return (nb+1); }
+  return (nb);
+}
 
 
 

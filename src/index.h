@@ -75,7 +75,8 @@ const char *index_dir(void);
 char *index_file(const char *, const char *, const char *);
 void freeAllIndix(); // free memory allocated for the elements of the all_indix_t structure.
 all_indix_t create_index(char *,int,int,int );
-int index_dump(char *, int , long , indix_t *,char *);
+// int index_dump(char *, int , long , indix_t *,char *);
+int index_dump(char *dbase, int mode, all_indix_t file_l_indix,char * SUF, const char * index_dir);
 // all_indix_t index_load(char * ,char *, int );
 all_indix_t index_load(char *,char *);
 void print_wrk_struct(result_t ** lst_work,int nb_cards,int);
@@ -85,7 +86,7 @@ char *index_temp(const char *dir);
 int index_compare(const void *a, const void *b);
 uint64_t iswap64(uint64_t val);
 uint32_t iswap32(uint32_t val);
-int list_append(char *dbase, char *dir, char *file);
+// int list_append(char *dbase, char *dir, char *file);
 all_indix_t fic_index_load(char * file,char * suff);
 
 #endif /* __INDEX_H_ */

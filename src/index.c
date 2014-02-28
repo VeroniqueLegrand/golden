@@ -364,6 +364,31 @@ int index_merge(char *file, long nb, indix_t *ind) {
 }
 
 
+/*
+ * merge multiple index files.
+ * files is in fact a list of dbase, separated by ' '. It is given by the user.
+ * For each given dbase, I have to find the coresponding .dbx, .acx, .idx files.
+ */
+void index_merge_multi(char *files,char * dbase, int loc, int acc, char * source_dir, char * dest_dir) {
+  char * elm;
+  char * s_dbx_file, *s_acx_file, *s_icx_file;
+  char * d_dbx_file, *d_acx_file, *d_icx_file;
+
+  d_dbx_file=index_file(dest_dir,dbase,LSTSUF);
+  if (acc) d_acx_file=index_file(dest_dir,dbase,ACCSUF);
+  if (loc) d_icx_file=index_file(dest_dir,dbase,LOCSUF);
+
+  // if dest files already exist, merge new files into it.
+
+  elm = strtok (files," ");
+  while (elm!=NULL) {
+    s_dbx_file=index_file(source_dir,elm,LSTSUF);
+    if (acc) s_acx_file=index_file(source_dir,elm,ACCSUF);
+    if (loc) s_icx_file=index_file(source_dir,elm,LOCSUF);
+    elm = strtok (NULL,"\n");
+  }
+}
+
 /* Move indexe file */
 static int index_move(const char *dst, const char *src) {
   FILE *f, *g;
@@ -413,14 +438,24 @@ static int index_move(const char *dst, const char *src) {
     Prerequisite: old indexes must have been sorted previously.
     This is the default behavior that was in previous goldin version.
  */
-int index_dump(char *dbase, int mode, long nb, indix_t *ind,char * SUF) {
+int index_dump(char *dbase, int mode, all_indix_t file_l_indix,char * SUF, const char * index_dir) {
   char *file;
   char o_flg[3];
   FILE *f;
   int i;
   uint64_t nb_idx=0;
+  long nb;
+  indix_t *ind;
 
-  file = index_file(".", dbase, SUF);
+  if (strcmp(SUF,LOCSUF)==0) {
+    nb=file_l_indix.locnb;
+    ind=file_l_indix.l_locind;
+  } else {
+    nb=file_l_indix.accnb;
+    ind=file_l_indix.l_accind;
+  }
+
+  file = index_file(index_dir, dbase, SUF);
   if (mode==MERGE_INDEXES) return index_merge(file,nb,ind);
 
   if (mode==APPEND_INDEXES) strcpy(o_flg,"a");
