@@ -34,17 +34,17 @@
 #define BUFINC 100
 
 /* Append database flat file list && return file nb
- * The files argument is a list of file names separated by blanks.*/
+ * The files argument is a list of file names separated by \n.*/
 int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   FILE *f;
   int nb;
   char *p, *q, *buf, *name;
   size_t len;
   char * file;
+  char * cp_files=strdup(files);
 
   nb = 0;
   name = index_file(new_index_dir, dbase, LSTSUF);
-
 
   if (access(name, F_OK) != -1) {
     if ((f = fopen(name, "r+")) == NULL) err(errno,"Cannot open file : %s",name);
@@ -60,26 +60,29 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
       }
       /* Checks for existing file */
       *p = '\0';
-      file=strtok(files," ");
+      file=strtok(cp_files,"\n");
       while (file!=NULL) {
         q = file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
         if (strcmp(buf, q) == 0) warn("%s",q, "duplicate file in database");
-        file=strtok(NULL," ");
+        file=strtok(NULL,"\n");
       }
       nb++;
     }
     free(buf);
     /* Append new files to list */
-    file=strtok(files," ");
+    strcpy(cp_files,files);
+    file=strtok(cp_files,"\n");
     while (file!=NULL) {
       q = file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
-      (void)fprintf(f, "%s/%s\n", dir, q);
+      if (dir!=NULL) (void)fprintf(f, "%s/%s\n", dir, q);
+      else (void)fprintf(f, "%s\n", dir, q);
       nb++;
-      file=strtok(NULL," ");
+      file=strtok(NULL,"\n");
     }
     if (fclose(f) == EOF) error_fatal(name, NULL);
   }
   free(name);
+  free(cp_files);
   return (nb);
 }
 

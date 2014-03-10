@@ -46,7 +46,9 @@ void copy_file(char* fsource, char* fdest) {
   int nb_read;
   char * buf;
   mod=strtol(mode, 0, 8);
-  if (stat(fsource, &st) == -1) err(errno, "Source file does not exist.");
+  if (stat(fsource, &st) != -1) {
+    if (remove(fdest)==-1) err(errno, "Source file does not exist.");
+  }
   if ((fd=open(fsource,O_RDONLY))==-1) err(errno, "Cannot open source file.");
   if ((fd_dest=open(fdest,O_WRONLY|O_CREAT))==-1) err(errno, "Cannot open destination file.");
   if ((buf=malloc(st.st_size))==NULL) err(errno, "Cannot allocate memory");
@@ -62,7 +64,7 @@ void test_index_sort() {
   int i=0;
   
   all_indix_t t_idx=fic_index_load(icx_unsorted_file,LOCSUF);
-  index_dump("enzyme_test",REPLACE_INDEXES,t_idx.locnb, t_idx.l_locind,LOCSUF); // creates tst_file
+  index_dump("enzyme_test",REPLACE_INDEXES,t_idx,LOCSUF,"."); // creates tst_file
   index_sort(tst_file,21);
   // load test file and icx_file (already sorted), and check that both results are the same.
   all_indix_t t_idx3=index_load("enzyme_test",LOCSUF);
@@ -74,13 +76,41 @@ void test_index_sort() {
     assert(strcmp(t_idx_ref.l_locind[i].name,t_idx3.l_locind[i].name)==0);
     i++;
   }
-  
+}
+
+void test_list_append() {
+  char * expected_content="toto/titi/premier_fichier.dat\\ntoto/titi/second_fichier.dat\\ntoto/titi/troisieme_fichier.dat \
+      toto1.dat\\ntiti/toto1.dat\\n \
+      titi/toto1.dat\\ntiti/toto2.dat\\ntiti/toto3.dat";
+  char * dbase="db_test_tmp";
+  struct stat st;
+  copy_file("../test/unit/db_test.dbx", "../test/unit/db_test_tmp.dbx");
+  // char *dbase, char *dir, char *files,char * new_index_dir
+  int nb=list_append(dbase,NULL,"toto1.dat","../test/unit");
+  assert(nb==4);
+  nb=list_append(dbase,"titi","toto1.dat\n","../test/unit");
+  assert(nb==5);
+  // TODO : check that we got a warning for duplicate toto1.dat
+  nb=list_append(dbase,"titi","toto1.dat\ntoto2.dat\ntoto3.dat\n","../test/unit");
+  assert(nb==8);
+  assert(stat("../test/unit/db_test_tmp.dbx", &st) != -1);
+  char * buf= malloc(st.st_size);
+  int fd=open("../test/unit/db_test_tmp.dbx","r");
+  assert(read(fd,buf,st.st_size)!=-1);
+  assert(strcmp(buf,expected_content)==0);
+  close(fd);
+  free(buf);
+}
+
+void test_index_merge() {
+  // 1- mimic old behavior : merge 1 file with new indexes.
+  // 2- test new behavior : merge several index files.
 }
 
 
 all_indix_t test_index_create() {
   int nb;
-  nb = list_append(data_file, data_file, data_file);
+  nb = list_append(data_file, data_file, data_file,".");
   all_indix_t t_idx=create_index(data_file,nb,0,1);
   // assert(strcmp(t_idx.flatfile_name,data_file)==0);
   assert(t_idx.accnb==0);
@@ -102,14 +132,14 @@ all_indix_t test_index_create() {
 // int index_dump(char *dbase, int mode, long nb, indix_t *ind,char * SUF)
 void test_index_dump_load(all_indix_t t_idx) {
   struct stat st;
-  int ret=index_dump(rac_filename,APPEND_INDEXES,t_idx.accnb, t_idx.l_accind, ACCSUF);
+  int ret=index_dump(rac_filename,APPEND_INDEXES,t_idx, ACCSUF,".");
   assert(stat(acx_file, &st) != -1);
   assert(st.st_size==16); // index file should only contain an indicator saying that there are 0 indexes.
-  ret=index_dump(rac_filename,APPEND_INDEXES,t_idx.accnb, t_idx.l_accind,ACCSUF);
+  ret=index_dump(rac_filename,APPEND_INDEXES,t_idx,ACCSUF,".");
   assert(stat(acx_file, &st) != -1);
   assert(st.st_size==16);
 
-  ret=index_dump(rac_filename,REPLACE_INDEXES,t_idx.locnb, t_idx.l_locind,LOCSUF);
+  ret=index_dump(rac_filename,REPLACE_INDEXES,t_idx,LOCSUF,".");
   assert( stat(icx_file, &st)!= -1);
   assert(st.st_size>16);
   int old_size=st.st_size;
@@ -119,23 +149,23 @@ void test_index_dump_load(all_indix_t t_idx) {
   assert(t_idx3.locnb==21);
   
   qsort(t_idx3.l_locind, (size_t) t_idx3.locnb, sizeof(*t_idx3.l_locind), index_compare);
-  ret=index_dump(rac_filename,REPLACE_INDEXES,t_idx3.locnb, t_idx3.l_locind,LOCSUF);
+  ret=index_dump(rac_filename,REPLACE_INDEXES,t_idx3,LOCSUF,".");
   assert( stat(icx_file, &st)!= -1);
   assert(st.st_size==old_size);
   
   freeAllIndix(t_idx3);
 
-  ret=index_dump(rac_filename,MERGE_INDEXES,t_idx.locnb, t_idx.l_locind,LOCSUF);
+  ret=index_dump(rac_filename,MERGE_INDEXES,t_idx,LOCSUF,".");
   assert( stat(icx_file, &st)!= -1);
   assert(st.st_size==old_size);
 
-  ret=index_dump(rac_filename,APPEND_INDEXES,t_idx.locnb, t_idx.l_locind,LOCSUF);
+  ret=index_dump(rac_filename,APPEND_INDEXES,t_idx,LOCSUF,".");
   assert( stat(icx_file, &st)!= -1);
   int expected_size=2*old_size;
   expected_size=expected_size-8;
   assert(st.st_size==expected_size);
 
-  ret=index_dump(rac_filename,REPLACE_INDEXES,t_idx.locnb, t_idx.l_locind,LOCSUF);
+  ret=index_dump(rac_filename,REPLACE_INDEXES,t_idx,LOCSUF,".");
   assert( stat(icx_file, &st)!= -1);
   assert(st.st_size==old_size);
 
@@ -166,6 +196,7 @@ int main(int argc, char **argv) {
   test_index_dump_load(t_idx);
   freeAllIndix(t_idx);
   test_index_sort();
+  test_list_append();
   // TODO : clean index files.
 }
 
