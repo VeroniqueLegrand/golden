@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D4D32471886C6AB00712232"
                BuildableName = "golden-1.1a"
-               BlueprintName = "golden-1.1a"
-               ReferencedContainer = "container:golden-1.1a.xcodeproj">
+               BlueprintName = "golden-3.0"
+               ReferencedContainer = "container:golden-3.0.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -73,7 +73,7 @@
       </EnvironmentVariables>
       <AdditionalOptions>
          <AdditionalOption
-            key = "MallocScribble"
+            key = "MallocStackLogging"
             value = ""
             isEnabled = "YES">
          </AdditionalOption>
@@ -88,7 +88,7 @@
             isEnabled = "YES">
          </AdditionalOption>
          <AdditionalOption
-            key = "MallocStackLogging"
+            key = "MallocScribble"
             value = ""
             isEnabled = "YES">
          </AdditionalOption>

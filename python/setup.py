@@ -26,7 +26,7 @@ class sdist(_sdist):
 
 cmdclass = { 'build':build, 'sdist':sdist }
 
-setup( name = "Golden", version = "1.0", cmdclass=cmdclass,
+setup( name = "Golden", version = "3.0", cmdclass=cmdclass,
        description = "Python bindings for the golden tool",
        url = " ", author = " ", author_email = " ",
        ext_modules = [ Goldenmod ] )

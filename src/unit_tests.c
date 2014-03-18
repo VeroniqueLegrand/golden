@@ -79,23 +79,33 @@ void test_index_sort() {
 }
 
 void test_list_append() {
-  char * expected_content="toto/titi/premier_fichier.dat\\ntoto/titi/second_fichier.dat\\ntoto/titi/troisieme_fichier.dat \
-      toto1.dat\\ntiti/toto1.dat\\n \
-      titi/toto1.dat\\ntiti/toto2.dat\\ntiti/toto3.dat";
+  char * expected_content="toto/titi/premier_fichier.dat\ntoto/titi/second_fichier.dat\ntoto/titi/troisieme_fichier.dat\n\
+toto1.dat\ntiti/toto1.dat\n\
+titi/toto1.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
+  
+  // write expected content for tests
+  /*
+  int fd_tmp=open("/tmp/unit_test.txt",O_WRONLY);
+  write(fd_tmp,expected_content,strlen(expected_content));
+  close(fd_tmp);*/
   char * dbase="db_test_tmp";
   struct stat st;
+  char * buf;
+  int fd;
   copy_file("../test/unit/db_test.dbx", "../test/unit/db_test_tmp.dbx");
-  // char *dbase, char *dir, char *files,char * new_index_dir
   int nb=list_append(dbase,NULL,"toto1.dat","../test/unit");
   assert(nb==4);
+  assert(stat("../test/unit/db_test_tmp.dbx", &st) != -1);
+  
   nb=list_append(dbase,"titi","toto1.dat\n","../test/unit");
+  assert(stat("../test/unit/db_test_tmp.dbx", &st) != -1);
   assert(nb==5);
   // TODO : check that we got a warning for duplicate toto1.dat
   nb=list_append(dbase,"titi","toto1.dat\ntoto2.dat\ntoto3.dat\n","../test/unit");
   assert(nb==8);
   assert(stat("../test/unit/db_test_tmp.dbx", &st) != -1);
-  char * buf= malloc(st.st_size);
-  int fd=open("../test/unit/db_test_tmp.dbx","r");
+  buf= malloc(st.st_size);
+  fd=open("../test/unit/db_test_tmp.dbx",O_RDONLY);
   assert(read(fd,buf,st.st_size)!=-1);
   assert(strcmp(buf,expected_content)==0);
   close(fd);

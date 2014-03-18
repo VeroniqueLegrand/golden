@@ -353,16 +353,16 @@
 /* End PBXGroup section */
 
 /* Begin PBXLegacyTarget section */
-		2D4D32471886C6AB00712232 /* golden-1.1a */ = {
+		2D4D32471886C6AB00712232 /* golden-3.0 */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 2D4D324A1886C6AB00712232 /* Build configuration list for PBXLegacyTarget "golden-1.1a" */;
+			buildConfigurationList = 2D4D324A1886C6AB00712232 /* Build configuration list for PBXLegacyTarget "golden-3.0" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
 			dependencies = (
 			);
-			name = "golden-1.1a";
+			name = "golden-3.0";
 			passBuildSettingsInEnvironment = 1;
 			productName = "golden-1.1a";
 		};
@@ -375,7 +375,7 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = vlegrand;
 			};
-			buildConfigurationList = 2D4D32461886C6AB00712232 /* Build configuration list for PBXProject "golden-1.1a" */;
+			buildConfigurationList = 2D4D32461886C6AB00712232 /* Build configuration list for PBXProject "golden-3.0" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -392,7 +392,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				2D4D32471886C6AB00712232 /* golden-1.1a */,
+				2D4D32471886C6AB00712232 /* golden-3.0 */,
 			);
 		};
 /* End PBXProject section */
@@ -412,6 +412,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CFLAGS = "-Qunused-arguments";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -449,6 +450,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CFLAGS = "-Qunused-arguments";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -479,10 +481,11 @@
 		2D4D324B1886C6AB00712232 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CFLAGS = "-Qunused-arguments";
 				DEBUGGING_SYMBOLS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-Qunused-arguments";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -491,7 +494,8 @@
 		2D4D324C1886C6AB00712232 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				OTHER_CFLAGS = "";
+				CFLAGS = "-Qunused-arguments";
+				OTHER_CFLAGS = "-Qunused-arguments";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -500,7 +504,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2D4D32461886C6AB00712232 /* Build configuration list for PBXProject "golden-1.1a" */ = {
+		2D4D32461886C6AB00712232 /* Build configuration list for PBXProject "golden-3.0" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D4D32481886C6AB00712232 /* Debug */,
@@ -509,7 +513,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D4D324A1886C6AB00712232 /* Build configuration list for PBXLegacyTarget "golden-1.1a" */ = {
+		2D4D324A1886C6AB00712232 /* Build configuration list for PBXLegacyTarget "golden-3.0" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D4D324B1886C6AB00712232 /* Debug */,

@@ -34,7 +34,16 @@
 #define BUFINC 100
 
 /* Append database flat file list && return file nb
- * The files argument is a list of file names separated by \n.*/
+ * The files argument is a list of file names separated by \n.
+ * Parameters :
+ * dir : as usual, the alternate dir where to find the .dat files.
+ * dbase : base name for the bank; useful to retrieve index file name.
+ * files : list of dbx files which content must be appended to existing .dbx file.
+ * new_index_dir : location for index files. In previous versions of goldin/golden,
+ * they were always generated in the execution directory but I do not find this 
+ * very practical for unit testing and other kind of testing as well. 
+ * Just put "." if you want previous behavior.
+ */
 int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   FILE *f;
   int nb;
@@ -75,7 +84,7 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
     while (file!=NULL) {
       q = file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
       if (dir!=NULL) (void)fprintf(f, "%s/%s\n", dir, q);
-      else (void)fprintf(f, "%s\n", dir, q);
+      else (void)fprintf(f, "%s\n", q);
       nb++;
       file=strtok(NULL,"\n");
     }
