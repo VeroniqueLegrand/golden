@@ -169,9 +169,9 @@ AUTOMAKE = ${SHELL} /Users/vlegrand/Desktop/golden-3.0/missing automake-1.13
 AWK = awk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g
+CFLAGS = -Qunused-arguments
 CPP = gcc -E
-CPPFLAGS = 
+CPPFLAGS = -Qunused-arguments
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps

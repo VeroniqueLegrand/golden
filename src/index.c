@@ -143,13 +143,6 @@ char *index_file(const char *dir, const char *dbase, const char *suf) {
 
 
 /* Search database indexes */
-//
-/* lst is an array containing the adresses of result_t structures in the order expected by the user.
- It points on the first element that index_search has to look for in file for dbase.
- The information in lst (filenb,offset) is filled for the elements that are found.
- index_search returns the number of elements that were not found.
- index_search allocates memory for lst_not_found. It is up to the caller to free it.
- */
 int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_found) {
   FILE *f;
   int i, swap;
@@ -293,6 +286,33 @@ void index_sort(char *file, long nb) {
   return;
 }
 
+/* concatenates indexes
+ * returns the total number of indexes.
+ */
+int index_concat(char *file, long nb, indix_t *ind) {
+  indix_t *cur;
+  FILE *g;
+  uint64_t newnb, oldnb;
+  cur = ind;
+  /* Create empty index file if missing */
+  if (access(file, F_OK) != 0) create_missing_idxfile(file);
+  if (nb == 0) { return 0; }
+  if ((g = fopen(file, "r+")) == NULL) err(errno,"Cannot open file : %s",file);
+  if (fread(&oldnb, sizeof(oldnb), 1, g) != 1) err(errno,"Cannot read number of indexes from file : %s",file);
+  newnb=oldnb+nb;
+
+  /* Add new remaining indexes */
+  while(nb) {
+    if (fwrite(cur, sizeof(*cur), 1, g) != 1) err(errno,"Cannot write index to : %s",file);
+    nb--; cur++;
+  }
+
+  if (fseeko(g, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s",file);
+  if (fwrite(&newnb, sizeof(newnb), 1, g) != 1) err(errno,"Cannot write to : %s", file);
+
+  if (fclose(g) == EOF) err(errno,"Cannot close file : %s",file);
+  return newnb;
+}
 
 /* Merge indexes */
 int index_merge(char *file, long nb, indix_t *ind) {
@@ -369,6 +389,7 @@ int index_merge(char *file, long nb, indix_t *ind) {
  * files is in fact a list of dbase, separated by ' '. It is given by the user.
  * For each given dbase, I have to find the coresponding .dbx, .acx, .idx files.
  */
+/*
 void index_merge_multi(char *files,char * dbase, int loc, int acc, char * source_dir, char * dest_dir) {
   char * elm;
   char * s_dbx_file, *s_acx_file, *s_icx_file;
@@ -387,7 +408,7 @@ void index_merge_multi(char *files,char * dbase, int loc, int acc, char * source
     if (loc) s_icx_file=index_file(source_dir,elm,LOCSUF);
     elm = strtok (NULL,"\n");
   }
-}
+}*/
 
 /* Move indexe file */
 static int index_move(const char *dst, const char *src) {

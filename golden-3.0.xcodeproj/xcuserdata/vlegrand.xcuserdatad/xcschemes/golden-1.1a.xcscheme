@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D4D32471886C6AB00712232"
-               BuildableName = "golden-1.1a"
+               BuildableName = "golden-3.0"
                BlueprintName = "golden-3.0"
                ReferencedContainer = "container:golden-3.0.xcodeproj">
             </BuildableReference>

@@ -71,3 +71,13 @@ int locus_merge(char *dbase, long nb, indix_t *ind) {
   free(file);
 
   return i; }
+
+int locus_concat(char *dbase, long nb, indix_t *ind, char * new_index_dir) {
+  int i=IDX_ERR;
+  char *file;
+
+  file = index_file(new_index_dir, dbase, LOCSUF);
+  i = index_concat(file, nb, ind);
+  free(file);
+  return i;
+}

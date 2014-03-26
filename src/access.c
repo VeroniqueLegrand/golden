@@ -109,8 +109,18 @@ int access_merge(char *dbase, long nb, indix_t *ind) {
   int i;
   char *file;
 
-  file = index_file(index_dir, dbase, ACCSUF); // change that temporarily: don't want the huge index files to be generated in my work directory
+  file = index_file(index_dir, dbase, ACCSUF);
   i = index_merge(file, nb, ind);
   free(file);
 
   return i; }
+
+int access_concat(char *dbase, long nb, indix_t *ind, char * new_index_dir) {
+  int i=IDX_ERR;
+  char *file;
+
+  file = index_file(new_index_dir, dbase, ACCSUF);
+  i = index_concat(file, nb, ind);
+  free(file);
+  return i;
+}

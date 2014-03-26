@@ -27,12 +27,22 @@
 #define REPLACE_INDEXES 2
 #define MERGE_INDEXES 3
 
+/* error codes for index functions */
+#define IDX_ERR -1
+
 
 /* Index structure definition */
 typedef struct {
   char name[NAMLEN+1];
   uint32_t filenb;
   uint64_t offset; } indix_t;
+
+/* Storage structure for number of indexes in case of index concatenation. */
+typedef struct {
+  int accnb;
+  int locnb;
+} all_indix_nb;
+
 
 /* Storage structures for information on flat files that were just parsed.*/
 typedef struct {
@@ -88,6 +98,8 @@ uint64_t iswap64(uint64_t val);
 uint32_t iswap32(uint32_t val);
 // int list_append(char *dbase, char *dir, char *file);
 all_indix_t fic_index_load(char * file,char * suff);
+all_indix_nb index_concat_with_existing(all_indix_t file_l_indix,char *dbase, int loc, int acc);
+void index_merge_with_existing(all_indix_t file_l_indix,char *dbase, int loc, int acc);
 
 #endif /* __INDEX_H_ */
 

@@ -117,6 +117,12 @@ void test_index_merge() {
   // 2- test new behavior : merge several index files.
 }
 
+/*
+ Concatenates several unsorted index files with doublons. 
+ */
+void test_index_concat() {
+  
+}
 
 all_indix_t test_index_create() {
   int nb;

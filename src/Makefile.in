@@ -76,7 +76,7 @@ libgolden_a_AR = $(AR) $(ARFLAGS)
 libgolden_a_LIBADD =
 am__objects_1 = access.$(OBJEXT) entry.$(OBJEXT) error.$(OBJEXT) \
 	index.$(OBJEXT) list.$(OBJEXT) locus.$(OBJEXT) query.$(OBJEXT) \
-	index_utils.$(OBJEXT)
+	index_utils.$(OBJEXT) goldin_options.$(OBJEXT)
 am_libgolden_a_OBJECTS = $(am__objects_1)
 libgolden_a_OBJECTS = $(am_libgolden_a_OBJECTS)
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgdatadir)"
@@ -284,8 +284,8 @@ unit_tests_LDADD = libgolden.a
 perf_tests_SOURCES = perf_tests.c
 perf_tests_LDADD = libgolden.a
 libgolden_a_SOURCES = $(SRC)
-SRC = access.c entry.c error.c index.c list.c locus.c query.c index_utils.c
-HDR = access.h entry.h error.h index.h list.h locus.h query.h
+SRC = access.c entry.c error.c index.c list.c locus.c query.c index_utils.c goldin_options.c
+HDR = access.h entry.h error.h index.h list.h locus.h query.h goldin_options.h
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -409,6 +409,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/error.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/golden.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goldin.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goldin_options.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/index.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/index_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@

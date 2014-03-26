@@ -132,6 +132,8 @@
 		2DB799DD18A1184B001A857C /* query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = query.h; path = src/query.h; sourceTree = SOURCE_ROOT; };
 		2DB799E218A14D92001A857C /* taxo_test_golden_multi.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = taxo_test_golden_multi.py; sourceTree = "<group>"; };
 		2DB799E318A14D92001A857C /* test_golden_multi */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_golden_multi; sourceTree = "<group>"; };
+		2DF5A20C18E3367200CE8C77 /* goldin_options.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = goldin_options.c; sourceTree = "<group>"; };
+		2DF5A20D18E3367200CE8C77 /* goldin_options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = goldin_options.h; sourceTree = "<group>"; };
 		2DF60C8B18ABCD3800E2C659 /* unit_tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unit_tests.c; sourceTree = "<group>"; };
 		2DF60C8C18ABCD6B00E2C659 /* unit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = unit; sourceTree = "<group>"; };
 		2DF6838318BB8504005254CD /* perf_tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = perf_tests.c; sourceTree = "<group>"; };
@@ -254,6 +256,8 @@
 		2D4D330D1886CACC00712232 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				2DF5A20C18E3367200CE8C77 /* goldin_options.c */,
+				2DF5A20D18E3367200CE8C77 /* goldin_options.h */,
 				2DF6838318BB8504005254CD /* perf_tests.c */,
 				2D6295F118B3AA16001CC177 /* index_utils.c */,
 				2DF60C8B18ABCD3800E2C659 /* unit_tests.c */,

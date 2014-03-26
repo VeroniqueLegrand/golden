@@ -24,15 +24,8 @@
 #include "list.h"
 #include "locus.h"
 #include <err.h>
-#include <getopt.h>
 
-
-#ifndef EXIT_SUCCESS
-#define EXIT_SUCCESS 0
-#define EXIT_FAILURE 1
-#endif
-
-
+#include <goldin_options.h>
 
 #define PERF_PROFILE
 
@@ -40,180 +33,139 @@
 #include <time.h>
 #endif
 
-/* Functions prototypes */
-static void usage(int);
-
+#include <fcntl.h>
 
 /* Global variables */
-static char *prog;
-static int dump_flag;
-static int sort_flag;
-static int merge_flag;
-
-static struct option long_options[] =
-{
-  /* These options set a flag. */
-  {"dump", no_argument,       &dump_flag, 1}, // dump indexes right after their creation; no merge; no sort.
-  {"sort",   no_argument,       &sort_flag, 1}, // sort indexes.
-  {"merge",  no_argument, &merge_flag, 1}, // merges all index files given in argument into a new one (its dbase is given in argument). if --sort is not specified, files are simply concatenated.
-  /* These options don't set a flag.
-   We distinguish them by their indices. */
-  {"index_dir",  required_argument, 0, 'b'} // indicates place where to put index files. default value is "."
-  
-  /*{"add",     no_argument,       0, 'a'},*/
-  };
+// static char *prog;
 
 
-/*
- Depending on the option flags, arguments do not have the same signification.
- If --merge is specified, <file> is in fact 'dbase' for existing index files to merge and
- <dbase> is as usual for new index file.
- */
-void processArgs() {
-  
-}
-
+void process_databank_files(int,int,char ** ,goldin_parms);
+all_indix_nb process_databank_file(goldin_parms, char * );
+void all_index_sort(goldin_parms,all_indix_nb);
 
 /* Main function */
 int main(int argc, char **argv) {
   FILE *f;
-  int i, nb, loc, acc, wrn;
-  char *p, *dbase, *file, *dir;
+  int i;
+  char *p, *dbase, *file;
   entry_t ent;
   long locnb, accnb, indnb;
   indix_t *cur, *locind, *accind;
   size_t len;
-  struct stat st;
-  char * new_index_dir=".";
-  char * lst_merge_fic=NULL;
-  
-#ifdef PERF_PROFILE
-  clock_t cpu_time_start, cpu_time_stop;
-  time_t wall_time_start, wall_time_stop;
-#endif
+  goldin_parms s_parms;
+  //char * lst_merge_fic=NULL;
   /* Inits */
-  prog = basename(*argv);
-  int option_index = 0;
+  // prog = basename(*argv);
+
   /* Checks command line options & arguments */
-  i = loc = acc = 0; wrn = 1; dir = NULL;
-  while((i = getopt_long(argc, argv, "ad:hiq",long_options,&option_index)) != -1) {
-    switch(i) {
-    case 0 :
-        printf("Option: %s \n",long_options[option_index].name);
-      break;
-    case 'a':
-      acc = 1; break;
-    case 'd':
-      dir = optarg; break;
-    case 'h':
-      usage(EXIT_SUCCESS); break;
-    case 'i':
-      loc = 1; break;
-    case 'q':
-      wrn = 0; break;
-    /* long options */
-    case 'b':
-      new_index_dir=optarg;break;
-    default:
-      usage(EXIT_FAILURE); break; }
-  }
-  if ((loc + acc) == 0) { loc = acc = 1; }
-  if (dump_flag && merge_flag) usage(EXIT_FAILURE);
-  if ((sort_flag && !dump_flag) && (sort_flag && !merge_flag)) usage(EXIT_FAILURE);
-  if (argc - optind < 2) usage(EXIT_FAILURE);
-
+  init_goldin_parms(&s_parms,argc, argv);
   /* Proceed all input files */
-  dbase = argv[optind]; indnb = 0; locind = accind = NULL;
-  if (dir == NULL) { dir = dbase; }
-  for(i = optind + 1; i < argc; i++) {
-    file = argv[i];
+  indnb = 0; locind = accind = NULL;
 
-    /* Check for regular file */
-    if (stat(file, &st) == -1) {
-      error_fatal(file, NULL); }
-    if ((st.st_mode & S_IFMT) != S_IFREG) {
-      error_fatal(file, "not a regular file"); }
-    
-#ifdef PERF_PROFILE
-    cpu_time_start=clock();
-    wall_time_start=time(NULL);
-    srand(wall_time_start);
-#endif
-
-    /* Add file to list */
-    nb = list_append(dbase, dir, file,new_index_dir);
-    all_indix_t file_l_indix=create_index(file,nb,loc,acc);
-
-    if (sort_flag) {
-      qsort(file_l_indix.l_locind, (size_t) file_l_indix.locnb, sizeof(*file_l_indix.l_locind), index_compare);
-      qsort(file_l_indix.l_accind, (size_t) file_l_indix.accnb, sizeof(*file_l_indix.l_accind), index_compare);
-    }
-    if (dump_flag) {
-      int ret=index_dump(dbase,REPLACE_INDEXES,file_l_indix,LOCSUF,new_index_dir);
-      ret=index_dump(dbase,REPLACE_INDEXES,file_l_indix,ACCSUF,new_index_dir);
-#ifdef PERF_PROFILE
-      cpu_time_stop=clock();
-      wall_time_stop=time(NULL);
-      
-      // compute time spent reading flat files
-      clock_t cpu_time_read_flat=cpu_time_stop-cpu_time_start;
-      time_t wall_time_read_flat=wall_time_stop-wall_time_start;
-      
-      printf("processor time spent in creating indexes for flat file %s : %lu clock ticks\n",file,(unsigned long)	cpu_time_read_flat);
-      printf("wall time spent in creating indexes for flat files %s : %ld seconds \n",file,(long)	wall_time_read_flat);
-#endif
-      // if (strcmp(new_index_dir,".")!=0) free(new_index_dir);
-      return EXIT_SUCCESS;
-    }
+  if (!s_parms.idx_input_flag) {
+    process_databank_files(optind,argc,argv,s_parms);
+  } else {/* I am expecting index files as input */
+    process_index_files(optind,argc,argv,s_parms);
+  };
 
     
-    if (wrn && (file_l_indix.locnb + file_l_indix.accnb) == 0) {
-      error_warn(file, "file contains no entries");
-      continue; }
-
-#ifdef PERF_PROFILE
-    cpu_time_start=clock();
-    wall_time_start=time(NULL);
-#endif
-    /* Merge indexes */
-    if (loc) {
-      if (locus_merge(dbase, file_l_indix.locnb, file_l_indix.l_locind))
-        error_fatal(dbase, "entry names indexes failed"); }
-    if (acc) {
-      if (access_merge(dbase, file_l_indix.accnb, file_l_indix.l_accind))
-        error_fatal(dbase, "accession numbers indexes failed"); }
-#ifdef PERF_PROFILE
-    cpu_time_stop=clock();
-    wall_time_stop=time(NULL);
-    
-    // compute time spent merging files
-    clock_t cpu_time_merge_index=cpu_time_stop-cpu_time_start;
-    time_t wall_time_merge_index=wall_time_stop-wall_time_start;
-    
-    printf("processor time spent merging indexes : %lu clock ticks\n",(unsigned long)	cpu_time_merge_index);
-    printf("wall time spent merging indexes: %ld seconds\n",(long)	wall_time_merge_index);
-#endif
-    freeAllIndix(file_l_indix);
-  }
-  // if (strcmp(new_index_dir,".")!=0) free(new_index_dir);
   return EXIT_SUCCESS;
+}
+
+void process_databank_files(int optind,int argc,char ** argv,goldin_parms s_parms) {
+  int i;
+  char* file;
+  all_indix_nb tot_idx;
+  for(i = optind + 1; i < argc; i++) {
+     file = argv[i];
+     tot_idx=process_databank_file(s_parms,file);
+  }
+  if (s_parms.csort_flag) { // sort index file.
+    all_index_sort(s_parms,tot_idx);
+  }
+}
+
+void all_index_sort(goldin_parms s_parms,all_indix_nb tot_idx) {
+  char *file;
+  if (s_parms.loc) {
+    file = index_file(s_parms.new_index_dir, s_parms.dbase, LOCSUF);
+    index_sort(file,tot_idx.locnb);
+  }
+  if (s_parms.acc) {
+    file = index_file(s_parms.new_index_dir, s_parms.dbase, ACCSUF);
+    index_sort(file,tot_idx.accnb);
+  }
+}
+
+all_indix_nb process_databank_file(goldin_parms s_parms , char * file) {
+  struct stat st;
+  int nb;
+  int ret;
+  all_indix_nb tot_idx;
+  /* Check for regular file */
+  if (stat(file, &st) == -1) err(errno,file, NULL);
+  if ((st.st_mode & S_IFMT) != S_IFREG) err(errno, file, "not a regular file");
+      
+#ifdef PERF_PROFILE
+  clock_t cpu_time_start=clock();
+  time_t wall_time_start=time(NULL);
+  srand(wall_time_start);
+#endif
+
+  /* Add file to list */
+  nb = list_append(s_parms.dbase, s_parms.dir, file,s_parms.new_index_dir);
+  all_indix_t file_l_indix=create_index(file,nb,s_parms.loc,s_parms.acc);
+  tot_idx.accnb=file_l_indix.accnb;
+  tot_idx.locnb=file_l_indix.accnb;
+  if (s_parms.wrn && (file_l_indix.locnb + file_l_indix.accnb) == 0) {
+     warn("%s %s",file, "file contains no entries");
+     return tot_idx;
+  }
+  if (!s_parms.csort_flag && !s_parms.co_flag) { // same behavior as in previous versions.
+    index_merge_with_existing(file_l_indix,s_parms.dbase,s_parms.loc,s_parms.acc);
+    freeAllIndix(file_l_indix);
+    return tot_idx;
+  }
+  // concatenate index files
+  tot_idx=index_concat_with_existing(file_l_indix,s_parms.dbase,s_parms.loc,s_parms.acc);
+  freeAllIndix(file_l_indix);
+  return tot_idx;
+}
+
+void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) {
+  struct stat st;
+  int i,fd,nb_read,nb;
+  char* rac_file;
+  all_indix_nb tot_idx;
+  char * d_dbx_file, *d_acx_file, *d_icx_file;
+  char * s_dbx_file, *s_acx_file, *s_icx_file;
+
+  d_dbx_file=index_file(s_parms.new_index_dir,s_parms.dbase,LSTSUF);
+  if (s_parms.acc) d_acx_file=index_file(s_parms.new_index_dir,s_parms.dbase,ACCSUF);
+  if (s_parms.loc) d_icx_file=index_file(s_parms.new_index_dir,s_parms.dbase,LOCSUF);
+
+
+  for(i = optind + 1; i < argc; i++) {
+     rac_file = argv[i];
+     s_dbx_file=index_file(s_parms.new_index_dir,rac_file,LSTSUF);
+     if (stat(s_dbx_file, &st) == -1) err(errno,s_dbx_file, NULL);
+     int len=st.st_size;
+     char * lst_to_concat= malloc(len+1);
+     if ((fd=open(s_dbx_file,O_RDONLY))==-1) err(errno, "Cannot open source file.");
+     if ((nb_read=read(fd,lst_to_concat,st.st_size))==-1) err(errno,"Error while reading source file.");
+     close(fd);
+     nb = list_append(s_parms.dbase, s_parms.dir,lst_to_concat,s_parms.new_index_dir);
+
+
+     if (s_parms.acc) s_acx_file=index_file(s_parms.new_index_dir,rac_file,ACCSUF);
+     if (s_parms.loc) s_icx_file=index_file(s_parms.new_index_dir,rac_file,LOCSUF);
+
+  }
+  if (s_parms.csort_flag) { // sort index file.
+    all_index_sort(s_parms,tot_idx);
+  }
 }
 
 
 
 
-/* Usage display */
-static void usage(int status) {
-  FILE *f = stdout;
-
-  (void)fprintf(f, "usage: %s [options] <dbase> <file> ...\n\n", prog);
-  (void)fprintf(f, "options:\n");
-  (void)fprintf(f, "  -a       ... Make accession numbers indexes.\n");
-  (void)fprintf(f, "  -d <dir> ... Use alternate data <dir>.\n");
-  (void)fprintf(f, "  -h       ... Prints this message and exit.\n");
-  (void)fprintf(f, "  -i       ... Make entry names indexes.\n");
-  (void)fprintf(f, "  -q       ... Be quiet, do not display some warnings.\n");
-  (void)fprintf(f, "  --dump   ... Dump indexes without sorting nor merging. \n");
-  (void)fprintf(f, "  --merge  ... merge indexe whose base name are given in argument; result is new index files (acx and/or idx). \n");
-  (void)fprintf(f, "  --sort   ... sort indexes. \n");
-  exit(status); }

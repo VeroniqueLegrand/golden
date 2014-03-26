@@ -21,8 +21,8 @@ perf_tests_SOURCES = perf_tests.c
 perf_tests_LDADD = libgolden.a
 
 libgolden_a_SOURCES = $(SRC)
-SRC = access.c entry.c error.c index.c list.c locus.c query.c index_utils.c
-HDR = access.h entry.h error.h index.h list.h locus.h query.h
+SRC = access.c entry.c error.c index.c list.c locus.c query.c index_utils.c goldin_options.c
+HDR = access.h entry.h error.h index.h list.h locus.h query.h goldin_options.h
 
 ## TESTS = unit_tests.sh ## for a later use.
 
