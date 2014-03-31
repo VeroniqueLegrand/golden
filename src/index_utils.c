@@ -206,3 +206,63 @@ void index_merge_with_existing(all_indix_t file_l_indix,char *dbase, int loc, in
 
 }
 
+
+
+
+void init_index_fd(cur_index_descr * p_idx_fd) {
+  p_idx_fd->d_fa=NULL;
+  p_idx_fd->d_fl=NULL;
+  p_idx_fd->accnb=0;
+  p_idx_fd->locnb=0;
+}
+
+
+void close_index_desc(cur_index_descr * p_idx_fd, char * dbase) {
+  if (p_idx_fd->d_fa!=NULL) {
+    if (fclose(p_idx_fd->d_fa) == EOF) err(errno,"error closing file: %s.acx",dbase);
+    p_idx_fd->d_fa=NULL;
+  }
+  if (p_idx_fd->d_fl!=NULL) {
+    if (fclose(p_idx_fd->d_fl) == EOF) err(errno,"error closing file: %s.icx",dbase);
+    p_idx_fd->d_fl=NULL;
+  }
+  p_idx_fd->accnb=0;
+  p_idx_fd->locnb=0;
+}
+
+
+/*
+ * Returns information about index files.
+ */
+cur_index_descr get_index_desc(int acc,int loc,char * new_index_dir, char * dbase,char * opn_mode, int create_flg) {
+  // struct stat st;
+  char *s_acx_file, *s_icx_file;
+  uint64_t indnb;
+  cur_index_descr cur_idx;
+  int ret;
+
+  if ((strcmp(opn_mode,"r")!=0) && (strcmp(opn_mode,"r+")!=0)) {
+    error_fatal("opn_mode must be \"r\" or \"r+\"", NULL);
+  }
+  init_index_fd(&cur_idx);
+  if (acc) {
+      s_acx_file=index_file(new_index_dir,dbase,ACCSUF);
+      ret=access(s_acx_file, F_OK);
+      if (( ret!= 0) && create_flg) create_missing_idxfile(s_acx_file);
+      else if (ret!=0) error_fatal(s_acx_file, NULL);
+
+      if ((cur_idx.d_fa = fopen(s_acx_file, opn_mode)) == NULL) error_fatal(s_acx_file, NULL);
+      if (fread(&indnb, sizeof(indnb), 1, cur_idx.d_fa) != 1) error_fatal(s_acx_file, NULL);
+      cur_idx.accnb=indnb;
+    }
+    if (loc) {
+      s_icx_file=index_file(new_index_dir,dbase,LOCSUF);
+      ret=access(s_icx_file, F_OK);
+      if (( ret!= 0) && create_flg) create_missing_idxfile(s_icx_file);
+      else if (ret!=0) error_fatal(s_acx_file, NULL);
+      if ((cur_idx.d_fl = fopen(s_icx_file, opn_mode)) == NULL) error_fatal(s_icx_file, NULL);
+      if (fread(&indnb, sizeof(indnb), 1, cur_idx.d_fl) != 1) error_fatal(s_icx_file, NULL);
+      cur_idx.locnb=indnb;
+    }
+    return  cur_idx;
+}

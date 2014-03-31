@@ -43,6 +43,20 @@ typedef struct {
   int locnb;
 } all_indix_nb;
 
+/*
+ * Keep description of index files that are currently being processed.
+ */
+typedef struct {
+  FILE * d_fa;
+  FILE * d_fl;
+  int accnb;
+  int locnb;
+} cur_index_descr;
+
+void init_index_fd(cur_index_descr *);
+void close_index_desc(cur_index_descr *, char *);
+cur_index_descr get_index_desc(int ,int ,char *, char *,char *, int);
+
 
 /* Storage structures for information on flat files that were just parsed.*/
 typedef struct {
@@ -100,6 +114,7 @@ uint32_t iswap32(uint32_t val);
 all_indix_t fic_index_load(char * file,char * suff);
 all_indix_nb index_concat_with_existing(all_indix_t file_l_indix,char *dbase, int loc, int acc);
 void index_merge_with_existing(all_indix_t file_l_indix,char *dbase, int loc, int acc);
+int index_concat_from_file(FILE * fd_d,long prev_nb, long nb, FILE * fd_s);
 
 #endif /* __INDEX_H_ */
 

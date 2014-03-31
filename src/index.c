@@ -286,7 +286,8 @@ void index_sort(char *file, long nb) {
   return;
 }
 
-/* concatenates indexes
+/* concatenates new indexes with index file on disk.
+ * If index file doesn't exist, create it.
  * returns the total number of indexes.
  */
 int index_concat(char *file, long nb, indix_t *ind) {
@@ -294,6 +295,7 @@ int index_concat(char *file, long nb, indix_t *ind) {
   FILE *g;
   uint64_t newnb, oldnb;
   cur = ind;
+
   /* Create empty index file if missing */
   if (access(file, F_OK) != 0) create_missing_idxfile(file);
   if (nb == 0) { return 0; }
@@ -304,7 +306,8 @@ int index_concat(char *file, long nb, indix_t *ind) {
   /* Add new remaining indexes */
   while(nb) {
     if (fwrite(cur, sizeof(*cur), 1, g) != 1) err(errno,"Cannot write index to : %s",file);
-    nb--; cur++;
+    nb--;
+    cur++;
   }
 
   if (fseeko(g, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s",file);
@@ -313,6 +316,20 @@ int index_concat(char *file, long nb, indix_t *ind) {
   if (fclose(g) == EOF) err(errno,"Cannot close file : %s",file);
   return newnb;
 }
+
+/* concatenates indexes that have already been written to a file */
+int index_concat_from_file(FILE * fd_d,long prev_nb, long nb, FILE * fd_s) {
+  int totnb=prev_nb;
+  int cnt;
+  indix_t inx;
+  for (cnt=0;cnt<nb;cnt++) {
+    if (fread(&inx, sizeof(inx), 1, fd_s) != 1) error_fatal("Cannot read index from source file", NULL);
+    if (fwrite(&inx, sizeof(inx), 1, fd_d) != 1) err(errno,"Cannot write index to destination file",NULL);
+    totnb++;
+  }
+  return totnb;
+}
+
 
 /* Merge indexes */
 int index_merge(char *file, long nb, indix_t *ind) {
