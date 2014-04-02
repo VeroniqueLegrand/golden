@@ -15,7 +15,7 @@ static struct option long_options[] =
   {"concat_only",  no_argument, &concat_oflg, 1}, // concatenates all indexes and do not sort them; keep doublons.
   {"idx_input", no_argument, &idx_input_flg,1}, // indicates that filenames given in argument are base name for index files.
   /* These options don't set a flag. */
-  {"index_dir",  required_argument, 0, 'b'} // indicates place where to put prduced index files. default value is "."
+  {"index_dir",  required_argument, 0, 'b'} // indicates place where to put produced index files. default value is "."
 };
 
 /*

@@ -1,4 +1,4 @@
-/* index.c - Goldin utility functions for indexes. */
+/* index_utility.c - low-level tility functions for indexes. */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,68 +144,6 @@ uint32_t iswap32(uint32_t val) {
          ((val <<  8) & 0x00ff0000) |
          ((val >>  8) & 0x0000ff00) |
          ((val >> 24) & 0x000000ff); }
-
-all_indix_nb index_concat_with_existing(all_indix_t file_l_indix,char *dbase, int loc, int acc) {
-  all_indix_nb tot_idx;
-#ifdef PERF_PROFILE
-    clock_t cpu_time_start=clock();
-    time_t wall_time_start=time(NULL);
-#endif
-
-  if (loc) {
-    tot_idx.locnb=locus_concat(dbase, file_l_indix.locnb, file_l_indix.l_locind);
-    if (tot_idx.locnb==IDX_ERR) err(errno,"entry names indexes concatenation failed : %s",dbase);
-  }
-  if (acc) {
-    tot_idx.accnb=access_concat(dbase, file_l_indix.accnb, file_l_indix.l_accind);
-    if (tot_idx.accnb==IDX_ERR) err(errno,"accession numbers indexes concatenation failed : %s",dbase);
-  }
-
-#ifdef PERF_PROFILE
-  clock_t cpu_time_stop=clock();
-  time_t wall_time_stop=time(NULL);
-
-  // compute time spent concatenating indexes
-  clock_t cpu_time_merge_index=cpu_time_stop-cpu_time_start;
-  time_t wall_time_merge_index=wall_time_stop-wall_time_start;
-
-  printf("processor time spent concatenating indexes : %lu clock ticks\n",(unsigned long) cpu_time_merge_index);
-  printf("wall time spent concatenating indexes: %ld seconds\n",(long)  wall_time_merge_index);
-#endif
-
-  return tot_idx;
-}
-
-/*
- * Merge new indexes with existing index file.
- * Compute cpu time and wall time for this operation if program was built with PERF_PROFILE
- */
-void index_merge_with_existing(all_indix_t file_l_indix,char *dbase, int loc, int acc) {
-#ifdef PERF_PROFILE
-    clock_t cpu_time_start=clock();
-    time_t wall_time_start=time(NULL);
-#endif
-  /* Merge indexes */
-  if (loc) {
-    if (locus_merge(dbase, file_l_indix.locnb, file_l_indix.l_locind)) err(errno,"entry names indexes failed : %s",dbase);
-  }
-  if (acc) {
-    if (access_merge(dbase, file_l_indix.accnb, file_l_indix.l_accind)) err(errno,"accession numbers indexes failed : %s",dbase);
-  }
-#ifdef PERF_PROFILE
-  clock_t cpu_time_stop=clock();
-  time_t wall_time_stop=time(NULL);
-
-  // compute time spent merging files
-  clock_t cpu_time_merge_index=cpu_time_stop-cpu_time_start;
-  time_t wall_time_merge_index=wall_time_stop-wall_time_start;
-
-  printf("processor time spent merging indexes : %lu clock ticks\n",(unsigned long) cpu_time_merge_index);
-  printf("wall time spent merging indexes: %ld seconds\n",(long)  wall_time_merge_index);
-#endif
-
-}
-
 
 
 

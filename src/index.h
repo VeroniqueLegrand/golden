@@ -93,6 +93,7 @@ typedef struct {
 
 
 /* Functions prototypes */
+int index_concat(char *, long, indix_t *);
 int index_merge(char *, long, indix_t *);
 int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_found);
 const char *index_dir(void);
@@ -112,9 +113,10 @@ uint64_t iswap64(uint64_t val);
 uint32_t iswap32(uint32_t val);
 // int list_append(char *dbase, char *dir, char *file);
 all_indix_t fic_index_load(char * file,char * suff);
-all_indix_nb index_concat_with_existing(all_indix_t file_l_indix,char *dbase, int loc, int acc);
-void index_merge_with_existing(all_indix_t file_l_indix,char *dbase, int loc, int acc);
-int index_concat_from_file(FILE * fd_d,long prev_nb, long nb, FILE * fd_s);
+// all_indix_nb mem_index_concat(all_indix_t file_l_indix,char *dbase, int loc, int acc);
+int fic_index_concat(FILE * fd_d,long prev_nb, long nb, FILE * fd_s);
+
+
 
 #endif /* __INDEX_H_ */
 

@@ -17,6 +17,7 @@
 #include <ctype.h>
 #include <libgen.h>
 
+#include "index.h"
 #include "access.h"
 #include "entry.h"
 #include "error.h"
@@ -25,7 +26,8 @@
 #include "locus.h"
 #include <err.h>
 
-#include <goldin_options.h>
+#include "goldin_options.h"
+#include "goldin_utils.h"
 
 #define PERF_PROFILE
 
@@ -41,7 +43,7 @@
 
 void process_databank_files(int,int,char ** ,goldin_parms);
 all_indix_nb process_databank_file(goldin_parms, char * );
-void all_index_sort(goldin_parms,all_indix_nb);
+
 void process_index_files(int,int,char **,goldin_parms);
 
 /* Main function */
@@ -54,14 +56,12 @@ int main(int argc, char **argv) {
   indix_t *cur, *locind, *accind;
   size_t len;
   goldin_parms s_parms;
-  //char * lst_merge_fic=NULL;
-  /* Inits */
-  // prog = basename(*argv);
+
+  printf("coucou\n");
 
   /* Checks command line options & arguments */
   init_goldin_parms(&s_parms,argc, argv);
   /* Proceed all input files */
-  indnb = 0; locind = accind = NULL;
 
   if (!s_parms.idx_input_flag) {
     process_databank_files(optind,argc,argv,s_parms);
@@ -84,17 +84,7 @@ void process_databank_files(int optind,int argc,char ** argv,goldin_parms s_parm
   }
 }
 
-void all_index_sort(goldin_parms s_parms,all_indix_nb tot_idx) {
-  char *file;
-  if (s_parms.loc) {
-    file = index_file(s_parms.new_index_dir, s_parms.dbase, LOCSUF);
-    index_sort(file,tot_idx.locnb);
-  }
-  if (s_parms.acc) {
-    file = index_file(s_parms.new_index_dir, s_parms.dbase, ACCSUF);
-    index_sort(file,tot_idx.accnb);
-  }
-}
+
 
 all_indix_nb process_databank_file(goldin_parms s_parms , char * file) {
   struct stat st;
@@ -115,17 +105,17 @@ all_indix_nb process_databank_file(goldin_parms s_parms , char * file) {
      return tot_idx;
   }
   if (!s_parms.csort_flag && !s_parms.co_flag) { // same behavior as in previous versions.
-    index_merge_with_existing(file_l_indix,s_parms.dbase,s_parms.loc,s_parms.acc);
+    mem_index_merge(file_l_indix,s_parms);
     freeAllIndix(file_l_indix);
     return tot_idx;
   }
-  // concatenate index files
-  tot_idx=index_concat_with_existing(file_l_indix,s_parms.dbase,s_parms.loc,s_parms.acc);
+  // concatenate new index with previous ones.
+  tot_idx=mem_index_concat(file_l_indix,s_parms);
   freeAllIndix(file_l_indix);
   return tot_idx;
 }
 
-process_index_file(goldin_parms s_parms ,char * rac_file,  cur_index_descr * d_descr) {
+void process_index_file(goldin_parms s_parms ,char * rac_file,  cur_index_descr * d_descr) {
   cur_index_descr s_descr;
   int fd,nb_read,nb;
   char * s_dbx_file;
@@ -144,26 +134,23 @@ process_index_file(goldin_parms s_parms ,char * rac_file,  cur_index_descr * d_d
   // concatenate
   if (s_parms.acc) {
     if (fseeko(d_descr->d_fa, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.acx",s_parms.dbase);
-    d_descr->accnb=index_concat_from_file(d_descr->d_fa,d_descr->accnb, s_descr.accnb, s_descr.d_fa);
+    d_descr->accnb=fic_index_concat(d_descr->d_fa,d_descr->accnb, s_descr.accnb, s_descr.d_fa);
   }
   if (s_parms.loc) {
     if (fseeko(d_descr->d_fl, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.icx",s_parms.dbase);
-    d_descr->locnb=index_concat_from_file(d_descr->d_fl,d_descr->locnb, s_descr.locnb, s_descr.d_fl);
+    d_descr->locnb=fic_index_concat(d_descr->d_fl,d_descr->locnb, s_descr.locnb, s_descr.d_fl);
   }
   // close source index files
   close_index_desc(&s_descr, rac_file);
 }
 
 void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) {
-  // struct stat st;
   int i;
   char* rac_file;
 
   all_indix_nb tot_idx;
   cur_index_descr s_descr;
 
-  //char * d_dbx_file, *d_acx_file, *d_icx_file;
-  // char * s_dbx_file;
 
   cur_index_descr d_descr=get_index_desc(s_parms.acc,s_parms.loc,s_parms.new_index_dir,s_parms.dbase,"r+",1); // get description of destination index files.
   for(i = optind + 1; i < argc; i++) {

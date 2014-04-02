@@ -167,9 +167,9 @@ AUTOCONF = ${SHELL} /Users/vlegrand/Desktop/golden-3.0/missing autoconf
 AUTOHEADER = ${SHELL} /Users/vlegrand/Desktop/golden-3.0/missing autoheader
 AUTOMAKE = ${SHELL} /Users/vlegrand/Desktop/golden-3.0/missing automake-1.13
 AWK = awk
-CC = gcc
+CC = gcc -g
 CCDEPMODE = depmode=gcc3
-CFLAGS = -Qunused-arguments
+CFLAGS = -Qunused-arguments -g
 CPP = gcc -E
 CPPFLAGS = -Qunused-arguments
 CYGPATH_W = echo

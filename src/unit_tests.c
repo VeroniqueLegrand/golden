@@ -83,11 +83,6 @@ void test_list_append() {
 toto1.dat\ntiti/toto1.dat\n\
 titi/toto1.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   
-  // write expected content for tests
-  /*
-  int fd_tmp=open("/tmp/unit_test.txt",O_WRONLY);
-  write(fd_tmp,expected_content,strlen(expected_content));
-  close(fd_tmp);*/
   char * dbase="db_test_tmp";
   struct stat st;
   char * buf;
@@ -110,6 +105,12 @@ titi/toto1.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   assert(strcmp(buf,expected_content)==0);
   close(fd);
   free(buf);
+  
+  // check new dbx file creation for new indexes.
+  nb=list_append("db_test_tmp2",NULL,"toto1.dat","../test/unit");
+  assert(nb==1);
+  assert(stat("../test/unit/db_test_tmp2.dbx", &st) != -1);
+
 }
 
 void test_index_merge() {

@@ -62,11 +62,11 @@ void locus_search(WDBQueryData wData, char * dbase, int * nb_locus_not_found) {
 
 
 /* Merge locus indexes with existing file */
-int locus_merge(char *dbase, long nb, indix_t *ind) {
+int locus_merge(char *dbase, long nb, indix_t *ind, char * new_index_dir) {
   int i;
   char *file;
-
-  file = index_file(index_dir, dbase, LOCSUF);
+  // char * idx_dir=index_dir();
+  file = index_file(new_index_dir, dbase, LOCSUF);
   i = index_merge(file, nb, ind);
   free(file);
 

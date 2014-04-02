@@ -248,7 +248,7 @@ void index_sort(char *file, long nb) {
   const char *dir;
   indix_t * old;
   void * fmap, *fmap_orig;
-  uint64_t nb_idx;
+  // uint64_t nb_idx;
 
   if (nb == 0) return;
   if ((dir = getenv("TMPDIR")) == NULL) { dir = TMPDIR; }
@@ -318,7 +318,7 @@ int index_concat(char *file, long nb, indix_t *ind) {
 }
 
 /* concatenates indexes that have already been written to a file */
-int index_concat_from_file(FILE * fd_d,long prev_nb, long nb, FILE * fd_s) {
+int fic_index_concat(FILE * fd_d,long prev_nb, long nb, FILE * fd_s) {
   int totnb=prev_nb;
   int cnt;
   indix_t inx;

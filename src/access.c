@@ -105,11 +105,11 @@ void access_search(WDBQueryData wData, char * db_name, int * nb_AC_not_found) {
 
 
 /* Merge accession indexes */
-int access_merge(char *dbase, long nb, indix_t *ind) {
+int access_merge(char *dbase, long nb, indix_t *ind,char * new_index_dir) {
   int i;
   char *file;
 
-  file = index_file(index_dir, dbase, ACCSUF);
+  file = index_file(new_index_dir, dbase, ACCSUF);
   i = index_merge(file, nb, ind);
   free(file);
 

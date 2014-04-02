@@ -89,6 +89,19 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
       file=strtok(NULL,"\n");
     }
     if (fclose(f) == EOF) error_fatal(name, NULL);
+  } else {
+    if ((f = fopen(name, "a")) == NULL) err(errno,"Cannot open file : %s",name);
+    /* Append new files to list */
+    strcpy(cp_files,files);
+    file=strtok(cp_files,"\n");
+    while (file!=NULL) {
+      q = file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
+      if (dir!=NULL) (void)fprintf(f, "%s/%s\n", dir, q);
+      else (void)fprintf(f, "%s\n", q);
+      nb++;
+      file=strtok(NULL,"\n");
+    }
+    if (fclose(f) == EOF) error_fatal(name, NULL);
   }
   free(name);
   free(cp_files);
