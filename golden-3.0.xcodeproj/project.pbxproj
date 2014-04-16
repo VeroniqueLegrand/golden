@@ -125,6 +125,10 @@
 		2D4D33701889694900712232 /* Dummy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Dummy.xcodeproj; path = Dummy/Dummy.xcodeproj; sourceTree = "<group>"; };
 		2D4D339218897B9E00712232 /* misc_all1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = misc_all1.txt; sourceTree = "<group>"; };
 		2D6295F118B3AA16001CC177 /* index_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = index_utils.c; sourceTree = "<group>"; };
+		2D651B9918FED1C500B036B1 /* index_desc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = index_desc.c; sourceTree = "<group>"; };
+		2D651B9A18FED1C500B036B1 /* index_desc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = index_desc.h; sourceTree = "<group>"; };
+		2D651B9B18FED1C500B036B1 /* index_hl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = index_hl.c; sourceTree = "<group>"; };
+		2D651B9C18FED1C500B036B1 /* index_hl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = index_hl.h; sourceTree = "<group>"; };
 		2DAA48061892BBE900CE9F9A /* embl_in.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = embl_in.txt; sourceTree = "<group>"; };
 		2DAA48071892BBE900CE9F9A /* genbank_in.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = genbank_in.txt; sourceTree = "<group>"; };
 		2DAA48081892BBE900CE9F9A /* prosite_in.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = prosite_in.txt; sourceTree = "<group>"; };
@@ -258,6 +262,10 @@
 		2D4D330D1886CACC00712232 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				2D651B9918FED1C500B036B1 /* index_desc.c */,
+				2D651B9A18FED1C500B036B1 /* index_desc.h */,
+				2D651B9B18FED1C500B036B1 /* index_hl.c */,
+				2D651B9C18FED1C500B036B1 /* index_hl.h */,
 				2DF5A20F18EB04AB00CE8C77 /* goldin_utils.c */,
 				2DF5A21018EB04AB00CE8C77 /* goldin_utils.h */,
 				2DF5A20C18E3367200CE8C77 /* goldin_options.c */,
