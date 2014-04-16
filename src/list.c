@@ -5,7 +5,7 @@
 #endif
 
 #include <sys/types.h>
-
+#include <sys/stat.h>
 #include <stdio.h>
 #include <sys/types.h>
 #ifdef STDC_HEADERS
@@ -21,6 +21,7 @@
 
 #include <errno.h>
 #include <err.h>
+#include <fcntl.h>
 
 #include "error.h"
 #include "index.h"
@@ -188,3 +189,58 @@ int list_check(void) {
     error_fatal(p, NULL);
 
   return 0; }
+
+/*
+ * Returns the number of flat files already indexed for dbase
+ */
+int list_nb(char * new_index_dir, char * dbase) {
+  char * dbx_file,* buf, *p;
+  FILE * dbx_fd;
+  int ret,len;
+  int nb_flat=0;
+  dbx_file=index_file(new_index_dir,dbase,LSTSUF);
+  ret=access(dbx_file, F_OK);
+  if (ret!=0) return nb_flat;
+  if ((dbx_fd = fopen(dbx_file, "r+")) == NULL) err(errno,"error opening file : %s", dbx_file);
+  len = BUFINC;
+  if ((buf = (char *)malloc(len+1)) == NULL) err(errno,"memory");
+  while(fgets(buf, (int)len, dbx_fd) != NULL) {
+    /* Checks for long line */
+    if ((p = strrchr(buf, '\n')) == NULL) {
+      len += BUFINC;
+      if ((buf = (char *)realloc(buf, len+1)) == NULL) err(errno, "memory");
+      if (fseeko(dbx_fd, -1 * (off_t)strlen(buf), SEEK_CUR) != 0) err(errno,"error seeking in file : %s", dbx_file);
+        continue;
+    }
+    nb_flat++;
+  }
+  free(buf);
+  fclose(dbx_fd);
+  return nb_flat;
+}
+
+/*
+ * Creates new, empty dbx file.
+ */
+void list_new(char *file) {
+  FILE *g;
+  /* Create empty index file*/
+  if ((g = fopen(file, "w")) == NULL) err(errno,"cannot create file : %s",file);
+  if (fclose(g) == EOF) err(errno,"cannot close file : %s",file);
+}
+
+/*
+ * Get all database flat file names.
+ * Allocates memory.
+ */
+char * list_get(char * file) {
+  struct stat st;
+  int fd,nb_read;
+  if (stat(file, &st) == -1) err(errno,file, NULL);
+  int len=st.st_size;
+  char * lst_to_concat= malloc(len+1);
+  if ((fd=open(file,O_RDONLY))==-1) err(errno, "Cannot open source file.");
+  if ((nb_read=read(fd,lst_to_concat,st.st_size))==-1) err(errno,"Error while reading source file.");
+  close(fd);
+  return lst_to_concat;
+}
