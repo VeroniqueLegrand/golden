@@ -75,9 +75,9 @@ am__v_AR_1 =
 libgolden_a_AR = $(AR) $(ARFLAGS)
 libgolden_a_LIBADD =
 am__objects_1 = access.$(OBJEXT) entry.$(OBJEXT) error.$(OBJEXT) \
-	index.$(OBJEXT) list.$(OBJEXT) locus.$(OBJEXT) query.$(OBJEXT) \
-	index_utils.$(OBJEXT) goldin_options.$(OBJEXT) \
-	goldin_utils.$(OBJEXT)
+	index.$(OBJEXT) index_hl.$(OBJEXT) index_desc.$(OBJEXT) \
+	list.$(OBJEXT) locus.$(OBJEXT) query.$(OBJEXT) \
+	goldin_options.$(OBJEXT) goldin_utils.$(OBJEXT)
 am_libgolden_a_OBJECTS = $(am__objects_1)
 libgolden_a_OBJECTS = $(am_libgolden_a_OBJECTS)
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgdatadir)"
@@ -190,7 +190,7 @@ AUTOMAKE = ${SHELL} /Users/vlegrand/Desktop/golden-3.0/missing automake-1.13
 AWK = awk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -Qunused-arguments
+CFLAGS = -Qunused-arguments -g
 CPP = gcc -E
 CPPFLAGS = -Qunused-arguments
 CYGPATH_W = echo
@@ -285,8 +285,8 @@ unit_tests_LDADD = libgolden.a
 perf_tests_SOURCES = perf_tests.c
 perf_tests_LDADD = libgolden.a
 libgolden_a_SOURCES = $(SRC)
-SRC = access.c entry.c error.c index.c list.c locus.c query.c index_utils.c goldin_options.c goldin_utils.c
-HDR = access.h entry.h error.h index.h list.h locus.h query.h goldin_options.h goldin_utils.h
+SRC = access.c entry.c error.c index.c index_hl.c index_desc.c list.c locus.c query.c goldin_options.c goldin_utils.c
+HDR = access.h entry.h error.h index.h index_hl.h index_desc.h list.h locus.h query.h goldin_options.h goldin_utils.h
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -413,7 +413,8 @@ include ./$(DEPDIR)/goldin.Po
 include ./$(DEPDIR)/goldin_options.Po
 include ./$(DEPDIR)/goldin_utils.Po
 include ./$(DEPDIR)/index.Po
-include ./$(DEPDIR)/index_utils.Po
+include ./$(DEPDIR)/index_desc.Po
+include ./$(DEPDIR)/index_hl.Po
 include ./$(DEPDIR)/list.Po
 include ./$(DEPDIR)/locus.Po
 include ./$(DEPDIR)/perf_tests.Po

@@ -4,6 +4,7 @@
 #define __LOCUS_H_
 
 #include "index.h"
+#include "index_hl.h"
 
 /* Functions prototypes */
 int locus_merge(char *, long, indix_t *,char * new_index_dir);

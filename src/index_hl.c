@@ -42,27 +42,19 @@ void freeAllIndix(all_indix_t sToFree) {
   if (sToFree.l_accind!=NULL) free(sToFree.l_accind);
 }
 
-all_indix_t fic_index_load(char * file,char * suff) {
+array_indix_t fic_index_load(const char * file) {
   FILE * g;
   uint64_t nb_idx;
-  all_indix_t fic_indix;
+  array_indix_t fic_indix;
   indix_t cur;
   int i=0;
-  init_all_indix_t(&fic_indix);
   if ((g = fopen(file, "r")) == NULL) err(errno,"cannot open file: %s.",file);
   if (fread(&nb_idx, sizeof(nb_idx), 1, g) != 1) err(errno,"cannot read index number from file: %s.",file);
-  if (suff==LOCSUF) {
-    fic_indix.locnb=nb_idx;
-    if ((fic_indix.l_locind = (indix_t *)realloc(fic_indix.l_locind, nb_idx*sizeof(indix_t))) == NULL) err(errno,"cannot allocate memory");
-  } else {
-    fic_indix.accnb=nb_idx;
-    if ((fic_indix.l_accind = (indix_t *)realloc(fic_indix.l_accind, nb_idx*sizeof(indix_t))) == NULL) err(errno,"cannot reallocate memory");
-  }
-  
-  while(i<nb_idx) {
+  fic_indix.nb_idx=nb_idx;
+  if ((fic_indix.l_idx = (indix_t *)realloc(fic_indix.l_idx, nb_idx*sizeof(indix_t))) == NULL) err(errno,"cannot allocate memory");
+  for(i=0;i<nb_idx;i++) {
     if (fread(&cur, sizeof(cur), 1, g) != 1) err(errno,"cannot read index from file: %s.",file);
-    if (suff==LOCSUF) fic_indix.l_locind[i]=cur;
-    else fic_indix.l_accind[i]=cur;
+    fic_indix.l_idx[i]=cur;
     i++;
   }
   if (fclose(g) == EOF) err(errno,"error closing file: %s.",file);
@@ -75,10 +67,34 @@ all_indix_t fic_index_load(char * file,char * suff) {
  would fail.
  */
 // all_indix_t index_load(char * flat_filename, char * file,int typ) {
-all_indix_t index_load(char * dbase,char * suff) {
+all_indix_t index_load(const char *idx_dir, const char * dbase,const char * suff) {
   char * file;
-  file = index_file(".", dbase, suff);
-  return fic_index_load(file,suff);
+  array_indix_t t_idx;
+  all_indix_t all_idx;
+  int load_all=0;
+  init_all_indix_t(&all_idx);
+  if (suff==NULL) load_all=1; // load all indexes, both AC and locus.
+  if (load_all==1) {
+    file = index_file(idx_dir, dbase, ACCSUF);
+    t_idx=fic_index_load(file);
+    all_idx.accnb=t_idx.nb_idx;
+    all_idx.l_accind=t_idx.l_idx;
+    file = index_file(idx_dir, dbase, LOCSUF);
+    t_idx=fic_index_load(file);
+    all_idx.locnb=t_idx.nb_idx;
+    all_idx.l_locind=t_idx.l_idx;
+  } else {
+    file = index_file(idx_dir, dbase, suff);
+    t_idx=fic_index_load(file);
+  }
+  if (suff==LOCSUF) {
+    all_idx.locnb=t_idx.nb_idx;
+    all_idx.l_locind=t_idx.l_idx;
+  } else {
+    all_idx.accnb=t_idx.nb_idx;
+    all_idx.l_accind=t_idx.l_idx;
+  }
+  return all_idx;
 }
 
 /*void close_index_desc(cur_index_descr * p_idx_fd, char * dbase) {
@@ -184,11 +200,11 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
 
   if (lst==NULL) return 0;
   if (*lst==NULL) {
-    error_fatal("index_search : bad list in input", NULL);
+    err(0,"index_search : bad list in input");
   }
 
   if (stat(file, &st) == -1) {
-    error_fatal(file, NULL); }
+    err("index file : %s does not exist.",file); }
 
 #ifdef DEBUG
     result_t ** start_l=wData.start_l; // for printing debug info only.

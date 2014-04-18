@@ -191,7 +191,8 @@ int list_check(void) {
   return 0; }
 
 /*
- * Returns the number of flat files already indexed for dbase
+ * Returns the number of flat files already indexed for dbase.
+ * If dbx file doesn't exist, an error is displayed and program exits..
  */
 int list_nb(char * new_index_dir, char * dbase) {
   char * dbx_file,* buf, *p;
@@ -200,7 +201,7 @@ int list_nb(char * new_index_dir, char * dbase) {
   int nb_flat=0;
   dbx_file=index_file(new_index_dir,dbase,LSTSUF);
   ret=access(dbx_file, F_OK);
-  if (ret!=0) return nb_flat;
+  if (ret!=0) err(0,"%s file doesn't exist",dbx_file);
   if ((dbx_fd = fopen(dbx_file, "r+")) == NULL) err(errno,"error opening file : %s", dbx_file);
   len = BUFINC;
   if ((buf = (char *)malloc(len+1)) == NULL) err(errno,"memory");

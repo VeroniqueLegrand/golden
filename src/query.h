@@ -7,6 +7,8 @@
 #ifndef __QUERY_H_
 #define __QUERY_H_
 
+#include "index_hl.h"
+
 // static int compare_dbase (void const *a, void const *b);
 int performGoldenQuery(WAllQueryData, int,int);
 WAllQueryData prepareQueryData(char *, result_t * ,int);

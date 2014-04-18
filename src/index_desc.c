@@ -118,21 +118,23 @@ dest_index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char *
   dbx_file=index_file(new_index_dir,dbase,LSTSUF);
   ret=access(dbx_file, F_OK);
   if (ret!=0) list_new(dbx_file);
-  else if ((d_idx.d_fdbx = fopen(dbx_file, "r+")) == NULL) err(errno,"error opening file : %s", dbx_file);
-  len = BUFINC;
-  if ((buf = (char *)malloc(len+1)) == NULL) err(errno,"memory");
-  while(fgets(buf, (int)len, d_idx.d_fdbx) != NULL) {
-    /* Checks for long line */
-    if ((p = strrchr(buf, '\n')) == NULL) {
-      len += BUFINC;
-      if ((buf = (char *)realloc(buf, len+1)) == NULL) err(errno, "memory");
-      if (fseeko(d_idx.d_fdbx, -1 * (off_t)strlen(buf), SEEK_CUR) != 0) err(errno,"error seeking in file : %s", dbx_file);
-        continue;
+  else {
+    if ((d_idx.d_fdbx = fopen(dbx_file, "r+")) == NULL) err(errno,"error opening file : %s", dbx_file);
+    len = BUFINC;
+    if ((buf = (char *)malloc(len+1)) == NULL) err(errno,"memory");
+    while(fgets(buf, (int)len, d_idx.d_fdbx) != NULL) {
+      /* Checks for long line */
+      if ((p = strrchr(buf, '\n')) == NULL) {
+        len += BUFINC;
+        if ((buf = (char *)realloc(buf, len+1)) == NULL) err(errno, "memory");
+        if (fseeko(d_idx.d_fdbx, -1 * (off_t)strlen(buf), SEEK_CUR) != 0) err(errno,"error seeking in file : %s", dbx_file);
+          continue;
+      }
+      d_idx.max_filenb++;
     }
-    d_idx.max_filenb++;
+    free(buf);
   }
-  free(buf);
-  return  d_idx;
+  return d_idx;
 }
 
 void close_dest_index_desc(dest_index_desc * p_ddesc) {

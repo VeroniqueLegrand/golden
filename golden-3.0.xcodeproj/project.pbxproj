@@ -124,7 +124,6 @@
 		2D4D335A188968D400712232 /* taxo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = taxo.txt; sourceTree = "<group>"; };
 		2D4D33701889694900712232 /* Dummy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Dummy.xcodeproj; path = Dummy/Dummy.xcodeproj; sourceTree = "<group>"; };
 		2D4D339218897B9E00712232 /* misc_all1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = misc_all1.txt; sourceTree = "<group>"; };
-		2D6295F118B3AA16001CC177 /* index_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = index_utils.c; sourceTree = "<group>"; };
 		2D651B9918FED1C500B036B1 /* index_desc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = index_desc.c; sourceTree = "<group>"; };
 		2D651B9A18FED1C500B036B1 /* index_desc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = index_desc.h; sourceTree = "<group>"; };
 		2D651B9B18FED1C500B036B1 /* index_hl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = index_hl.c; sourceTree = "<group>"; };
@@ -271,7 +270,6 @@
 				2DF5A20C18E3367200CE8C77 /* goldin_options.c */,
 				2DF5A20D18E3367200CE8C77 /* goldin_options.h */,
 				2DF6838318BB8504005254CD /* perf_tests.c */,
-				2D6295F118B3AA16001CC177 /* index_utils.c */,
 				2DF60C8B18ABCD3800E2C659 /* unit_tests.c */,
 				2D4D330E1886CACC00712232 /* .deps */,
 				2D4D33171886CACC00712232 /* .gdbinit */,

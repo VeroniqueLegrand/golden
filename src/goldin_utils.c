@@ -1,12 +1,16 @@
 /*
  * Here : aim is to make goldin.c simplier.
  * I will gather here "high level" functions that are used only by goldin.
- * These functions may use directly those in index.c, list.c,locus.c,access.c.
+ * These functions may use directly those in index.c, index_l.c, list.c,locus.c,access.c.
  */
 #include <errno.h>
 #include <err.h>
 #include "index.h"
+#include "index_hl.h"
 #include "goldin_options.h"
+#include "goldin_utils.h"
+#include "access.h"
+#include "locus.h"
 
 void all_index_sort(goldin_parms s_parms,all_indix_nb tot_idx) {
   char *file;

@@ -22,6 +22,12 @@ typedef struct {
   long accnb; // size of l_accind.
 } all_indix_t;
 
+/* storage structure for the content of 1 index file. */
+typedef struct {
+  indix_t *l_idx; //array of index for the flat file
+  long nb_idx; // size of array.
+} array_indix_t;
+
 
 void init_all_indix_t();
 void freeAllIndix(); // free memory allocated for the elements of the all_indix_t structure.
@@ -44,9 +50,9 @@ typedef struct {
 
 all_indix_t create_index(char *,int,int,int );
 int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_found);
-all_indix_t index_load(char *,char *);
+all_indix_t index_load(const char *,const char *,const char *);
 int index_concat(char *, long, indix_t *);
 int index_merge(char *, long, indix_t *);
-all_indix_t fic_index_load(char * file,char * suff);
+array_indix_t fic_index_load(const char * file);
 
 #endif /* INDEX_HL_H_ */

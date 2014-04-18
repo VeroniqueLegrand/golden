@@ -1,0 +1,138 @@
+//
+LOCUS       EYS95825                 190 aa            linear   BCT 28-MAR-2014
+DEFINITION  elongation factor P [Bartonella bacilliformis Peru-18].
+ACCESSION   EYS95825
+VERSION     EYS95825.1  GI:601448917
+DBLINK      BioProject: PRJNA229740
+            BioSample: SAMN02419801
+DBSOURCE    accession JHPR01000001.1
+KEYWORDS    .
+SOURCE      Bartonella bacilliformis Peru-18
+  ORGANISM  Bartonella bacilliformis Peru-18
+            Bacteria; Proteobacteria; Alphaproteobacteria; Rhizobiales;
+            Bartonellaceae; Bartonella.
+REFERENCE   1  (residues 1 to 190)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     The Genome Sequence of Bartonella bacilliformis Peru-18
+  JOURNAL   Unpublished
+REFERENCE   2  (residues 1 to 190)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-MAR-2014) Broad Institute of MIT and Harvard, 7
+            Cambridge Center, Cambridge, MA 02142, USA
+COMMENT     Please be aware that the annotation is done automatically with
+            little or no manual curation.
+
+            ##Genome-Assembly-Data-START##
+            Assembly Method       :: allpaths v. R48559
+            Assembly Name         :: Bart_baci_Peru-18_V1
+            Genome Coverage       :: 138.0x
+            Sequencing Technology :: Illumina
+            ##Genome-Assembly-Data-END##
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..190
+                     /organism="Bartonella bacilliformis Peru-18"
+                     /strain="Peru-18"
+                     /isolation_source="clinical specimen, blood"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:1427331"
+                     /collection_date="1998-05-01"
+     Protein         1..190
+                     /product="elongation factor P"
+     CDS             1..190
+                     /locus_tag="X470_00002"
+                     /coded_by="complement(JHPR01000001.1:554..1126)"
+                     /transl_table=11
+ORIGIN
+        1 mkingneirp gnviehqgsl wvavkcnavk pgkggafnqv elknvidgtk lnerfraaet
+       61 vekvrleqkd ftflyqqgea lvfmdtesye qlelqrdfvg draaflqdgm tvtvelheek
+      121 plgislpdqv tvtiaeadpa ikgqtvtssy kpailengir ilvppfvqag eriivdtnel
+      181 tyirrvsekg
+//
+LOCUS       EYS95826                 365 aa            linear   BCT 28-MAR-2014
+DEFINITION  hypothetical protein X470_00003 [Bartonella bacilliformis Peru-18].
+ACCESSION   EYS95826
+VERSION     EYS95826.1  GI:601448918
+DBLINK      BioProject: PRJNA229740
+            BioSample: SAMN02419801
+DBSOURCE    accession JHPR01000001.1
+KEYWORDS    .
+SOURCE      Bartonella bacilliformis Peru-18
+  ORGANISM  Bartonella bacilliformis Peru-18
+            Bacteria; Proteobacteria; Alphaproteobacteria; Rhizobiales;
+            Bartonellaceae; Bartonella.
+REFERENCE   1  (residues 1 to 365)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     The Genome Sequence of Bartonella bacilliformis Peru-18
+  JOURNAL   Unpublished
+REFERENCE   2  (residues 1 to 365)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-MAR-2014) Broad Institute of MIT and Harvard, 7
+            Cambridge Center, Cambridge, MA 02142, USA
+COMMENT     Please be aware that the annotation is done automatically with
+            little or no manual curation.
+
+            ##Genome-Assembly-Data-START##
+            Assembly Method       :: allpaths v. R48559
+            Assembly Name         :: Bart_baci_Peru-18_V1
+            Genome Coverage       :: 138.0x
+            Sequencing Technology :: Illumina
+            ##Genome-Assembly-Data-END##
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..365
+                     /organism="Bartonella bacilliformis Peru-18"
+                     /strain="Peru-18"
+                     /isolation_source="clinical specimen, blood"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:1427331"
+                     /collection_date="1998-05-01"
+     Protein         1..365
+                     /product="hypothetical protein"
+     CDS             1..365
+                     /locus_tag="X470_00003"
+                     /coded_by="complement(JHPR01000001.1:1798..2895)"
+                     /transl_table=11
+ORIGIN
+        1 mtkiaygayr vfwafrlmlv vigalavsaa iglavsaafa kdeeilnleq slntvqdfsk
+       61 nkraqkipqi lragkydeay dyyvqgfylk afraalrrae nndpkaqtlv gkmymegyav
+      121 tqdgaraalw fgraakqgdp haqlryglml fngnfvkkne eegeklihea mqaglkeayf
+      181 ycgqlllykt mrekenlkgv aaaddndens dkalafflkg aalgdaeaaf aaaqilavgt
+      241 mkyprhdhya rrlmtiaaqk khvmaqmmla qwllqgrgge adfkeafsll ydnalkrvmp
+      301 aqvnlarvyr dglgvegdiv taaawylvvk sgkgqaadle mmlegmsqaq leqahqkaye
+      361 lmqlf
+//

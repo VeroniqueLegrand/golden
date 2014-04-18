@@ -169,7 +169,7 @@ AUTOMAKE = ${SHELL} /Users/vlegrand/Desktop/golden-3.0/missing automake-1.13
 AWK = awk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -Qunused-arguments
+CFLAGS = -Qunused-arguments -g
 CPP = gcc -E
 CPPFLAGS = -Qunused-arguments
 CYGPATH_W = echo

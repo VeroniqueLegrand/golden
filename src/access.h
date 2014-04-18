@@ -4,6 +4,7 @@
 #define __ACCESS_H_
 
 #include "index.h"
+#include "index_hl.h"
 
 
 /* Functions prototypes */

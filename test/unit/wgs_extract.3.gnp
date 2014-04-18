@@ -1,0 +1,182 @@
+LOCUS       EYS68655                 375 aa            linear   BCT 28-MAR-2014
+DEFINITION  acyl-CoA dehydrogenase, N-terminal domain protein [Acinetobacter
+            baumannii 16553_6].
+ACCESSION   EYS68655
+VERSION     EYS68655.1  GI:601420411
+DBLINK      BioProject: PRJNA195186
+            BioSample: SAMN02646224
+DBSOURCE    accession JHPI01000001.1
+KEYWORDS    .
+SOURCE      Acinetobacter baumannii 16553_6
+  ORGANISM  Acinetobacter baumannii 16553_6
+            Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+            Moraxellaceae; Acinetobacter; Acinetobacter calcoaceticus/baumannii
+            complex.
+REFERENCE   1  (residues 1 to 375)
+  AUTHORS   Harris,A.D., Johnson,K.J., George,J., Nadendla,S., Daugherty,S.C.,
+            Parankush,S., Sadzewicz,L., Tallon,L., Sengamalay,N., Hazen,T.H.
+            and Rasko,D.A.
+  TITLE     Comparative genomics and transcriptomics to identify genetic
+            mechanisms underlying the emergence of carbapenem resistant
+            Acinetobacter baumannii (CRAb)
+  JOURNAL   Unpublished
+REFERENCE   2  (residues 1 to 375)
+  AUTHORS   Harris,A.D., Johnson,K.J., George,J., Nadendla,S., Daugherty,S.C.,
+            Parankush,S., Sadzewicz,L., Tallon,L., Sengamalay,N., Hazen,T.H.
+            and Rasko,D.A.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (26-MAR-2014) Institute for Genome Sciences, University
+            of Maryland School of Medicine, BioPark II, 801 W. Baltimore St.,
+            Suite 619, Baltimore, MD 21201, USA
+COMMENT     Bacteria and source DNA available from BEI.
+
+            ##Genome-Assembly-Data-START##
+            Assembly Method       :: MaSuRCA v. 2.0.3.1
+            Genome Coverage       :: 106.13x
+            Sequencing Technology :: Illumina
+            ##Genome-Assembly-Data-END##
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..375
+                     /organism="Acinetobacter baumannii 16553_6"
+                     /strain="16553_6"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:1311103"
+                     /country="USA"
+     Protein         1..375
+                     /product="acyl-CoA dehydrogenase, N-terminal domain
+                     protein"
+     CDS             1..375
+                     /locus_tag="K002_0001"
+                     /coded_by="JHPI01000001.1:1..1128"
+                     /transl_table=11
+ORIGIN
+        1 mirdaahayc qerlqprvle qfrhettdps ifremgelgl lgptipeqyg gaglnyvsyg
+       61 lvareieyvd sgyrsmasvq sslvmvpihe fgteeqkqky lpklatgeyi gcfgltepdh
+      121 gsdpgsmitr akkvdggyrl tgakmwitns piadvfvvwa kevsaegnvg dirgfilekg
+      181 weglsapaih gkvglrasit geivmdnvfv peenafpeir glkgpftcln sarygiawga
+      241 mgaaefcwht ahqytmdrkq fgrplaanql iqkkladmqt eialglqaal rfgrmkdegi
+      301 asvegtslik rnncgkaldi armardmmgg ngisdefgva rhlvnlevvn tyegthdvha
+      361 lilgraqtgi aafsn
+//
+LOCUS       EYS68656                 440 aa            linear   BCT 28-MAR-2014
+DEFINITION  sugar (and other) transporter family protein [Acinetobacter
+            baumannii 16553_6].
+ACCESSION   EYS68656
+VERSION     EYS68656.1  GI:601420412
+DBLINK      BioProject: PRJNA195186
+            BioSample: SAMN02646224
+DBSOURCE    accession JHPI01000001.1
+KEYWORDS    .
+SOURCE      Acinetobacter baumannii 16553_6
+  ORGANISM  Acinetobacter baumannii 16553_6
+            Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+            Moraxellaceae; Acinetobacter; Acinetobacter calcoaceticus/baumannii
+            complex.
+REFERENCE   1  (residues 1 to 440)
+  AUTHORS   Harris,A.D., Johnson,K.J., George,J., Nadendla,S., Daugherty,S.C.,
+            Parankush,S., Sadzewicz,L., Tallon,L., Sengamalay,N., Hazen,T.H.
+            and Rasko,D.A.
+  TITLE     Comparative genomics and transcriptomics to identify genetic
+            mechanisms underlying the emergence of carbapenem resistant
+            Acinetobacter baumannii (CRAb)
+  JOURNAL   Unpublished
+REFERENCE   2  (residues 1 to 440)
+  AUTHORS   Harris,A.D., Johnson,K.J., George,J., Nadendla,S., Daugherty,S.C.,
+            Parankush,S., Sadzewicz,L., Tallon,L., Sengamalay,N., Hazen,T.H.
+            and Rasko,D.A.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (26-MAR-2014) Institute for Genome Sciences, University
+            of Maryland School of Medicine, BioPark II, 801 W. Baltimore St.,
+            Suite 619, Baltimore, MD 21201, USA
+COMMENT     Bacteria and source DNA available from BEI.
+
+            ##Genome-Assembly-Data-START##
+            Assembly Method       :: MaSuRCA v. 2.0.3.1
+            Genome Coverage       :: 106.13x
+            Sequencing Technology :: Illumina
+            ##Genome-Assembly-Data-END##
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..440
+                     /organism="Acinetobacter baumannii 16553_6"
+                     /strain="16553_6"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:1311103"
+                     /country="USA"
+     Protein         1..440
+                     /product="sugar (and other) transporter family protein"
+     CDS             1..440
+                     /locus_tag="K002_0002"
+                     /coded_by="JHPI01000001.1:1354..2676"
+                     /transl_table=11
+ORIGIN
+        1 mnndvqvisk elrntfpsnl gtyerigpht wkwallfayf amvvdgidim llsysltslk
+       61 aefglttfqa galgsaslag mgiggilggw acdkfgrvrt iansvtffsv atcllgftqs
+      121 feqfmalrfi galgigalym acntlmaeyv pttyrttvlg tlqtgqtvgy iaatllagai
+      181 ipdygwrvlf fltvvpafvn iflqrfvpep kswqltkies lqgnrqpker vvaekpksss
+      241 iykqifnnfk hrkmfllwmt tafflqfgyy ginnwmpsyl etevhmnfkn ltsymvgsyt
+      301 amilgkilag yladkfnrra vfvfgtiasa vflpiiiffn tpdnilylli tfgflygipy
+      361 gvnatymaes fstdvrgtai ggaynigrvg aaiapaiigf lasggtftma fivmgaayfv
+      421 agvlpglfik drqydpqrqs
+//
+LOCUS       EYS68660                 309 aa            linear   BCT 28-MAR-2014
+DEFINITION  bacterial regulatory helix-turn-helix , lysR family protein
+            [Acinetobacter baumannii 16553_6].
+ACCESSION   EYS68660
+VERSION     EYS68660.1  GI:601420416
+DBLINK      BioProject: PRJNA195186
+            BioSample: SAMN02646224
+DBSOURCE    accession JHPI01000001.1
+KEYWORDS    .
+SOURCE      Acinetobacter baumannii 16553_6
+  ORGANISM  Acinetobacter baumannii 16553_6
+            Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+            Moraxellaceae; Acinetobacter; Acinetobacter calcoaceticus/baumannii
+            complex.
+REFERENCE   1  (residues 1 to 309)
+  AUTHORS   Harris,A.D., Johnson,K.J., George,J., Nadendla,S., Daugherty,S.C.,
+            Parankush,S., Sadzewicz,L., Tallon,L., Sengamalay,N., Hazen,T.H.
+            and Rasko,D.A.
+  TITLE     Comparative genomics and transcriptomics to identify genetic
+            mechanisms underlying the emergence of carbapenem resistant
+            Acinetobacter baumannii (CRAb)
+  JOURNAL   Unpublished
+REFERENCE   2  (residues 1 to 309)
+  AUTHORS   Harris,A.D., Johnson,K.J., George,J., Nadendla,S., Daugherty,S.C.,
+            Parankush,S., Sadzewicz,L., Tallon,L., Sengamalay,N., Hazen,T.H.
+            and Rasko,D.A.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (26-MAR-2014) Institute for Genome Sciences, University
+            of Maryland School of Medicine, BioPark II, 801 W. Baltimore St.,
+            Suite 619, Baltimore, MD 21201, USA
+COMMENT     Bacteria and source DNA available from BEI.
+
+            ##Genome-Assembly-Data-START##
+            Assembly Method       :: MaSuRCA v. 2.0.3.1
+            Genome Coverage       :: 106.13x
+            Sequencing Technology :: Illumina
+            ##Genome-Assembly-Data-END##
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..309
+                     /organism="Acinetobacter baumannii 16553_6"
+                     /strain="16553_6"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:1311103"
+                     /country="USA"
+     Protein         1..309
+                     /product="bacterial regulatory helix-turn-helix , lysR
+                     family protein"
+     CDS             1..309
+                     /locus_tag="K002_0006"
+                     /coded_by="complement(JHPI01000001.1:6696..7625)"
+                     /transl_table=11
+ORIGIN
+        1 melkqlkyfi aviesgslgk aaknldigts alsqqiskle selsirllqr talgtvptpa
+       61 glaffqqvql alrhldhaid sahssrlsgh vtvgfspsva avigthflkl mrnrypdikv
+      121 rlieglsgdl kalvnarqld vaiifsddvd pqwaiqplvk eqmflispke vlgqyhlesc
+      181 idtqtithlq lkelplilps qrhglrllle qkihqlkvay eidglhllme sisqlemati
+      241 qpagaslnsr qdlcllrvve paierinyli slseeelspa tlatkvvira citnlinekr
+      301 wsgaelint
+//

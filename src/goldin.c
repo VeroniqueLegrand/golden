@@ -1,3 +1,4 @@
+
 /* goldin.c - Golden indexer main functions */
 
 #ifdef HAVE_CONFIG_H
