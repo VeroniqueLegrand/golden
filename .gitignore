@@ -1,0 +1,12 @@
+*.o,*.trace,*.Po,*.zip,*.a
+src/*.o
+.DS_Store
+.autotools
+.cproject
+.project
+.settings
+Dummy
+*.xcodeproj
+config.log
+config.status
+
