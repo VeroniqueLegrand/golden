@@ -24,7 +24,8 @@ done
 ## Check entries
 lst="AC007218 HSA395L14 1PYMA ASX_HYDROXYL"
 for e in $lst; do
-  ../src/golden -c check:$e || exit 1
+##  ../src/golden -c check:$e || exit 1
+../src/golden -c check:$e >/dev/null 2>&1 || exit 1
 done
 
 ## Cleanup

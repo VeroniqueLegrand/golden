@@ -128,6 +128,9 @@
 		2D651B9A18FED1C500B036B1 /* index_desc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = index_desc.h; sourceTree = "<group>"; };
 		2D651B9B18FED1C500B036B1 /* index_hl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = index_hl.c; sourceTree = "<group>"; };
 		2D651B9C18FED1C500B036B1 /* index_hl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = index_hl.h; sourceTree = "<group>"; };
+		2D6A6ED6190A589C00D9DFFA /* wgs_extract.1.gnp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = wgs_extract.1.gnp; path = test/unit/wgs_extract.1.gnp; sourceTree = "<group>"; };
+		2D6A6ED7190A589C00D9DFFA /* wgs_extract.2.gnp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = wgs_extract.2.gnp; path = test/unit/wgs_extract.2.gnp; sourceTree = "<group>"; };
+		2D6A6ED8190A589C00D9DFFA /* wgs_extract.3.gnp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = wgs_extract.3.gnp; path = test/unit/wgs_extract.3.gnp; sourceTree = "<group>"; };
 		2DAA48061892BBE900CE9F9A /* embl_in.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = embl_in.txt; sourceTree = "<group>"; };
 		2DAA48071892BBE900CE9F9A /* genbank_in.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = genbank_in.txt; sourceTree = "<group>"; };
 		2DAA48081892BBE900CE9F9A /* prosite_in.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = prosite_in.txt; sourceTree = "<group>"; };
@@ -148,6 +151,9 @@
 		2D4D32421886C6AB00712232 = {
 			isa = PBXGroup;
 			children = (
+				2D6A6ED6190A589C00D9DFFA /* wgs_extract.1.gnp */,
+				2D6A6ED7190A589C00D9DFFA /* wgs_extract.2.gnp */,
+				2D6A6ED8190A589C00D9DFFA /* wgs_extract.3.gnp */,
 				2D4D33701889694900712232 /* Dummy.xcodeproj */,
 				2D4D32CD1886CACC00712232 /* aclocal.m4 */,
 				2D4D32CE1886CACC00712232 /* AUTHORS */,
