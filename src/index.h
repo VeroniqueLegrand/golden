@@ -39,15 +39,6 @@ typedef struct {
   uint64_t offset; } indix_t;
 
 
-
-
-/*
-void init_index_fd(cur_index_descr *);
-void close_index_desc(cur_index_descr *, char *);
-cur_index_descr get_index_desc(int ,int ,char *, char *,char *, int);*/
-
-
-
 typedef struct {
   char *name, *dbase;
   char *real_dbase;
@@ -75,7 +66,7 @@ uint32_t iswap32(uint32_t val);
 
 // all_indix_nb mem_index_concat(all_indix_t file_l_indix,char *dbase, int loc, int acc);
 
-int fic_index_concat(FILE * fd_d,long prev_nb, long nb, FILE * fd_s,int cnt_filenb);
+long index_file_concat(FILE * fd_d,int prev_nb, long nb, FILE * fd_s, long);
 
 
 

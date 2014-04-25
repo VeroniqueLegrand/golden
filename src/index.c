@@ -42,12 +42,12 @@
 #define TMPDIR "/tmp"
 #endif
 
+
+#define DEBUG
 /* Functions prototypes */
 
 static int index_move(const char *, const char *);
-/*static int index_compare(const void *, const void *);
-static uint64_t iswap64(uint64_t);
-static uint32_t iswap32(uint32_t);*/
+
 
 /*
   Debug utility : prints content of data structure used for work (array of addresses of result_t structures).
@@ -186,15 +186,18 @@ void index_sort(char *file, long nb) {
     printf("%s\n",old->name);
     old++;
   }
+  printf("--------------------------------------------------\n");
 #endif
 
+  // if ( msync(fmap_orig, (size_t) length , MS_SYNC ) < 0 ) err(errno, "msync failed for file : %s",file);
   if (close(fd) == EOF) err(errno, "Cannot close file : %s",file);
   if (munmap(fmap_orig,(size_t) length) == -1) err(errno, "Cannot unmap file : %s",file);
 
   return;
 }
 
-/* concatenates new indexes with index file on disk.
+
+/* concatenates new indexes in memory with index file on disk.
  * If index file doesn't exist, create it.
  * returns the total number of indexes.
  */
@@ -226,13 +229,13 @@ int index_concat(char *file, long nb, indix_t *ind) {
 }
 
 /* concatenates indexes that have already been written to a file */
-int fic_index_concat(FILE * fd_d,long prev_nb, long nb, FILE * fd_s, int cnt_filenb) {
-  int totnb=prev_nb;
-  int cnt;
+long index_file_concat(FILE * fd_d,int prev_nb_flat, long nb_idx, FILE * fd_s, long prev_nb_idx) {
+  long totnb=prev_nb_idx;
+  long cnt;
   indix_t inx;
-  for (cnt=0;cnt<nb;cnt++) {
+  for (cnt=0;cnt<nb_idx;cnt++) {
     if (fread(&inx, sizeof(inx), 1, fd_s) != 1) error_fatal("Cannot read index from source file", NULL);
-    inx.filenb=inx.filenb+cnt_filenb;
+    inx.filenb=inx.filenb+prev_nb_flat;
     if (fwrite(&inx, sizeof(inx), 1, fd_d) != 1) err(errno,"Cannot write index to destination file",NULL);
     totnb++;
   }

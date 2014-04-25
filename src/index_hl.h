@@ -28,6 +28,8 @@ typedef struct {
   long nb_idx; // size of array.
 } array_indix_t;
 
+// void init_array_indix_t();
+
 
 void init_all_indix_t();
 void freeAllIndix(); // free memory allocated for the elements of the all_indix_t structure.

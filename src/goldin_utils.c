@@ -24,8 +24,10 @@ void all_index_sort(goldin_parms s_parms,all_indix_nb tot_idx) {
   }
 }
 
-
-all_indix_nb mem_index_concat(all_indix_t file_l_indix,goldin_parms s_parms) {
+/*
+* Concatenates all indexes in memory (locus+AC) with existing index file on disk.
+*/
+all_indix_nb all_index_mconcat(all_indix_t file_l_indix,goldin_parms s_parms) {
   all_indix_nb tot_idx;
 
   if (s_parms.loc) {
@@ -44,7 +46,7 @@ all_indix_nb mem_index_concat(all_indix_t file_l_indix,goldin_parms s_parms) {
  * Merge new indexes with existing index file.
  * Compute cpu time and wall time for this operation if program was built with PERF_PROFILE
  */
-void mem_index_merge(all_indix_t file_l_indix,goldin_parms s_parms) {
+void all_index_mmerge(all_indix_t file_l_indix,goldin_parms s_parms) {
 
   /* Merge indexes */
   if (s_parms.loc) {

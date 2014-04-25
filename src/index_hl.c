@@ -47,6 +47,7 @@ array_indix_t fic_index_load(const char * file) {
   uint64_t nb_idx;
   array_indix_t fic_indix;
   indix_t cur;
+  fic_indix.l_idx=NULL;
   int i=0;
   if ((g = fopen(file, "r")) == NULL) err(errno,"cannot open file: %s.",file);
   if (fread(&nb_idx, sizeof(nb_idx), 1, g) != 1) err(errno,"cannot read index number from file: %s.",file);
@@ -55,7 +56,6 @@ array_indix_t fic_index_load(const char * file) {
   for(i=0;i<nb_idx;i++) {
     if (fread(&cur, sizeof(cur), 1, g) != 1) err(errno,"cannot read index from file: %s.",file);
     fic_indix.l_idx[i]=cur;
-    i++;
   }
   if (fclose(g) == EOF) err(errno,"error closing file: %s.",file);
   return fic_indix;
@@ -73,6 +73,7 @@ all_indix_t index_load(const char *idx_dir, const char * dbase,const char * suff
   all_indix_t all_idx;
   int load_all=0;
   init_all_indix_t(&all_idx);
+  
   if (suff==NULL) load_all=1; // load all indexes, both AC and locus.
   if (load_all==1) {
     file = index_file(idx_dir, dbase, ACCSUF);
@@ -111,6 +112,9 @@ all_indix_t index_load(const char *idx_dir, const char * dbase,const char * suff
   p_idx_fd->locnb=0;
   p_idx_fd->ficnb=0;
 }*/
+
+
+
 
 
 

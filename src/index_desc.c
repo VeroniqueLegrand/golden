@@ -117,8 +117,10 @@ dest_index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char *
   }
   dbx_file=index_file(new_index_dir,dbase,LSTSUF);
   ret=access(dbx_file, F_OK);
-  if (ret!=0) list_new(dbx_file);
-  else {
+  if (ret!=0) {
+    list_new(dbx_file);
+    if ((d_idx.d_fdbx = fopen(dbx_file, "r+")) == NULL) err(errno,"error opening file : %s", dbx_file);
+  } else {
     if ((d_idx.d_fdbx = fopen(dbx_file, "r+")) == NULL) err(errno,"error opening file : %s", dbx_file);
     len = BUFINC;
     if ((buf = (char *)malloc(len+1)) == NULL) err(errno,"memory");

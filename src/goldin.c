@@ -108,12 +108,12 @@ all_indix_nb process_databank_file(goldin_parms s_parms , char * file) {
      return tot_idx;
   }
   if (!s_parms.csort_flag && !s_parms.co_flag) { // same behavior as in previous versions.
-    mem_index_merge(file_l_indix,s_parms);
+    all_index_mmerge(file_l_indix,s_parms);
     freeAllIndix(file_l_indix);
     return tot_idx;
   }
   // concatenate new index with previous ones.
-  tot_idx=mem_index_concat(file_l_indix,s_parms);
+  tot_idx=all_index_mconcat(file_l_indix,s_parms);
   freeAllIndix(file_l_indix);
   return tot_idx;
 }
@@ -134,11 +134,11 @@ void process_index_file(goldin_parms s_parms ,char * rac_file,  dest_index_desc 
   free(l_flats);
   if (s_parms.acc) {
     if (fseeko(d_descr->d_facx, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.acx",s_parms.dbase);
-    d_descr->accnb=fic_index_concat(d_descr->d_facx,d_descr->accnb, s_descr.accnb, s_descr.d_facx,s_descr.max_filenb);
+    d_descr->accnb=index_file_concat(d_descr->d_facx,d_descr->max_filenb, s_descr.accnb, s_descr.d_facx,d_descr->accnb);
   }
   if (s_parms.loc) {
     if (fseeko(d_descr->d_ficx, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.icx",s_parms.dbase);
-    d_descr->locnb=fic_index_concat(d_descr->d_ficx,d_descr->locnb, s_descr.locnb, s_descr.d_ficx,s_descr.max_filenb);
+    d_descr->locnb=index_file_concat(d_descr->d_ficx,d_descr->max_filenb, s_descr.locnb, s_descr.d_ficx,d_descr->locnb);
   }
   // close source index files
   close_source_index_desc(&s_descr);
@@ -152,7 +152,6 @@ void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) 
   all_indix_nb tot_idx;
   dest_index_desc d_descr;
 
-
   d_descr=get_dest_index_desc(s_parms.acc,s_parms.loc,s_parms.new_index_dir,s_parms.dbase); // get description of destination index files.
   for(i = optind + 1; i < argc; i++) {
      rac_file = argv[i];
@@ -161,15 +160,18 @@ void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) 
   // update dest index files with right number of indexes.
   if (s_parms.acc) {
     if (fseeko(d_descr.d_facx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx",s_parms.dbase);
-    if (fwrite(&tot_idx.accnb, sizeof(tot_idx.accnb), 1, d_descr.d_facx) != 1) err(errno,"error writing number of indexes");
+    if (fwrite(&d_descr.accnb, sizeof(d_descr.accnb), 1, d_descr.d_facx) != 1) err(errno,"error writing number of indexes");
   }
   if (s_parms.loc) {
     if (fseeko(d_descr.d_ficx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx",s_parms.dbase);
-    if (fwrite(&tot_idx.locnb, sizeof(tot_idx.accnb), 1, d_descr.d_ficx) != 1) err(errno,"error writing number of indexes");
+    if (fwrite(&d_descr.locnb, sizeof(d_descr.accnb), 1, d_descr.d_ficx) != 1) err(errno,"error writing number of indexes");
   }
 
   // close dest index files
   close_dest_index_desc(&d_descr);
+
+  tot_idx.accnb=d_descr.accnb;
+  tot_idx.locnb=d_descr.locnb;
   if (s_parms.csort_flag) { // sort index file.
     all_index_sort(s_parms,tot_idx);
   }
