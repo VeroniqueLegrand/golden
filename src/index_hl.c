@@ -98,23 +98,25 @@ all_indix_t index_load(const char *idx_dir, const char * dbase,const char * suff
   return all_idx;
 }
 
-/*void close_index_desc(cur_index_descr * p_idx_fd, char * dbase) {
-  if (p_idx_fd->d_fa!=NULL) {
-    if (fclose(p_idx_fd->d_fa) == EOF) err(errno,"error closing file: %s.acx",dbase);
-    p_idx_fd->d_fa=NULL;
+
+/*
+ to remove old index files
+ */
+void index_hl_remove(int acc,int loc,char *new_index_dir,char *dbase) {
+  char * dbx_file;
+  dbx_file = index_file(new_index_dir, dbase, LSTSUF);
+  if (access(dbx_file, F_OK) == 0) {
+    if (remove(dbx_file)==-1) err(errno, "Couldn't remove : %s",dbx_file);
   }
-  if (p_idx_fd->d_fl!=NULL) {
-    if (fclose(p_idx_fd->d_fl) == EOF) err(errno,"error closing file: %s.icx",dbase);
-    p_idx_fd->d_fl=NULL;
+  if (acc) {
+    char * acx_file = index_file(new_index_dir, dbase, ACCSUF);
+    if (access(acx_file, F_OK) == 0) if (remove(acx_file)==-1) err(errno, "Couldn't remove : %s",acx_file);
   }
-
-  p_idx_fd->accnb=0;
-  p_idx_fd->locnb=0;
-  p_idx_fd->ficnb=0;
-}*/
-
-
-
+  if (loc) {
+    char * icx_file = index_file(new_index_dir, dbase, LOCSUF);
+    if (access(icx_file, F_OK) == 0) if (remove(icx_file)==-1) err(errno, "Couldn't remove : %s",icx_file);
+  }
+}
 
 
 

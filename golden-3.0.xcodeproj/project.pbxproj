@@ -145,6 +145,11 @@
 		2DF60C8B18ABCD3800E2C659 /* unit_tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unit_tests.c; sourceTree = "<group>"; };
 		2DF60C8C18ABCD6B00E2C659 /* unit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = unit; sourceTree = "<group>"; };
 		2DF6838318BB8504005254CD /* perf_tests.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = perf_tests.c; sourceTree = "<group>"; };
+		2DFCAF2E190E5F7B0085B752 /* wgs_extract.1.gbff */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wgs_extract.1.gbff; sourceTree = "<group>"; };
+		2DFCAF2F190E5F7B0085B752 /* wgs_extract.1.gnp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wgs_extract.1.gnp; sourceTree = "<group>"; };
+		2DFCAF30190E5F7B0085B752 /* wgs_extract.2.gbff */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wgs_extract.2.gbff; sourceTree = "<group>"; };
+		2DFCAF31190E5F7B0085B752 /* wgs_extract.2.gnp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wgs_extract.2.gnp; sourceTree = "<group>"; };
+		2DFCAF32190E5F7B0085B752 /* wgs_extract.3.gnp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wgs_extract.3.gnp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -354,6 +359,11 @@
 		2D4D333B1886CACC00712232 /* all */ = {
 			isa = PBXGroup;
 			children = (
+				2DFCAF2E190E5F7B0085B752 /* wgs_extract.1.gbff */,
+				2DFCAF2F190E5F7B0085B752 /* wgs_extract.1.gnp */,
+				2DFCAF30190E5F7B0085B752 /* wgs_extract.2.gbff */,
+				2DFCAF31190E5F7B0085B752 /* wgs_extract.2.gnp */,
+				2DFCAF32190E5F7B0085B752 /* wgs_extract.3.gnp */,
 				2D4D333C1886CACC00712232 /* embl.dat */,
 				2D4D333D1886CACC00712232 /* genbank.dat */,
 				2D4D333E1886CACC00712232 /* nrl_3d.dat */,

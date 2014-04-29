@@ -54,9 +54,10 @@ void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
     if (!p_parms->csort_flag && !p_parms->co_flag && !p_parms->idx_input_flag) p_parms->serial_behavior=1;
     if (p_parms->idx_input_flag && p_parms->dir !=NULL) usage(EXIT_FAILURE,prog);
     if ((p_parms->idx_input_flag && (!p_parms->co_flag && !p_parms->csort_flag)) ) usage(EXIT_FAILURE,prog); // TODO later? Implement merge of existing index files.
+    if ((p_parms->idx_input_flag && (p_parms->co_flag && p_parms->csort_flag)) ) usage(EXIT_FAILURE,prog); 
     if (argc - optind < 2) usage(EXIT_FAILURE,prog);
     p_parms->dbase = argv[optind];
-    if (p_parms->dir == NULL) { p_parms->dir = p_parms->dbase; }
+    // if (p_parms->dir == NULL) { p_parms->dir = p_parms->dbase; }
     if ((p_parms->loc + p_parms->acc) == 0) { p_parms->loc = p_parms->acc = 1; }
 }
 

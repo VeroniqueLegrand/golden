@@ -1,0 +1,297 @@
+LOCUS       AABU01000001            1021 bp    DNA     linear   INV 20-MAY-2003
+DEFINITION  Drosophila melanogaster 211000022278031, whole genome shotgun
+            sequence.
+ACCESSION   AABU01000001 AABU01000000
+VERSION     AABU01000001.1  GI:27229320
+DBLINK      Project: 13812
+KEYWORDS    WGS.
+SOURCE      Drosophila melanogaster (fruit fly)
+  ORGANISM  Drosophila melanogaster
+            Eukaryota; Metazoa; Ecdysozoa; Arthropoda; Hexapoda; Insecta;
+            Pterygota; Neoptera; Endopterygota; Diptera; Brachycera;
+            Muscomorpha; Ephydroidea; Drosophilidae; Drosophila; Sophophora.
+REFERENCE   1  (bases 1 to 1021)
+  AUTHORS   Celniker,S.E., Wheeler,D.A., Kronmiller,B., Carlson,J.W.,
+            Halpern,A., Patel,S., Adams,M., Champe,M., Dugan,S.P., Frise,E.,
+            Hodgson,A., George,R.A., Hoskins,R.A., Laverty,T., Muzny,D.M.,
+            Nelson,C.R., Pacleb,J.M., Park,S., Pfeiffer,B.D., Richards,S.,
+            Sodergren,E.J., Svirskas,R., Tabor,P.E., Wan,K., Stapleton,M.,
+            Sutton,G.G., Venter,C., Weinstock,G., Scherer,S.E., Myers,E.W.,
+            Gibbs,R.A. and Rubin,G.M.
+  TITLE     Finishing a whole-genome shotgun: release 3 of the Drosophila
+            melanogaster euchromatic genome sequence
+  JOURNAL   Genome Biol. 3 (12), RESEARCH0079 (2002)
+   PUBMED   12537568
+  REMARK    http://genomebiology.com/2002/3/12/research/0079
+REFERENCE   2  (bases 1 to 1021)
+  AUTHORS   Adams,M.D., Holt,R.A., Evans,C.A., Gocayne,J.D., Amanatides,P.G.,
+            Li,P.W., Henderson,S.N., Sutton,G.G., Wortman,J.R., Yandell,M.D.,
+            Zhang,Q., Chen,L.X., Brandon,R.C., Rogers,Y.H., An,H.J.,
+            Andrews-Pfannkoch,C., Baldwin,D., Ballew,R.M., Basu,A.,
+            Baxendale,J., Beasley,E.M., Beeson,K.Y., Bhandari,D., Bolanos,R.A.,
+            Busam,D.A., Center,A., Chandra,I., Dahlke,C., Davenport,L.B.,
+            Davies,P., Delcher,A., Deng,Z., Mays,A.D., Dew,I., Dietz,S.M.,
+            Dodson,K., Doup,L.E., Dunn,P., Evangelista,C.C., Ferriera,S.,
+            Flanigan,M.J., Fosler,C., Gabrielian,A.E., Garg,N.S., Glasser,K.,
+            Glodek,A., Gong,F., Gu,Z., Guan,P., Halpern,A.L., Harris,M.,
+            Heiman,T.J., Houck,J., Hostin,D., Howland,T.J., Wei,M.H.,
+            Ibegwam,C., Jalali,M., Kalush,F., Ke,Z., Ketchum,K.A., Kodira,C.D.,
+            Kraft,C., Kravitz,S., Lai,Z., Lei,Y., Levitsky,A.A., Li,J., Li,Z.,
+            Liang,Y., Lin,X., Liu,X., Mattei,B., McIntosh,T.C., McPherson,D.,
+            Merkulov,G., Miller,J.R., Milshina,N.V., Mobarry,C., Moy,M.,
+            Murphy,B., Nelson,K.A., Nusskern,D.R., Pittman,G.S., Pan,S.,
+            Pollard,J., Puri,V., Reinert,K., Remington,K., Scheeler,F.,
+            Shue,B.C., Siden-Kiamos,I., Simpson,M., Skupski,M.P., Smith,T.,
+            Spier,E., Strong,R., Sun,E., Tector,C., Turner,R., Venter,E.,
+            Wang,A.H., Wang,X., Wang,Z.Y., Williams,S.M., Woodage,T., Wu,D.,
+            Yao,Q.A., Ye,J., Zaveri,J.S., Zhan,M., Zhang,G., Zhao,Q., Zheng,L.,
+            Zheng,X.H., Zhong,F.N., Zhong,W., Zhu,S., Zhu,X., Smith,H.O.,
+            Myers,E.W. and Venter,J.C.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (18-DEC-2002) Berkeley Drosophila Genome Project, MS
+            64-121, Lawrence Berkeley National Laboratory, One Cyclotron Road,
+            Berkeley, CA 94720, USA
+COMMENT     This sequence is a scaffold of ordered and oriented sequence
+            contigs from a whole genome shotgun assembly (WGS3). Gaps in the
+            sequence are filled with Ns to the estimated size.
+            For further information about this sequence, including its location
+            and relationship to other sequences, please visit our sequence
+            archive Web site (http://www.fruitfly.org) or send email to
+            bdgp@fruitfly.berkeley.edu.
+            The number of contigs is less than the number of accession numbers
+            because some contigs have been replaced by others.
+            
+            The CON records are the annotated heterochomatin from the FlyBase
+            Consortium (GPID 13812).  CM000456-CM000461 are from the chromosome
+            arms, and DS483543-DS486008 are the unplaced (chrUn) sequences.
+            FA000001 is the unordered assembly of those unplaced sequences.
+FEATURES             Location/Qualifiers
+     source          1..1021
+                     /organism="Drosophila melanogaster"
+                     /mol_type="genomic DNA"
+                     /db_xref="taxon:7227"
+                     /note="genotype: y[1]; cn[1] bw[1] sp[1]; Rh6[1]"
+ORIGIN      
+        1 tataatataa tataatataa tataatataa tataatataa tataatataa tataatacaa
+       61 tccaatccaa tccaatccaa tacaatataa tataatataa tataatataa tataatataa
+      121 tataatataa tataatataa tataatataa tataatataa tataatataa tataatataa
+      181 tataatataa tacaatataa tacaatataa tacaatataa tacaatataa tataatataa
+      241 tataatataa tataatataa tataatataa tataatataa tataatataa tataatataa
+      301 tataatataa tataatataa tataatataa tataatgatg aggagggagg atgatgattt
+      361 aaataaatcc cgcttggctg caggccgcct taggatgcgg gctgctggta aattaaacac
+      421 agtgggcatg gcgctggatt tggggtttaa atttaaattt aaatcattaa atgtgggtgt
+      481 gggcagcagc attagtgtga acaagttttg tgagtaattt cccctcatat gtggacgagg
+      541 tggacggagg agaagacaat ttccccttcg agatgctgct tttggcgcca caactgcttg
+      601 cagtagtatt ggtgagtgag agggggtctt tttgggcatt attagtgttt gtgttctctt
+      661 ttctctttct tcttatgtga aagggaatta acaattttta tagcagcccc agaagagttt
+      721 tttaaactta tgtttgcttg atttgagggc aatttcttct gattaatgat gactgtatta
+      781 atctgagaat tgtctgattc gtggaacatg ggcgatatat ttgaggtaga acggggaaga
+      841 tcgctgttct gggcttgagg aaattgaaag tacctcatcg tcagaaaaaa ggttgtcgga
+      901 catggacatg ttgggttttt gttatataaa aacgataagt gtaaggtata aataccctgg
+      961 ctttctttaa tttggttttc ctccttttct tctttaagtt cttctggttt gctttcttct
+     1021 c
+//
+LOCUS       AABU01000017            2020 bp    DNA     linear   INV 20-MAY-2003
+DEFINITION  Drosophila melanogaster 211000022278047, whole genome shotgun
+            sequence.
+ACCESSION   AABU01000017 AABU01000000
+VERSION     AABU01000017.1  GI:27229336
+DBLINK      Project: 13812
+KEYWORDS    WGS.
+SOURCE      Drosophila melanogaster (fruit fly)
+  ORGANISM  Drosophila melanogaster
+            Eukaryota; Metazoa; Ecdysozoa; Arthropoda; Hexapoda; Insecta;
+            Pterygota; Neoptera; Endopterygota; Diptera; Brachycera;
+            Muscomorpha; Ephydroidea; Drosophilidae; Drosophila; Sophophora.
+REFERENCE   1  (bases 1 to 2020)
+  AUTHORS   Celniker,S.E., Wheeler,D.A., Kronmiller,B., Carlson,J.W.,
+            Halpern,A., Patel,S., Adams,M., Champe,M., Dugan,S.P., Frise,E.,
+            Hodgson,A., George,R.A., Hoskins,R.A., Laverty,T., Muzny,D.M.,
+            Nelson,C.R., Pacleb,J.M., Park,S., Pfeiffer,B.D., Richards,S.,
+            Sodergren,E.J., Svirskas,R., Tabor,P.E., Wan,K., Stapleton,M.,
+            Sutton,G.G., Venter,C., Weinstock,G., Scherer,S.E., Myers,E.W.,
+            Gibbs,R.A. and Rubin,G.M.
+  TITLE     Finishing a whole-genome shotgun: release 3 of the Drosophila
+            melanogaster euchromatic genome sequence
+  JOURNAL   Genome Biol. 3 (12), RESEARCH0079 (2002)
+   PUBMED   12537568
+  REMARK    http://genomebiology.com/2002/3/12/research/0079
+REFERENCE   2  (bases 1 to 2020)
+  AUTHORS   Adams,M.D., Holt,R.A., Evans,C.A., Gocayne,J.D., Amanatides,P.G.,
+            Li,P.W., Henderson,S.N., Sutton,G.G., Wortman,J.R., Yandell,M.D.,
+            Zhang,Q., Chen,L.X., Brandon,R.C., Rogers,Y.H., An,H.J.,
+            Andrews-Pfannkoch,C., Baldwin,D., Ballew,R.M., Basu,A.,
+            Baxendale,J., Beasley,E.M., Beeson,K.Y., Bhandari,D., Bolanos,R.A.,
+            Busam,D.A., Center,A., Chandra,I., Dahlke,C., Davenport,L.B.,
+            Davies,P., Delcher,A., Deng,Z., Mays,A.D., Dew,I., Dietz,S.M.,
+            Dodson,K., Doup,L.E., Dunn,P., Evangelista,C.C., Ferriera,S.,
+            Flanigan,M.J., Fosler,C., Gabrielian,A.E., Garg,N.S., Glasser,K.,
+            Glodek,A., Gong,F., Gu,Z., Guan,P., Halpern,A.L., Harris,M.,
+            Heiman,T.J., Houck,J., Hostin,D., Howland,T.J., Wei,M.H.,
+            Ibegwam,C., Jalali,M., Kalush,F., Ke,Z., Ketchum,K.A., Kodira,C.D.,
+            Kraft,C., Kravitz,S., Lai,Z., Lei,Y., Levitsky,A.A., Li,J., Li,Z.,
+            Liang,Y., Lin,X., Liu,X., Mattei,B., McIntosh,T.C., McPherson,D.,
+            Merkulov,G., Miller,J.R., Milshina,N.V., Mobarry,C., Moy,M.,
+            Murphy,B., Nelson,K.A., Nusskern,D.R., Pittman,G.S., Pan,S.,
+            Pollard,J., Puri,V., Reinert,K., Remington,K., Scheeler,F.,
+            Shue,B.C., Siden-Kiamos,I., Simpson,M., Skupski,M.P., Smith,T.,
+            Spier,E., Strong,R., Sun,E., Tector,C., Turner,R., Venter,E.,
+            Wang,A.H., Wang,X., Wang,Z.Y., Williams,S.M., Woodage,T., Wu,D.,
+            Yao,Q.A., Ye,J., Zaveri,J.S., Zhan,M., Zhang,G., Zhao,Q., Zheng,L.,
+            Zheng,X.H., Zhong,F.N., Zhong,W., Zhu,S., Zhu,X., Smith,H.O.,
+            Myers,E.W. and Venter,J.C.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (18-DEC-2002) Berkeley Drosophila Genome Project, MS
+            64-121, Lawrence Berkeley National Laboratory, One Cyclotron Road,
+            Berkeley, CA 94720, USA
+COMMENT     This sequence is a scaffold of ordered and oriented sequence
+            contigs from a whole genome shotgun assembly (WGS3). Gaps in the
+            sequence are filled with Ns to the estimated size.
+            For further information about this sequence, including its location
+            and relationship to other sequences, please visit our sequence
+            archive Web site (http://www.fruitfly.org) or send email to
+            bdgp@fruitfly.berkeley.edu.
+            The number of contigs is less than the number of accession numbers
+            because some contigs have been replaced by others.
+            
+            The CON records are the annotated heterochomatin from the FlyBase
+            Consortium (GPID 13812).  CM000456-CM000461 are from the chromosome
+            arms, and DS483543-DS486008 are the unplaced (chrUn) sequences.
+            FA000001 is the unordered assembly of those unplaced sequences.
+FEATURES             Location/Qualifiers
+     source          1..2020
+                     /organism="Drosophila melanogaster"
+                     /mol_type="genomic DNA"
+                     /db_xref="taxon:7227"
+                     /note="genotype: y[1]; cn[1] bw[1] sp[1]; Rh6[1]"
+ORIGIN      
+        1 atttggcttc tccttctcca tagagactag tggatttcga ggcgtctcga ccggtcttgt
+       61 gccggctttg atcgccgtgg ccttctttag accacaaact gagatgtctc caaacctgaa
+      121 gctcagctag tggtcgctag aaataatctt ggcacatgag gtgtcatcaa tgccaaggct
+      181 gaagagcgag ccatcacccc cattcttcct tgacataaga cgccagttct cagtgtccaa
+      241 gtcattttgt tttttgatca attccatgat ccactttgtt gtcttttctc ctgtcctggg
+      301 gcacaagaag gtgatgttgc gtgacgatgg caagtcgttg cccatcttta cctccaggga
+      361 gacaccgctt cacttactga ggctggggac tgctaattgc agccactcag cagtggttgc
+      421 gttgcggcaa tccactatca ggagaccctc cctgaagtgg attcctccca acttaattgg
+      481 agaatcctaa ccagagagga ttctcttaaa gtagtgcgtc ctcgagctgt gagaacctca
+      541 ctgctgagga cgactttggg gtacccctct ggtacgaccg caactttaat ggtcccagtt
+      601 acctcagttg tctttgcagc ccttgagata cttgggccat cgaaaggagc agagcttttc
+      661 tccaccttct gcctcttagg cagggcgtgc ttgtgccgtt ggcaaactcc gattaggagc
+      721 ggtgttacca ccgaagtaga acgctctctg tcaaggagac ggtcgtcaaa ctgtcttgcg
+      781 ccatttcccg cagtcaaagc ctgcgatatt ttaatatttt tgggtctatg tttcataggt
+      841 cccacgactt gcagagaaat aaacggtcca cccgggcaga gatccgcagt acccgtgtaa
+      901 ggctaaccag accgggcgga cgccacttgc ccggactctc cgttagcgac tgggctagtt
+      961 gtttcccagg cccccagcct ggcagactct cggcacctta gtccgggccg gaaatgtgga
+     1021 aattttgaga gtttccagct ccagcccaac tacgattagc cagcactctt agcagagacg
+     1081 ccttcgcgtg gagagtgtag ttgcacttca agtagtgtgc cacaattacg gtgcgtacca
+     1141 tcgttggctg gcatggcggc ctgtcaatta ttatcggtga tgcaattttg ccttcacatt
+     1201 cccactagct gaggaacgaa tatctgatat agaattctct ctccactttg cgcgtttctc
+     1261 catctggtct ttcgacttaa aagggatccc gaccttatgc catgaccttt tggaacagta
+     1321 acgctcggca ttcacagcag ccagctacat gatagccttt ggttaccctg gtgacgcggc
+     1381 acagtgtctg ctcaaagaga agagaagaga agagaagaga agagaagaga agagaagaga
+     1441 agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga
+     1501 agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga
+     1561 agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga
+     1621 agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga
+     1681 agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga
+     1741 agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga
+     1801 agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga
+     1861 agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga
+     1921 agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga agagaagaga
+     1981 gagaagagaa gagaagagaa gagaagagaa gagaagagaa
+//
+LOCUS       AABU01000916            1158 bp    DNA     linear   INV 20-MAY-2003
+DEFINITION  Drosophila melanogaster 211000022278946, whole genome shotgun
+            sequence.
+ACCESSION   AABU01000916 AABU01000000
+VERSION     AABU01000916.1  GI:27230235
+DBLINK      Project: 13812
+KEYWORDS    WGS.
+SOURCE      Drosophila melanogaster (fruit fly)
+  ORGANISM  Drosophila melanogaster
+            Eukaryota; Metazoa; Ecdysozoa; Arthropoda; Hexapoda; Insecta;
+            Pterygota; Neoptera; Endopterygota; Diptera; Brachycera;
+            Muscomorpha; Ephydroidea; Drosophilidae; Drosophila; Sophophora.
+REFERENCE   1  (bases 1 to 1158)
+  AUTHORS   Celniker,S.E., Wheeler,D.A., Kronmiller,B., Carlson,J.W.,
+            Halpern,A., Patel,S., Adams,M., Champe,M., Dugan,S.P., Frise,E.,
+            Hodgson,A., George,R.A., Hoskins,R.A., Laverty,T., Muzny,D.M.,
+            Nelson,C.R., Pacleb,J.M., Park,S., Pfeiffer,B.D., Richards,S.,
+            Sodergren,E.J., Svirskas,R., Tabor,P.E., Wan,K., Stapleton,M.,
+            Sutton,G.G., Venter,C., Weinstock,G., Scherer,S.E., Myers,E.W.,
+            Gibbs,R.A. and Rubin,G.M.
+  TITLE     Finishing a whole-genome shotgun: release 3 of the Drosophila
+            melanogaster euchromatic genome sequence
+  JOURNAL   Genome Biol. 3 (12), RESEARCH0079 (2002)
+   PUBMED   12537568
+  REMARK    http://genomebiology.com/2002/3/12/research/0079
+REFERENCE   2  (bases 1 to 1158)
+  AUTHORS   Adams,M.D., Holt,R.A., Evans,C.A., Gocayne,J.D., Amanatides,P.G.,
+            Li,P.W., Henderson,S.N., Sutton,G.G., Wortman,J.R., Yandell,M.D.,
+            Zhang,Q., Chen,L.X., Brandon,R.C., Rogers,Y.H., An,H.J.,
+            Andrews-Pfannkoch,C., Baldwin,D., Ballew,R.M., Basu,A.,
+            Baxendale,J., Beasley,E.M., Beeson,K.Y., Bhandari,D., Bolanos,R.A.,
+            Busam,D.A., Center,A., Chandra,I., Dahlke,C., Davenport,L.B.,
+            Davies,P., Delcher,A., Deng,Z., Mays,A.D., Dew,I., Dietz,S.M.,
+            Dodson,K., Doup,L.E., Dunn,P., Evangelista,C.C., Ferriera,S.,
+            Flanigan,M.J., Fosler,C., Gabrielian,A.E., Garg,N.S., Glasser,K.,
+            Glodek,A., Gong,F., Gu,Z., Guan,P., Halpern,A.L., Harris,M.,
+            Heiman,T.J., Houck,J., Hostin,D., Howland,T.J., Wei,M.H.,
+            Ibegwam,C., Jalali,M., Kalush,F., Ke,Z., Ketchum,K.A., Kodira,C.D.,
+            Kraft,C., Kravitz,S., Lai,Z., Lei,Y., Levitsky,A.A., Li,J., Li,Z.,
+            Liang,Y., Lin,X., Liu,X., Mattei,B., McIntosh,T.C., McPherson,D.,
+            Merkulov,G., Miller,J.R., Milshina,N.V., Mobarry,C., Moy,M.,
+            Murphy,B., Nelson,K.A., Nusskern,D.R., Pittman,G.S., Pan,S.,
+            Pollard,J., Puri,V., Reinert,K., Remington,K., Scheeler,F.,
+            Shue,B.C., Siden-Kiamos,I., Simpson,M., Skupski,M.P., Smith,T.,
+            Spier,E., Strong,R., Sun,E., Tector,C., Turner,R., Venter,E.,
+            Wang,A.H., Wang,X., Wang,Z.Y., Williams,S.M., Woodage,T., Wu,D.,
+            Yao,Q.A., Ye,J., Zaveri,J.S., Zhan,M., Zhang,G., Zhao,Q., Zheng,L.,
+            Zheng,X.H., Zhong,F.N., Zhong,W., Zhu,S., Zhu,X., Smith,H.O.,
+            Myers,E.W. and Venter,J.C.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (18-DEC-2002) Berkeley Drosophila Genome Project, MS
+            64-121, Lawrence Berkeley National Laboratory, One Cyclotron Road,
+            Berkeley, CA 94720, USA
+COMMENT     This sequence is a scaffold of ordered and oriented sequence
+            contigs from a whole genome shotgun assembly (WGS3). Gaps in the
+            sequence are filled with Ns to the estimated size.
+            For further information about this sequence, including its location
+            and relationship to other sequences, please visit our sequence
+            archive Web site (http://www.fruitfly.org) or send email to
+            bdgp@fruitfly.berkeley.edu.
+            The number of contigs is less than the number of accession numbers
+            because some contigs have been replaced by others.
+            
+            The CON records are the annotated heterochomatin from the FlyBase
+            Consortium (GPID 13812).  CM000456-CM000461 are from the chromosome
+            arms, and DS483543-DS486008 are the unplaced (chrUn) sequences.
+            FA000001 is the unordered assembly of those unplaced sequences.
+FEATURES             Location/Qualifiers
+     source          1..1158
+                     /organism="Drosophila melanogaster"
+                     /mol_type="genomic DNA"
+                     /db_xref="taxon:7227"
+                     /note="genotype: y[1]; cn[1] bw[1] sp[1]; Rh6[1]"
+ORIGIN      
+        1 attatatttt attatattat attatattat attattatat attattatat tatattacat
+       61 tatattatat tctattctat tatattatat tatattatat tatattatta caattatata
+      121 aatatatata taattaaata cttgcaatat ttataagtga aaaaaatata atttttattt
+      181 cactaaatga ttacaatctt tttatttgag aagaacaccg accttttaca attaggtctc
+      241 aaactgaact ctgataatta ttctgatttg attgacgttc aagcctcggt atcgagcttt
+      301 tctaatatgg actttagact ttaggattct gatcgtgaag agaaaaagct ttgcgtttct
+      361 cttggattca agtgcatttg ctcttggata caagtgctct tagattctta taatttgttt
+      421 attgaaatcg atacttttgt ttttcgggat tgcggctccg agctttgaac gtgggaatgt
+      481 gacgatgggg tgaggcttaa aggaattgtt taaattaggg gacggatgtt tagtctacca
+      541 gtgggtgact tatctagaat tggggttttt ttaacaatct tattctttct ggtatctgtt
+      601 gggtacatcc ggagtagtgt atgttgtatt ggggtgtata agtaaataat tacaatttat
+      661 tgatttttat tttgtagatc gcaagcgacc gtttattgta attgttcatt tgaaactaaa
+      721 gctaagatac aaaatatttc cctaagtccc tagcaatcaa gtgtgggcgt cggcagcgtc
+      781 gcagcaggcg tcggcagcga atcagtggtc gtcagcggct acgcggcgga gaagtgcaga
+      841 tgatcgcact tttagctggt cgttgacagc ggaaagaatg cagacctttg gtcagcattt
+      901 tgggcacttg tgtttaccca gaaatgatgt tgaaatataa gatgtgggac gataacttat
+      961 agggcaataa ctcctcccct cttaatcgac gcttgtcctc aagcggtcat caaaaaaacg
+     1021 ggatgttgtt gaaactgcat tgttggtggg gtgatctgtg gtggtttggg caccgctgtc
+     1081 aatgttttga atgccaggtg cgtcgatttg aaggaccacc ttttttcctc tccggcagca
+     1141 ccgatttgtc acgaagat
+//

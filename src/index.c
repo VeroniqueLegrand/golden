@@ -147,9 +147,9 @@ char *index_file(const char *dir, const char *dbase, const char *suf) {
 
 
 
+#define DEBUG
 
 
-/* Only used for performance testing for the moment; optimized version of index_merge.*/
 void index_sort(char *file, long nb) {
   // FILE *g;
   int fd;

@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
   size_t len;
   goldin_parms s_parms;
 
-  printf("coucou\n");
+  //printf("coucou\n");
 
   /* Checks command line options & arguments */
   init_goldin_parms(&s_parms,argc, argv);
@@ -74,6 +74,7 @@ int main(int argc, char **argv) {
   return EXIT_SUCCESS;
 }
 
+
 void process_databank_files(int optind,int argc,char ** argv,goldin_parms s_parms) {
   int i;
   char* file;
@@ -86,7 +87,6 @@ void process_databank_files(int optind,int argc,char ** argv,goldin_parms s_parm
     all_index_sort(s_parms,tot_idx);
   }
 }
-
 
 
 all_indix_nb process_databank_file(goldin_parms s_parms , char * file) {
@@ -123,10 +123,14 @@ void process_index_file(goldin_parms s_parms ,char * rac_file,  dest_index_desc 
   int nb;
   char * s_dbx_file;
   char * l_flats;
+  char * path, *base_filename;
 
-
-  s_descr=get_source_index_desc(s_parms.acc,s_parms.loc,s_parms.new_index_dir,rac_file);
-  s_dbx_file=index_file(s_parms.new_index_dir,rac_file,LSTSUF);
+  char * cp1=strdup(rac_file);
+  char * cp2=strdup(rac_file);
+  path=dirname(cp1);
+  base_filename=basename(cp2);
+  s_descr=get_source_index_desc(s_parms.acc,s_parms.loc,path,base_filename);
+  s_dbx_file=index_file(path,base_filename,LSTSUF);
   l_flats=list_get(s_dbx_file);
 
   // concatenate
@@ -167,11 +171,12 @@ void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) 
     if (fwrite(&d_descr.locnb, sizeof(d_descr.accnb), 1, d_descr.d_ficx) != 1) err(errno,"error writing number of indexes");
   }
 
+  tot_idx.accnb=d_descr.accnb;
+  tot_idx.locnb=d_descr.locnb;
+  
   // close dest index files
   close_dest_index_desc(&d_descr);
 
-  tot_idx.accnb=d_descr.accnb;
-  tot_idx.locnb=d_descr.locnb;
   if (s_parms.csort_flag) { // sort index file.
     all_index_sort(s_parms,tot_idx);
   }

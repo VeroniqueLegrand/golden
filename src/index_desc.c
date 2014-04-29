@@ -50,22 +50,31 @@ fic_index_desc get_ficidx_desc(char *cur_index_dir, char *dbase,char* suff, char
   if ((strcmp(opn_mode,"r")!=0) && (strcmp(opn_mode,"r+")!=0)) err(0,"opn_mode must be \"r\" or \"r+\"");
   cur_idx.d_fidx=NULL;
   cur_idx.idxnb=0;
+  /*
   if (strcmp(suff,ACCSUF)==0) idx_file=index_file(cur_index_dir,dbase,ACCSUF);
-  else if (strcmp(suff,LOCSUF)==0) idx_file=index_file(cur_index_dir,dbase,LOCSUF);
-
+  else if (strcmp(suff,LOCSUF)==0) idx_file=index_file(cur_index_dir,dbase,LOCSUF);*/
+  idx_file=index_file(cur_index_dir,dbase,suff);
   ret=access(idx_file, F_OK);
   if (( ret!= 0) && create_flg) create_missing_idxfile(idx_file);
   else if (ret!=0) err(errno,"%s should exist", idx_file);
 
   if ((cur_idx.d_fidx = fopen(idx_file, opn_mode)) == NULL) err(errno,"error opening file : %s", idx_file);
-  if (fread(&indnb, sizeof(indnb), 1, cur_idx.d_fidx) != 1) err(errno,"error reading file : %s", idx_file);
-  cur_idx.idxnb=indnb;
+  if (strcmp(opn_mode,"w")==0) {
+    cur_idx.idxnb=0;
+  } else {
+    if (fread(&indnb, sizeof(indnb), 1, cur_idx.d_fidx) != 1) err(errno,"error reading file : %s", idx_file);
+    cur_idx.idxnb=indnb;
+  }
   return cur_idx;
 }
 
 void close_source_index_desc(source_index_desc * p_sdesc) {
-  if (fclose(p_sdesc->d_ficx) == EOF) err(errno,"error closing source locus index file.");
-  if (fclose(p_sdesc->d_facx) == EOF) err(errno,"error closing source AC index file.");
+  if (p_sdesc->d_ficx!=NULL) {
+    if (fclose(p_sdesc->d_ficx) == EOF) err(errno,"error closing source locus index file.");
+  }
+  if (p_sdesc->d_facx!=NULL) {
+    if (fclose(p_sdesc->d_facx) == EOF) err(errno,"error closing source AC index file.");
+  }
   init_sidx_desc(p_sdesc);
 }
 
@@ -104,6 +113,8 @@ dest_index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char *
   char * buf, *p;
   FILE * dbx_fd;
 
+  // remove old index files
+  index_hl_remove(acc,loc,new_index_dir,dbase);
   init_didx_desc(&d_idx);
   if (acc) {
      w_idx=get_ficidx_desc(new_index_dir, dbase, ACCSUF, "r+", 1);
@@ -116,16 +127,17 @@ dest_index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char *
     d_idx.d_ficx=w_idx.d_fidx;
   }
   dbx_file=index_file(new_index_dir,dbase,LSTSUF);
+  /*
   ret=access(dbx_file, F_OK);
   if (ret!=0) {
     list_new(dbx_file);
-    if ((d_idx.d_fdbx = fopen(dbx_file, "r+")) == NULL) err(errno,"error opening file : %s", dbx_file);
+    if ((d_idx.d_fdbx = fopen(dbx_file, "w")) == NULL) err(errno,"error opening file : %s", dbx_file);
   } else {
-    if ((d_idx.d_fdbx = fopen(dbx_file, "r+")) == NULL) err(errno,"error opening file : %s", dbx_file);
+    if ((d_idx.d_fdbx = fopen(dbx_file, "w")) == NULL) err(errno,"error opening file : %s", dbx_file);
     len = BUFINC;
     if ((buf = (char *)malloc(len+1)) == NULL) err(errno,"memory");
     while(fgets(buf, (int)len, d_idx.d_fdbx) != NULL) {
-      /* Checks for long line */
+      // Checks for long line
       if ((p = strrchr(buf, '\n')) == NULL) {
         len += BUFINC;
         if ((buf = (char *)realloc(buf, len+1)) == NULL) err(errno, "memory");
@@ -135,13 +147,18 @@ dest_index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char *
       d_idx.max_filenb++;
     }
     free(buf);
-  }
+  }*/
+  if ((d_idx.d_fdbx = fopen(dbx_file, "w")) == NULL) err(errno,"error opening file : %s", dbx_file);
   return d_idx;
 }
 
 void close_dest_index_desc(dest_index_desc * p_ddesc) {
-  if (fclose(p_ddesc->d_ficx) == EOF) err(errno,"error closing destination locus index file");
-  if (fclose(p_ddesc->d_facx) == EOF) err(errno,"error closing destination AC index file");
+  if (p_ddesc->d_ficx!=NULL) {
+    if (fclose(p_ddesc->d_ficx) == EOF) err(errno,"error closing destination locus index file");
+  }
+  if (p_ddesc->d_facx!=NULL) {
+    if (fclose(p_ddesc->d_facx) == EOF) err(errno,"error closing destination AC index file");
+  }
   if (fclose(p_ddesc->d_fdbx) == EOF) err(errno,"error closing destination LST file");
   init_didx_desc(p_ddesc);
 }
