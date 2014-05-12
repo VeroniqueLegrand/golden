@@ -369,6 +369,97 @@ all_indix_t test_index_create() {
   return t_idx;
 }
 
+/*
+ Inside the given open file, go back to the initial position for beginning reading indix_t structures.
+ */
+void index_fbegin_go(FILE * fidx,char * filename) {
+  uint64_t indnb;
+  if (fseeko(fidx, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s",filename);
+  if (fread(&indnb, sizeof(indnb), 1, fidx) != 1) err(errno,"error reading file : %s", filename);
+}
+
+void create_files_for_purge() {
+  dest_index_desc my_dest;
+  my_dest=get_dest_index_desc(1,1,"../test/unit","wgs_cfp");
+  char * s_dbx_file = index_file("../test/unit","wgs2",LSTSUF);
+  char * l_flats=list_get(s_dbx_file);
+  int new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
+  
+  source_index_desc my_source=get_source_index_desc(1,1,"../test/unit","wgs2");
+  my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
+  my_dest.max_filenb=new_nb;
+  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
+  index_fbegin_go(my_source.d_facx,"wgs2.acx");
+  
+  
+  my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
+  my_dest.max_filenb=new_nb;
+  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
+  
+  index_fbegin_go(my_source.d_facx,"wgs2.acx");
+
+  my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
+  my_dest.max_filenb=new_nb;
+  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
+  
+  index_fbegin_go(my_source.d_facx,"wgs2.acx");
+  
+  my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
+  my_dest.max_filenb=new_nb;
+  close_source_index_desc(&my_source);
+  
+  if (fseeko(my_dest.d_facx, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s","wgs_cfp");
+  fwrite(&my_dest.accnb, sizeof(my_dest.accnb), 1,my_dest.d_facx);
+  int nb_idx=my_dest.accnb;
+  close_dest_index_desc(&my_dest);
+  
+  char * acx_file=index_file("../test/unit","wgs_cfp",ACCSUF);
+  index_sort(acx_file,nb_idx);
+
+  // create empty index file
+  my_dest=get_dest_index_desc(1,1,"../test/unit","wgs_cfp_empty");
+  close_dest_index_desc(&my_dest);
+  
+  // create index file with only 1 element
+  my_dest=get_dest_index_desc(1,1,"../test/unit","wgs_cfp_single");
+  if (fseeko(my_dest.d_facx, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s","wgs_cfp_single");
+  int s_accnb=1;
+  indix_t s_idx;
+  strcpy(s_idx.name,"abc");
+  s_idx.filenb=1;
+  s_idx.offset=22500;
+  fwrite(&s_accnb, sizeof(s_accnb), 1,my_dest.d_facx);
+  close_dest_index_desc(&my_dest);
+}
+
+/* use index files created by create_idx_for_concat for that.*/
+void test_index_purge() {
+  all_indix_t idx_bf_purge=index_load("../test/unit","wgs_cfp",ACCSUF);
+  assert(idx_bf_purge.accnb==20);
+  /*int i=idx_bf_purge.accnb;
+  while (i){
+    printf("%s %d\n",idx_bf_purge.l_accind[i-1].name,idx_bf_purge.l_accind[i-1].filenb);
+    i--;
+  }*/
+  char * idx_file=index_file("../test/unit","wgs_cfp",ACCSUF);
+  index_purge(idx_file);
+  all_indix_t idx_af_purge=index_load("../test/unit","wgs_cfp",ACCSUF);
+  assert(idx_af_purge.accnb==5);
+  int i;
+  for (i=0;i<5;i++) {
+    assert(idx_af_purge.l_accind[i].filenb==4);
+  }
+  freeAllIndix(idx_bf_purge);
+  freeAllIndix(idx_af_purge);
+
+  // just check that purge doesn't crash on empty index files or index files that contains only 1 element.
+  idx_file=index_file("../test/unit","wgs_cfp_empty",ACCSUF);
+  index_purge(idx_file);
+
+  idx_file=index_file("../test/unit","wgs_cfp_single",ACCSUF);
+  index_purge(idx_file);
+}
+
 
 // clean all files generated on disk
 void clean() {
@@ -426,6 +517,42 @@ void clean() {
   
   if (stat("../test/unit/wgs_c.dbx", &st) != -1) {
     if (remove("../test/unit/wgs_c.dbx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_c.dbx");
+  }
+  
+  if (stat("../test/unit/wgs_cfp.dbx", &st) != -1) {
+    if (remove("../test/unit/wgs_cfp.dbx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp.dbx");
+  }
+
+  if (stat("../test/unit/wgs_cfp.acx", &st) != -1) {
+    if (remove("../test/unit/wgs_cfp.acx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_acx.dbx");
+  }
+
+  if (stat("../test/unit/wgs_cfp.idx", &st) != -1) {
+    if (remove("../test/unit/wgs_cfp.idx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_acx.idx");
+  }
+  
+  if (stat("../test/unit/wgs_cfp_empty.dbx", &st) != -1) {
+    if (remove("../test/unit/wgs_cfp_empty.dbx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_empty.dbx");
+  }
+
+  if (stat("../test/unit/wgs_cfp_empty.acx", &st) != -1) {
+    if (remove("../test/unit/wgs_cfp_empty.acx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_empty.dbx");
+  }
+
+  if (stat("../test/unit/wgs_cfp_empty.idx", &st) != -1) {
+    if (remove("../test/unit/wgs_cfp_empty.idx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_empty.idx");
+  }
+
+  if (stat("../test/unit/wgs_cfp_single.dbx", &st) != -1) {
+      if (remove("../test/unit/wgs_cfp_single.dbx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_single.dbx");
+  }
+
+  if (stat("../test/unit/wgs_cfp_single.acx", &st) != -1) {
+    if (remove("../test/unit/wgs_cfp_single.acx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_single.dbx");
+  }
+
+  if (stat("../test/unit/wgs_cfp_single.idx", &st) != -1) {
+    if (remove("../test/unit/wgs_cfp_single.idx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_single.idx");
   }
 }
 
@@ -489,6 +616,8 @@ void test_index_dump_load(all_indix_t t_idx) {
 
 int main(int argc, char **argv) {
   clean();
+  /*all_indix_t tmp_idx=index_load("/Users/vlegrand/Desktop/golden-3.0/test/tmp_new","wgs_ac_c1_sorted",ACCSUF);
+  freeAllIndix(tmp_idx);*/
   all_indix_t t_idx=test_index_create();
   freeAllIndix(t_idx);
   dest_index_desc d_descr;
@@ -499,6 +628,8 @@ int main(int argc, char **argv) {
   create_idx_for_concat();
   test_index_desc(&d_descr,ls_desc);
   test_index_file_concat(&d_descr,ls_desc,3);
+  create_files_for_purge();
+  test_index_purge();
   free(ls_desc);
   // clean files on disk
   clean();

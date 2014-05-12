@@ -91,7 +91,7 @@ all_indix_t index_load(const char *idx_dir, const char * dbase,const char * suff
   if (suff==LOCSUF) {
     all_idx.locnb=t_idx.nb_idx;
     all_idx.l_locind=t_idx.l_idx;
-  } else {
+  } else if (suff==ACCSUF){
     all_idx.accnb=t_idx.nb_idx;
     all_idx.l_accind=t_idx.l_idx;
   }

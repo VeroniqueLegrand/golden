@@ -73,7 +73,7 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
       file=strtok(cp_files,"\n");
       while (file!=NULL) {
         q = file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
-        if (strcmp(buf, q) == 0) warn("%s",q, "duplicate file in database");
+        if (strcmp(buf, q) == 0) warn("duplicate file in database : %s",q);
         file=strtok(NULL,"\n");
       }
       nb++;

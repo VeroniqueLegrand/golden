@@ -180,6 +180,10 @@ void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) 
   if (s_parms.csort_flag) { // sort index file.
     all_index_sort(s_parms,tot_idx);
   }
+
+  if (s_parms.purge_flag) {
+    all_index_purge(s_parms);
+  }
 }
 
 

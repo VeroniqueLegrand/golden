@@ -97,10 +97,24 @@ char *index_temp(const char *dir) {
 /* Compare indexes by names */
 int index_compare(const void *a, const void *b) {
   const indix_t *p, *q;
-
   p = (const indix_t *)a; q = (const indix_t *)b;
+  return strncmp(p->name, q->name, (size_t)NAMLEN);
+}
 
-  return strncmp(p->name, q->name, (size_t)NAMLEN); }
+/* Compare indexes by name and filenb */
+int index_compare_fnb(const void *a, const void *b) {
+  const indix_t *p, *q;
+  int ret;
+  p = (const indix_t *)a; q = (const indix_t *)b;
+  ret=strncmp(p->name, q->name, (size_t)NAMLEN);
+  if (ret==0) {
+    if (p->filenb==q->filenb) return 0;
+    else if (p->filenb<q->filenb) return -1;
+    else if (p->filenb>q->filenb) return 1;
+  }
+  return ret;
+}
+
 
 /* Swap values ... */
 uint64_t iswap64(uint64_t val) {
@@ -313,31 +327,63 @@ int index_merge(char *file, long nb, indix_t *ind) {
 }
 
 
-/*
- * merge multiple index files.
- * files is in fact a list of dbase, separated by ' '. It is given by the user.
- * For each given dbase, I have to find the coresponding .dbx, .acx, .idx files.
- */
-/*
-void index_merge_multi(char *files,char * dbase, int loc, int acc, char * source_dir, char * dest_dir) {
-  char * elm;
-  char * s_dbx_file, *s_acx_file, *s_icx_file;
-  char * d_dbx_file, *d_acx_file, *d_icx_file;
+void index_purge(const char * fic) {
+  char * dir, *new;
+  FILE * f, *g;
+  uint64_t newnb, oldnb;
+  indix_t cur1,cur2;
 
-  d_dbx_file=index_file(dest_dir,dbase,LSTSUF);
-  if (acc) d_acx_file=index_file(dest_dir,dbase,ACCSUF);
-  if (loc) d_icx_file=index_file(dest_dir,dbase,LOCSUF);
+  if (access(fic, F_OK) != 0) err(errno,"file doesn't exist : %s",fic);
+  if ((dir = getenv("TMPDIR")) == NULL) { dir = TMPDIR; }
+  if ((new = index_temp(dir)) == NULL) err(errno,"cannot create temporary file : %s",dir);
+  if ((f = fopen(new, "w")) == NULL) err(errno,"Cannot open file : %s",new);
 
-  // if dest files already exist, merge new files into it.
-
-  elm = strtok (files," ");
-  while (elm!=NULL) {
-    s_dbx_file=index_file(source_dir,elm,LSTSUF);
-    if (acc) s_acx_file=index_file(source_dir,elm,ACCSUF);
-    if (loc) s_icx_file=index_file(source_dir,elm,LOCSUF);
-    elm = strtok (NULL,"\n");
+  if ((g = fopen(fic, "r")) == NULL) err(errno,"Cannot open file : %s",fic);
+  if (fread(&oldnb, sizeof(oldnb), 1, g) != 1) err(errno,"Cannot read number of indexes from file : %s",fic);
+  if ((oldnb==0) || (oldnb==1)) {
+    if (fclose(g) == EOF) err(errno,"Cannot close file : %s",fic);
+    return;
   }
-}*/
+
+  if (fwrite(&oldnb, sizeof(oldnb), 1, f) != 1) err(errno,"Cannot write to : %s", new);
+  if (fread(&cur1, sizeof(cur1), 1, g) != 1) err(errno,"Cannot read indexes from file : %s",fic);
+  newnb=0;
+
+  while(oldnb-1) {
+    if (feof(g)) {
+      printf("end of file reached. ");
+    }
+    int ret=fread(&cur2, sizeof(cur2), 1, g);
+    printf("fread returned : %d\n",ret);
+    if (ret != 1) {
+      printf("%d \n",errno);
+      if (ferror(g)) {
+        printf("At file: %ld\n", ftell(g));
+        perror("read error: ");
+      }
+      err(errno,"Cannot read indexes from file : %s",fic);
+    }
+    int i=index_compare(&cur1,&cur2);
+    if (i!=0) {
+      if (fwrite(&cur1, sizeof(cur1), 1, f) != 1) err(errno,"Cannot write index to : %s",new);
+      cur1=cur2;
+      newnb++;
+    } else {
+      if (cur1.filenb<cur2.filenb) cur1=cur2;
+    }
+    oldnb--;
+  }
+  if (fwrite(&cur1, sizeof(cur1), 1, f) != 1) err(errno,"Cannot write index to : %s",new);
+  newnb++;
+  if (fseeko(f, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s",new);
+  if (fwrite(&newnb, sizeof(newnb), 1, f) != 1) err(errno,"Cannot write to : %s", new);
+  if (fclose(f) == EOF) err(errno,"Cannot close file : %s",new);
+  if (fclose(g) == EOF) err(errno,"Cannot close file : %s",fic);
+  
+  /* Rename file */
+  if (index_move(fic, new) != 0) err(errno,"Cannot move : %s to : %s",new,fic);
+
+}
 
 /* Move indexe file */
 static int index_move(const char *dst, const char *src) {

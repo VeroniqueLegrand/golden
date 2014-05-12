@@ -30,7 +30,7 @@ void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
   while((i = getopt_long(argc, argv, "ad:hiq",long_options,&option_index)) != -1) {
       switch(i) {
       case 0 :
-          printf("Option: %s \n",long_options[option_index].name);
+          // printf("Option: %s \n",long_options[option_index].name);
         break;
       case 'a':
         p_parms->acc = 1; break;
@@ -51,9 +51,11 @@ void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
     p_parms->idx_input_flag=idx_input_flg;
     p_parms->co_flag=concat_oflg;
     p_parms->csort_flag=concat_sflg;
+    p_parms->purge_flag=purge_flg;
     if (!p_parms->csort_flag && !p_parms->co_flag && !p_parms->idx_input_flag) p_parms->serial_behavior=1;
+    if (p_parms->purge_flag && (p_parms->co_flag )) usage(EXIT_FAILURE,prog);
     if (p_parms->idx_input_flag && p_parms->dir !=NULL) usage(EXIT_FAILURE,prog);
-    if ((p_parms->idx_input_flag && (!p_parms->co_flag && !p_parms->csort_flag)) ) usage(EXIT_FAILURE,prog); // TODO later? Implement merge of existing index files.
+    if ((p_parms->idx_input_flag && (!p_parms->co_flag && !p_parms->csort_flag && !p_parms->purge_flag)) ) usage(EXIT_FAILURE,prog); // TODO later? Implement merge of existing index files.
     if ((p_parms->idx_input_flag && (p_parms->co_flag && p_parms->csort_flag)) ) usage(EXIT_FAILURE,prog); 
     if (argc - optind < 2) usage(EXIT_FAILURE,prog);
     p_parms->dbase = argv[optind];
@@ -75,5 +77,6 @@ void usage(int status,char * prog) {
   (void)fprintf(f, "  --index_dir   ... Specify directory where to put generated index files. \n");
   (void)fprintf(f, "  --idx_input   ...Process input files as index files and not as flat files. \n");
   (void)fprintf(f, "  --concat_only ... concatenate index files whose base name are given in argument; result is new index files (acx and/or idx). \n");
-  (void)fprintf(f, "  --concat_sort ... Concatenates and sort index files. \n");
+  (void)fprintf(f, "  --concat_sort ... Concatenates and sort result file. \n");
+  (void)fprintf(f, "  --purge ... Remove doublons from index file. Must be used together with --concat_sort or on a index file that was previously sorted. \n");
   exit(status); }

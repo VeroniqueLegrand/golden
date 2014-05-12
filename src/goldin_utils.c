@@ -25,6 +25,22 @@ void all_index_sort(goldin_parms s_parms,all_indix_nb tot_idx) {
 }
 
 /*
+ * Remove doublons from index files; for a same AC or locus, keep only the record with the biggest filenb.
+ * WARNING : it is crucial that index files were previously sorted or else, the result of this function is undefined.
+ */
+void all_index_purge(goldin_parms s_parms) {
+  char *file;
+   if (s_parms.loc) {
+      file = index_file(s_parms.new_index_dir, s_parms.dbase, LOCSUF);
+      index_purge(file);
+    }
+    if (s_parms.acc) {
+      file = index_file(s_parms.new_index_dir, s_parms.dbase, ACCSUF);
+      index_purge(file);
+    }
+}
+
+/*
 * Concatenates all indexes in memory (locus+AC) with existing index file on disk.
 */
 all_indix_nb all_index_mconcat(all_indix_t file_l_indix,goldin_parms s_parms) {
