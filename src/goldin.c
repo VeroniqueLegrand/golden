@@ -60,7 +60,6 @@ int main(int argc, char **argv) {
   size_t len;
   goldin_parms s_parms;
 
-  //printf("coucou\n");
 
   /* Checks command line options & arguments */
   init_goldin_parms(&s_parms,argc, argv);
@@ -86,6 +85,9 @@ void process_databank_files(int optind,int argc,char ** argv,goldin_parms s_parm
   if (s_parms.csort_flag) { // sort index file.
     all_index_sort(s_parms,tot_idx);
   }
+  if (s_parms.purge_flag) {
+    all_index_purge(s_parms);
+  }
 }
 
 
@@ -107,7 +109,7 @@ all_indix_nb process_databank_file(goldin_parms s_parms , char * file) {
      warn("%s %s",file, "file contains no entries");
      return tot_idx;
   }
-  if (!s_parms.csort_flag && !s_parms.co_flag) { // same behavior as in previous versions.
+  if (!s_parms.csort_flag && !s_parms.co_flag && !s_parms.purge_flag) { // same behavior as in previous versions : merge new index with previous one.
     all_index_mmerge(file_l_indix,s_parms);
     freeAllIndix(file_l_indix);
     return tot_idx;
@@ -132,6 +134,7 @@ void process_index_file(goldin_parms s_parms ,char * rac_file,  dest_index_desc 
   s_descr=get_source_index_desc(s_parms.acc,s_parms.loc,path,base_filename);
   s_dbx_file=index_file(path,base_filename,LSTSUF);
   l_flats=list_get(s_dbx_file);
+  free(s_dbx_file);
 
   // concatenate
   nb = list_append(s_parms.dbase, s_parms.dir,l_flats,s_parms.new_index_dir);
@@ -147,6 +150,8 @@ void process_index_file(goldin_parms s_parms ,char * rac_file,  dest_index_desc 
   // close source index files
   close_source_index_desc(&s_descr);
   d_descr->max_filenb=nb;
+  free(cp1);
+  free(cp2);
 }
 
 void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) {

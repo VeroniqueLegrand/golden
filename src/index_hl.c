@@ -78,15 +78,18 @@ all_indix_t index_load(const char *idx_dir, const char * dbase,const char * suff
   if (load_all==1) {
     file = index_file(idx_dir, dbase, ACCSUF);
     t_idx=fic_index_load(file);
+    free(file);
     all_idx.accnb=t_idx.nb_idx;
     all_idx.l_accind=t_idx.l_idx;
     file = index_file(idx_dir, dbase, LOCSUF);
     t_idx=fic_index_load(file);
+    free(file);
     all_idx.locnb=t_idx.nb_idx;
     all_idx.l_locind=t_idx.l_idx;
   } else {
     file = index_file(idx_dir, dbase, suff);
     t_idx=fic_index_load(file);
+    free(file);
   }
   if (suff==LOCSUF) {
     all_idx.locnb=t_idx.nb_idx;
@@ -108,13 +111,16 @@ void index_hl_remove(int acc,int loc,char *new_index_dir,char *dbase) {
   if (access(dbx_file, F_OK) == 0) {
     if (remove(dbx_file)==-1) err(errno, "Couldn't remove : %s",dbx_file);
   }
+  free(dbx_file);
   if (acc) {
     char * acx_file = index_file(new_index_dir, dbase, ACCSUF);
     if (access(acx_file, F_OK) == 0) if (remove(acx_file)==-1) err(errno, "Couldn't remove : %s",acx_file);
+    free(acx_file);
   }
   if (loc) {
     char * icx_file = index_file(new_index_dir, dbase, LOCSUF);
     if (access(icx_file, F_OK) == 0) if (remove(icx_file)==-1) err(errno, "Couldn't remove : %s",icx_file);
+    free(icx_file);
   }
 }
 
@@ -210,7 +216,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
   }
 
   if (stat(file, &st) == -1) {
-    err("index file : %s does not exist.",file); }
+    err(errno,"index file : %s does not exist.",file); }
 
 #ifdef DEBUG
     result_t ** start_l=wData.start_l; // for printing debug info only.
@@ -218,10 +224,8 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
 #endif
 
 
-  if ((f = fopen(file, "r")) == NULL) {
-    error_fatal(file, NULL); }
-  if (fread(&indnb, sizeof(indnb), 1, f) != 1) {
-    error_fatal(file, NULL); }
+  if ((f = fopen(file, "r")) == NULL) err(errno,"Can't open file : %s",file);
+  if (fread(&indnb, sizeof(indnb), 1, f) != 1) err(errno,"can't read from file : %s",file);
 
   /* Check indexes endianness */
     chk = sizeof(indnb) + indnb * sizeof(inx);
@@ -239,9 +243,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
     printf("name : %s\n",name);
 #endif
     len = strlen(name);
-    if (len > NAMLEN) {
-      error_fatal(name, "name too long");
-    }
+    if (len > NAMLEN) err(errno,"name too long : %s",name);
 
     min = 0; max = (long)indnb - 1;
     i=-1; // to avoid pb in case indnb=0 and i is not initialized.
@@ -253,11 +255,9 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
     /* Set current position */
       cur = (min + max) / 2;
       pos = sizeof(indnb) + cur * sizeof(inx);
-      if (fseeko(f, pos, SEEK_SET) == -1) {
-        error_fatal(file, NULL); }
+      if (fseeko(f, pos, SEEK_SET) == -1) err(errno,"Couldn't find current position in file : %s",file);
         /* Check current name */
-      if (fread(&inx, sizeof(inx), 1, f) != 1) {
-        error_fatal(file, NULL); }
+      if (fread(&inx, sizeof(inx), 1, f) != 1) err(errno, "couldn't read from file : %s",file);
         if ((i = strcmp(name, inx.name)) == 0) break;
         /* Set new limits */
         if (i < 0) { max = cur - 1; }
@@ -276,8 +276,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
     }
     if (*nb_not_found==0) break;
   }
-  if (fclose(f) == EOF) {
-    error_fatal(file, NULL); }
+  if (fclose(f) == EOF) err(errno,"Couldn't close file : %s",file);
 #ifdef DEBUG
   printf("\n index_search, closed file : %s, for cur_db : %s, nb_not_found=%d, nb_res_found=%d \n",file,db_name,*nb_not_found,nb_found);
   print_wrk_struct(start_l,lst_size, 1);

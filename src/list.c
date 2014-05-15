@@ -216,6 +216,7 @@ int list_nb(char * new_index_dir, char * dbase) {
     nb_flat++;
   }
   free(buf);
+  free(dbx_file);
   fclose(dbx_fd);
   return nb_flat;
 }

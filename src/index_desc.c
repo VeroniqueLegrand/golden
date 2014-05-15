@@ -65,6 +65,7 @@ fic_index_desc get_ficidx_desc(char *cur_index_dir, char *dbase,char* suff, char
     if (fread(&indnb, sizeof(indnb), 1, cur_idx.d_fidx) != 1) err(errno,"error reading file : %s", idx_file);
     cur_idx.idxnb=indnb;
   }
+  free(idx_file);
   return cur_idx;
 }
 
@@ -149,6 +150,7 @@ dest_index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char *
     free(buf);
   }*/
   if ((d_idx.d_fdbx = fopen(dbx_file, "w")) == NULL) err(errno,"error opening file : %s", dbx_file);
+  free(dbx_file);
   return d_idx;
 }
 

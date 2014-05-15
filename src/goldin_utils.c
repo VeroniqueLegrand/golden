@@ -1,7 +1,7 @@
 /*
  * Here : aim is to make goldin.c simplier.
  * I will gather here "high level" functions that are used only by goldin.
- * These functions may use directly those in index.c, index_l.c, list.c,locus.c,access.c.
+ * These functions may use directly those in index.c, index_hl.c, list.c,locus.c,access.c.
  */
 #include <errno.h>
 #include <err.h>
@@ -17,10 +17,12 @@ void all_index_sort(goldin_parms s_parms,all_indix_nb tot_idx) {
   if (s_parms.loc) {
     file = index_file(s_parms.new_index_dir, s_parms.dbase, LOCSUF);
     index_sort(file,tot_idx.locnb);
+    free(file);
   }
   if (s_parms.acc) {
     file = index_file(s_parms.new_index_dir, s_parms.dbase, ACCSUF);
     index_sort(file,tot_idx.accnb);
+    free(file);
   }
 }
 
@@ -33,10 +35,12 @@ void all_index_purge(goldin_parms s_parms) {
    if (s_parms.loc) {
       file = index_file(s_parms.new_index_dir, s_parms.dbase, LOCSUF);
       index_purge(file);
+      free(file);
     }
     if (s_parms.acc) {
       file = index_file(s_parms.new_index_dir, s_parms.dbase, ACCSUF);
       index_purge(file);
+      free(file);
     }
 }
 

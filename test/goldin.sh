@@ -79,6 +79,19 @@ cmp tmp_new/wgs_ac_c1_sorted.acx tmp_new/wgs_ac_c1_ns.acx|grep "differ" || exit 
 
 cmp tmp_new/wgs_ac_c1_sorted.acx tmp_new/wgs_ac_c1_sorted_2.acx || exit 1
 
+## now purge and compare results
+../src/goldin --index_dir tmp_new --concat_sort --purge -a wgs_ac_c1_sp_2 all/wgs_extract.1.gbff all/wgs_extract.1.gnp all/wgs_extract.2.gbff all/wgs_extract.2.gnp all/wgs_extract.3.gnp || exit 1
+../src/goldin --index_dir tmp_new --idx_input --purge -a wgs_ac_c1_sp_1 tmp_new/wgs_ac_c1_sorted_2 || exit 1
+
+cmp tmp_new/wgs_ac_c1_sp_1.acx tmp_new/wgs_ac_c1_sp_2.acx || exit 1
+
+## "purged" index files should be the same as "merge" index files.
+../src/goldin --index_dir tmp_new  -a wgs_ac_c1_m_2 all/wgs_extract.1.gbff all/wgs_extract.1.gnp all/wgs_extract.2.gbff all/wgs_extract.2.gnp all/wgs_extract.3.gnp || exit 1
+cmp tmp_new/wgs_ac_c1_sp_1.acx tmp_new/wgs_ac_c1_m_2.acx || exit 1
+
+## Try another way of creating indexes from flat files than the "merge" one. This should roduce the same result.
+## --concat_sort --purge --index_dir /Users/vlegrand/wgs_tmp_index wgs_test /users/vlegrand/Desktop/GOLDENDATA/prod/index/golden/wgs/wgs.AAAA.1.gbff
+
 ## this should throw an error since locus were not indexed previously.
 my_output=`../src/goldin --index_dir tmp_new --idx_input --concat_only -i wgs_ac_c1 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3`
 test $? = 2 || exit 1
@@ -88,8 +101,16 @@ test $? = 2 || exit 1
 #echo $my_output|grep "No such file or directory"
 #echo $?
 
+
+
 ## this should cause a print usage
 my_output=`../src/goldin --index_dir tmp_new --idx_input --concat_sort --concat_only wgs_ac_c1_SNE tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3`
+echo $my_output|grep "usage" || exit 1
+
+my_output=`../src/goldin --index_dir tmp_new --idx_input --concat_only --purge wgs_ac_c1_SNE tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3`
+echo $my_output|grep "usage" || exit 1
+
+my_output=`../src/goldin --index_dir tmp_new --purge wgs_ac_c1_SNE all/wgs_extract.2.gnp all/wgs_extract.3.gnp`
 echo $my_output|grep "usage" || exit 1
 
 ## clean files

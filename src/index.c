@@ -43,7 +43,7 @@
 #endif
 
 
-#define DEBUG
+// #define DEBUG
 /* Functions prototypes */
 
 static int index_move(const char *, const char *);
@@ -161,7 +161,7 @@ char *index_file(const char *dir, const char *dbase, const char *suf) {
 
 
 
-#define DEBUG
+// #define DEBUG
 
 
 void index_sort(char *file, long nb) {
@@ -189,13 +189,24 @@ void index_sort(char *file, long nb) {
   fmap_orig=fmap;
   fmap=fmap+sizeof(uint64_t);
   old=(indix_t *) fmap;
+
+#ifdef DEBUG
+  indix_t * old2=old;
+  printf("AC/locus before sort:\n.");
+  int i;
+  for (i=0;i<nb;i++) {
+    printf("%s\n",old2->name);
+    old2++;
+  }
+  printf("--------------------------------------------------\n");
+#endif
+
   /* Sort indexes */
   qsort(old, (size_t)nb, sizeof(*old), index_compare);
 
 #ifdef DEBUG
   // to check that it works.
   printf("AC/locus sorted in alphabetical order:\n.");
-  int i;
   for (i=0;i<nb;i++) {
     printf("%s\n",old->name);
     old++;
@@ -229,6 +240,7 @@ int index_concat(char *file, long nb, indix_t *ind) {
   newnb=oldnb+nb;
 
   /* Add new remaining indexes */
+  if (fseeko(g, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.",file);
   while(nb) {
     if (fwrite(cur, sizeof(*cur), 1, g) != 1) err(errno,"Cannot write index to : %s",file);
     nb--;
@@ -242,7 +254,7 @@ int index_concat(char *file, long nb, indix_t *ind) {
   return newnb;
 }
 
-/* concatenates indexes that have already been written to a file */
+/* concatenates indexes that have already been written to a file by a previous call to goldin. */
 long index_file_concat(FILE * fd_d,int prev_nb_flat, long nb_idx, FILE * fd_s, long prev_nb_idx) {
   long totnb=prev_nb_idx;
   long cnt;
@@ -350,17 +362,17 @@ void index_purge(const char * fic) {
   newnb=0;
 
   while(oldnb-1) {
-    if (feof(g)) {
+    /*if (feof(g)) {
       printf("end of file reached. ");
-    }
+    }*/
     int ret=fread(&cur2, sizeof(cur2), 1, g);
-    printf("fread returned : %d\n",ret);
+    // printf("fread returned : %d\n",ret);
     if (ret != 1) {
-      printf("%d \n",errno);
+      /*printf("%d \n",errno);
       if (ferror(g)) {
         printf("At file: %ld\n", ftell(g));
         perror("read error: ");
-      }
+      }*/
       err(errno,"Cannot read indexes from file : %s",fic);
     }
     int i=index_compare(&cur1,&cur2);

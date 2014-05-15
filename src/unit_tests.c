@@ -108,6 +108,7 @@ int index_dump(char *dbase, int mode, all_indix_t file_l_indix,char * SUF, const
   if (fwrite(&nb_idx, sizeof(nb_idx), 1, f) != 1) err(errno,"error writing number of indexes");
 
   if (fclose(f) == EOF)err(errno,"cannot close file: %s.",file);
+  free(file);
   return 0;
 }
 
@@ -141,12 +142,13 @@ void test_index_sort() {
   int i=1;
   
   all_indix_t t_idx=index_load("../test/unit","enzyme_extract_unsorted_idx1",LOCSUF);
-  //debug stuff, to comment
+#ifdef DEBUG
   int j;
   for (j=0;j<21;j++) {
     printf("%s\n",t_idx.l_locind[j].name);
   }
   printf("--------------------------------------------------------------------------------\n");
+#endif
   //
   index_dump("enzyme_test",REPLACE_INDEXES,t_idx,LOCSUF,"../test/unit"); // creates tst_file
   index_sort(tst_file,21);
@@ -155,22 +157,11 @@ void test_index_sort() {
   assert(t_idx3.accnb==0);
   assert(t_idx3.locnb==21);
   
-  //debug stuff, to comment
+#ifdef DEBUG
   for (j=0;j<21;j++) {
     printf("%s\n",t_idx3.l_locind[j].name);
   }
-  //
-  
-  /*all_indix_t t_idx_ref=index_load("../test/unit",rac_filename,LOCSUF);
-  while (i<21) {
-    assert(strcmp(t_idx_ref.l_locind[i].name,t_idx3.l_locind[i].name)==0);
-    i++;
-  }*/
-  
-  int ret=strcmp("a","b");
-  ret=strcmp("aa","ab");
-  ret=strcmp("aab","ab");
-  ret=strcmp("aa","abc");
+#endif
 
   while (i<21) {
     char * v1=t_idx3.l_locind[i-1].name;
@@ -295,6 +286,32 @@ void test_index_desc(dest_index_desc* d_descr,source_index_desc* ls_descr) {
 }
 
 /*
+ * concatenates index in memory with index file on disk.
+ */
+void test_index_concat() {
+  struct stat st;
+  all_indix_t t_idx=create_index("../test/unit/wgs_extract.1.gnp",1,1,1);
+  int nb=list_append("wgs_orig",NULL,"../test/unit/wgs_extract.1.gnp","../test/unit");
+  char * acx_file=index_file("../test/unit","wgs_orig",ACCSUF);
+  int new_nb=index_concat(acx_file, nb, t_idx.l_accind);
+
+  assert(new_nb==nb);
+  assert((stat("../test/unit/wgs_orig.acx", &st) != -1));
+  new_nb=index_concat(acx_file, nb, t_idx.l_accind);
+  assert(new_nb==2*nb);
+
+  all_indix_t t_idx_2=index_load("../test/unit","wgs_orig",ACCSUF);
+
+  assert(strcmp(t_idx.l_accind[0].name,t_idx_2.l_accind[0].name)==0);
+  assert(strcmp(t_idx.l_accind[nb-1].name,t_idx_2.l_accind[new_nb-1].name)==0);
+  assert(strcmp(t_idx.l_accind[0].name,t_idx_2.l_accind[nb].name)==0);
+
+  freeAllIndix(t_idx);
+  freeAllIndix(t_idx_2);
+  free(acx_file);
+}
+
+/*
  Concatenates several unsorted index files That may contain doublons.
  */
 void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr,int nb_source) {
@@ -307,6 +324,7 @@ void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr
     sprintf(source_base,"%s%d","wgs",i);
     s_dbx_file=index_file("../test/unit",source_base,LSTSUF);
     l_flats=list_get(s_dbx_file);
+    free(s_dbx_file);
     new_nb = list_append("wgs_c",NULL,l_flats,"../test/unit");
     assert(new_nb==i);
     free(l_flats);
@@ -383,6 +401,7 @@ void create_files_for_purge() {
   my_dest=get_dest_index_desc(1,1,"../test/unit","wgs_cfp");
   char * s_dbx_file = index_file("../test/unit","wgs2",LSTSUF);
   char * l_flats=list_get(s_dbx_file);
+  free(s_dbx_file);
   int new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
   
   source_index_desc my_source=get_source_index_desc(1,1,"../test/unit","wgs2");
@@ -415,6 +434,7 @@ void create_files_for_purge() {
   
   char * acx_file=index_file("../test/unit","wgs_cfp",ACCSUF);
   index_sort(acx_file,nb_idx);
+  free(acx_file);
 
   // create empty index file
   my_dest=get_dest_index_desc(1,1,"../test/unit","wgs_cfp_empty");
@@ -443,6 +463,7 @@ void test_index_purge() {
   }*/
   char * idx_file=index_file("../test/unit","wgs_cfp",ACCSUF);
   index_purge(idx_file);
+  free(idx_file);
   all_indix_t idx_af_purge=index_load("../test/unit","wgs_cfp",ACCSUF);
   assert(idx_af_purge.accnb==5);
   int i;
@@ -455,9 +476,11 @@ void test_index_purge() {
   // just check that purge doesn't crash on empty index files or index files that contains only 1 element.
   idx_file=index_file("../test/unit","wgs_cfp_empty",ACCSUF);
   index_purge(idx_file);
+  free(idx_file);
 
   idx_file=index_file("../test/unit","wgs_cfp_single",ACCSUF);
   index_purge(idx_file);
+  free(idx_file);
 }
 
 
@@ -554,6 +577,48 @@ void clean() {
   if (stat("../test/unit/wgs_cfp_single.idx", &st) != -1) {
     if (remove("../test/unit/wgs_cfp_single.idx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_single.idx");
   }
+  
+  if (stat("../test/unit/wgs_orig.dbx", &st) != -1) {
+    if (remove("../test/unit/wgs_orig.dbx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_orig.dbx");
+  }
+
+  if (stat("../test/unit/wgs_orig.acx", &st) != -1) {
+    if (remove("../test/unit/wgs_orig.acx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_orig.acx");
+  }
+
+}
+
+
+
+int main(int argc, char **argv) {
+  clean();
+  /*all_indix_t tmp_idx=index_load("/Users/vlegrand/Desktop/golden-3.0/test/tmp_new","wgs_ac_c1_sp_1",ACCSUF);
+  all_indix_t tmp_idx2=index_load("/Users/vlegrand/Desktop/golden-3.0/test/tmp_new","wgs_ac_c1_sp_2",ACCSUF);
+  printf("%ld %ld\n",tmp_idx.accnb,tmp_idx2.accnb);
+  int i;
+  for (i=0;i<tmp_idx.accnb;i++) {
+    printf("%s %d | %s %d\n",tmp_idx.l_accind[i].name,tmp_idx.l_accind[i].filenb,tmp_idx2.l_accind[i].name,tmp_idx2.l_accind[i].filenb);
+  }
+
+  freeAllIndix(tmp_idx);
+  freeAllIndix(tmp_idx2);*/
+
+  all_indix_t t_idx=test_index_create();
+  freeAllIndix(t_idx);
+  dest_index_desc d_descr;
+  source_index_desc * ls_desc=malloc(3*sizeof(source_index_desc));
+  // test_index_dump_load(t_idx);
+  test_index_sort();
+  test_list_append();
+  create_idx_for_concat();
+  test_index_desc(&d_descr,ls_desc);
+  test_index_file_concat(&d_descr,ls_desc,3);
+  test_index_concat();
+  create_files_for_purge();
+  test_index_purge();
+  free(ls_desc);
+  // clean files on disk
+  clean();
 }
 
 
@@ -613,25 +678,4 @@ void test_index_dump_load(all_indix_t t_idx) {
   freeAllIndix(t_idx2);
 }
 */
-
-int main(int argc, char **argv) {
-  clean();
-  /*all_indix_t tmp_idx=index_load("/Users/vlegrand/Desktop/golden-3.0/test/tmp_new","wgs_ac_c1_sorted",ACCSUF);
-  freeAllIndix(tmp_idx);*/
-  all_indix_t t_idx=test_index_create();
-  freeAllIndix(t_idx);
-  dest_index_desc d_descr;
-  source_index_desc * ls_desc=malloc(3*sizeof(source_index_desc));
-  // test_index_dump_load(t_idx);
-  test_index_sort();
-  test_list_append();
-  create_idx_for_concat();
-  test_index_desc(&d_descr,ls_desc);
-  test_index_file_concat(&d_descr,ls_desc,3);
-  create_files_for_purge();
-  test_index_purge();
-  free(ls_desc);
-  // clean files on disk
-  clean();
-}
 
