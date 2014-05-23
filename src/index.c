@@ -254,17 +254,66 @@ int index_concat(char *file, long nb, indix_t *ind) {
   return newnb;
 }
 
+void set_lock(int fd,struct flock lck) {
+  int res = fcntl(fd, F_SETLKW, &lck);
+  if (res == -1) err(1, "lock failed on destination file.");
+}
+
+/*
+ * Sets a write lock on a region of the file pointed by fd.
+ * Region locked is delimited by l_start and l_len
+ */
+struct flock index_file_lock(int fd, off_t l_start, off_t l_len ) {
+  struct flock lock_t;
+  lock_t.l_whence = SEEK_SET;
+  lock_t.l_start = l_start;
+  lock_t.l_len = l_len;
+  lock_t.l_type = F_WRLCK;
+  set_lock(fd,lock_t);
+  return lock_t;
+}
+
+
+void index_file_unlock(int fd, struct flock lock_t) {
+  lock_t.l_type = F_UNLCK;
+  set_lock(fd,lock_t);
+}
+
 /* concatenates indexes that have already been written to a file by a previous call to goldin. */
-long index_file_concat(FILE * fd_d,int prev_nb_flat, long nb_idx, FILE * fd_s, long prev_nb_idx) {
+long index_file_concat(int fd_d,int prev_nb_flat, long nb_idx, int fd_s, long prev_nb_idx) {
   long totnb=prev_nb_idx;
   long cnt;
   indix_t inx;
+  struct flock lock_t; // lock used to perform the truncate operation
+  struct flock lock_w; // lock to perform the writing in the "reserved" area of the destination file.
+  struct stat s_dest, s_source;
+  int res;
+
+  lock_t=index_file_lock(fd_d,0,1); // lock used to perform the truncate operation
+
+  res = fstat(fd_d, &s_dest);
+  if (res == -1) err(1, "stat failed on destination file");
+
+  res = fstat(fd_s, &s_source);
+  if (res == -1) err(1, "stat failed on source file");
+  
+  size_t s_to_add = s_source.st_size-sizeof(long); // do not concatenate number of indexes in index file.
+
+  if (lseek(fd_d, 0, SEEK_END) == -1) err(errno,"index_file_concat: error while getting at the end of dest index file.",NULL);
+
+  res = ftruncate(fd_d, s_dest.st_size + s_to_add);
+  if (res == -1 && S_ISREG(s_dest.st_mode)) err(1, "Truncate failed");
+
+  lock_w=index_file_lock(fd_d,s_dest.st_size,s_source.st_size);
+  if (s_dest.st_size>0) index_file_unlock(fd_d,lock_t);
+
   for (cnt=0;cnt<nb_idx;cnt++) {
-    if (fread(&inx, sizeof(inx), 1, fd_s) != 1) error_fatal("Cannot read index from source file", NULL);
+    if (read(fd_s,&inx, sizeof(inx)) != sizeof(inx)) err(errno,"Cannot read index from source file", NULL);
     inx.filenb=inx.filenb+prev_nb_flat;
-    if (fwrite(&inx, sizeof(inx), 1, fd_d) != 1) err(errno,"Cannot write index to destination file",NULL);
+    if (write(fd_d,&inx, sizeof(inx)) != sizeof(inx)) err(errno,"Cannot write index to destination file",NULL);
     totnb++;
   }
+  index_file_unlock(fd_d,lock_w);
   return totnb;
 }
 

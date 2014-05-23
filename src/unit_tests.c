@@ -1,3 +1,4 @@
+
 /*
 This file is dedicated to unit testing.
 Unit testing differs from the already existing tests in the "test" directory in the fact
@@ -257,9 +258,9 @@ void test_index_desc(dest_index_desc* d_descr,source_index_desc* ls_descr) {
   assert(stat("../test/unit/wgs_c.acx", &st) != -1);
   assert(stat("../test/unit/wgs_c.idx", &st) != -1);
   assert(stat("../test/unit/wgs_c.dbx", &st) != -1);
-  assert(d_descr->d_facx!=NULL);
-  assert(d_descr->d_ficx!=NULL);
-  assert(d_descr->d_fdbx!=NULL);
+  assert(d_descr->d_facx!=-1);
+  assert(d_descr->d_ficx!=-1);
+  //assert(d_descr->d_fdbx!=NULL);
   assert(d_descr->max_filenb==0);
   assert(d_descr->locnb==0);
   assert(d_descr->accnb==0);
@@ -268,8 +269,8 @@ void test_index_desc(dest_index_desc* d_descr,source_index_desc* ls_descr) {
   ls_descr[2]=get_source_index_desc(1,1,"../test/unit","wgs3");
 
   for(i=0; i<nb_source; i++) {
-    assert(ls_descr[i].d_facx!=NULL);
-    assert(ls_descr[i].d_ficx!=NULL);
+    assert(ls_descr[i].d_facx!=-1);
+    assert(ls_descr[i].d_ficx!=-1);
     assert(ls_descr[i].max_filenb=1);
   }
 
@@ -329,20 +330,20 @@ void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr
     assert(new_nb==i);
     free(l_flats);
 
-    if (fseeko(d_descr->d_facx, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.acx","wgs_c");
+    // if (lseek(d_descr->d_facx, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.acx","wgs_c");
     d_descr->accnb=index_file_concat(d_descr->d_facx,d_descr->max_filenb, ls_descr[i-1].accnb, ls_descr[i-1].d_facx,d_descr->accnb);
 
-    if (fseeko(d_descr->d_ficx, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.icx","wgs_c");
+    // if (lseek(d_descr->d_ficx, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.icx","wgs_c");
     d_descr->locnb=index_file_concat(d_descr->d_ficx,d_descr->max_filenb, ls_descr[i-1].locnb, ls_descr[i-1].d_ficx,d_descr->locnb);
 
     d_descr->max_filenb=new_nb;
     close_source_index_desc(&ls_descr[i-1]);
   }
-  if (fseeko(d_descr->d_facx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx","wgs_c");
-  if (fwrite(&d_descr->accnb, sizeof(d_descr->accnb), 1, d_descr->d_facx) != 1) err(errno,"error writing number of indexes");
+  if (lseek(d_descr->d_facx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx","wgs_c");
+  if (write(d_descr->d_facx,&d_descr->accnb, sizeof(d_descr->accnb)) != sizeof(d_descr->accnb)) err(errno,"error writing number of indexes");
 
-  if (fseeko(d_descr->d_ficx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.idx","wgs_c");
-  if (fwrite(&d_descr->locnb, sizeof(d_descr->locnb), 1, d_descr->d_ficx) != 1) err(errno,"error writing number of indexes");
+  if (lseek(d_descr->d_ficx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.idx","wgs_c");
+  if (write(d_descr->d_ficx,&d_descr->locnb, sizeof(d_descr->locnb)) != sizeof(d_descr->locnb)) err(errno,"error writing number of indexes");
 
   
   close_dest_index_desc(d_descr);
@@ -356,6 +357,14 @@ void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr
   indix_t i0=wgs_idx.l_locind[0];
   indix_t i9=wgs_idx.l_locind[9];
   indix_t i4=wgs_idx.l_locind[4];
+  
+  /*
+  int j;
+  for (j=0;j<wgs_idx.accnb; j++){
+    printf("%s %d\n",wgs_idx.l_locind[j].name,wgs_idx.l_locind[j].filenb);
+  }
+  */
+
   assert(strcmp(i0.name,"EYS95825")==0);
   assert(i0.filenb==1);
 
@@ -364,11 +373,12 @@ void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr
 
   assert(strcmp(i9.name,"EYS68660")==0);
   assert(i9.filenb==3);
-}
+  
+  }
 
 all_indix_t test_index_create() {
   int nb;
-  nb = list_append(data_file, data_file, data_file,".");
+  nb = list_append("enzyme_extract",NULL, data_file,"../test/unit");
   all_indix_t t_idx=create_index(data_file,nb,0,1);
   // assert(strcmp(t_idx.flatfile_name,data_file)==0);
   assert(t_idx.accnb==0);
@@ -390,10 +400,10 @@ all_indix_t test_index_create() {
 /*
  Inside the given open file, go back to the initial position for beginning reading indix_t structures.
  */
-void index_fbegin_go(FILE * fidx,char * filename) {
+void index_fbegin_go(int fidx,char * filename) {
   uint64_t indnb;
-  if (fseeko(fidx, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s",filename);
-  if (fread(&indnb, sizeof(indnb), 1, fidx) != 1) err(errno,"error reading file : %s", filename);
+  if (lseek(fidx, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s",filename);
+  if (read(fidx,&indnb, sizeof(indnb)) != sizeof(indnb)) err(errno,"error reading file : %s", filename);
 }
 
 void create_files_for_purge() {
@@ -427,8 +437,8 @@ void create_files_for_purge() {
   my_dest.max_filenb=new_nb;
   close_source_index_desc(&my_source);
   
-  if (fseeko(my_dest.d_facx, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s","wgs_cfp");
-  fwrite(&my_dest.accnb, sizeof(my_dest.accnb), 1,my_dest.d_facx);
+  if (lseek(my_dest.d_facx, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s","wgs_cfp");
+  write(my_dest.d_facx, &my_dest.accnb, sizeof(my_dest.accnb));
   int nb_idx=my_dest.accnb;
   close_dest_index_desc(&my_dest);
   
@@ -442,26 +452,54 @@ void create_files_for_purge() {
   
   // create index file with only 1 element
   my_dest=get_dest_index_desc(1,1,"../test/unit","wgs_cfp_single");
-  if (fseeko(my_dest.d_facx, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s","wgs_cfp_single");
+  if (lseek(my_dest.d_facx, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s","wgs_cfp_single");
   int s_accnb=1;
   indix_t s_idx;
   strcpy(s_idx.name,"abc");
   s_idx.filenb=1;
   s_idx.offset=22500;
-  fwrite(&s_accnb, sizeof(s_accnb), 1,my_dest.d_facx);
+  write(my_dest.d_facx,&s_accnb, sizeof(s_accnb));
   close_dest_index_desc(&my_dest);
 }
+
+array_indix_t fic_index_load_test(const char * file) {
+  int g;
+  uint64_t nb_idx;
+  array_indix_t fic_indix;
+  indix_t cur;
+  fic_indix.l_idx=NULL;
+  int i=0;
+  if ((g = open(file, O_RDONLY)) == -1) err(errno,"cannot open file: %s.",file);
+  if (read(g,&nb_idx, sizeof(nb_idx)) != sizeof(nb_idx)) err(errno,"cannot read index number from file: %s.",file);
+  fic_indix.nb_idx=nb_idx;
+  if ((fic_indix.l_idx = (indix_t *)realloc(fic_indix.l_idx, nb_idx*sizeof(indix_t))) == NULL) err(errno,"cannot allocate memory");
+  for(i=0;i<nb_idx;i++) {
+    if (read(g,&cur, sizeof(cur)) != sizeof(cur)) err(errno,"cannot read index from file: %s.",file);
+    fic_indix.l_idx[i]=cur;
+  }
+  if (close(g) == -1) err(errno,"error closing file: %s.",file);
+  return fic_indix;
+}
+
 
 /* use index files created by create_idx_for_concat for that.*/
 void test_index_purge() {
   all_indix_t idx_bf_purge=index_load("../test/unit","wgs_cfp",ACCSUF);
   assert(idx_bf_purge.accnb==20);
+  char * idx_file=index_file("../test/unit","wgs_cfp",ACCSUF);
+  /*array_indix_t tmp=fic_index_load_test(idx_file); // seems to work
+  int i=tmp.nb_idx;
+  while (i-1){
+    printf("%s %d\n",tmp.l_idx[i-1].name,tmp.l_idx[i-1].filenb);
+    i--;
+  }*/
+  
   /*int i=idx_bf_purge.accnb;
   while (i){
     printf("%s %d\n",idx_bf_purge.l_accind[i-1].name,idx_bf_purge.l_accind[i-1].filenb);
     i--;
   }*/
-  char * idx_file=index_file("../test/unit","wgs_cfp",ACCSUF);
+  
   index_purge(idx_file);
   free(idx_file);
   all_indix_t idx_af_purge=index_load("../test/unit","wgs_cfp",ACCSUF);
@@ -470,7 +508,7 @@ void test_index_purge() {
   for (i=0;i<5;i++) {
     assert(idx_af_purge.l_accind[i].filenb==4);
   }
-  freeAllIndix(idx_bf_purge);
+  // freeAllIndix(idx_bf_purge);
   freeAllIndix(idx_af_purge);
 
   // just check that purge doesn't crash on empty index files or index files that contains only 1 element.
@@ -501,8 +539,8 @@ void clean() {
   }
 
   
-  if (stat("../test/unit/enzyme_extract.dat.dbx", &st) != -1) {
-    if (remove("../test/unit/enzyme_extract.dat.dbx")==-1) err(errno, "Couldn't remove ../test/unit/enzyme_extract.dat.dbx");
+  if (stat("../test/unit/enzyme_extract.dbx", &st) != -1) {
+    if (remove("../test/unit/enzyme_extract.dbx")==-1) err(errno, "Couldn't remove ../test/unit/enzyme_extract.dbx");
   }
   
   if (stat("../test/unit/enzyme_test.idx", &st) != -1) {

@@ -3,6 +3,7 @@
  * I will gather here "high level" functions that are used only by goldin.
  * These functions may use directly those in index.c, index_hl.c, list.c,locus.c,access.c.
  */
+#include <stdlib.h>
 #include <errno.h>
 #include <err.h>
 #include "index.h"

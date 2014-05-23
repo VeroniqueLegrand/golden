@@ -66,7 +66,9 @@ uint32_t iswap32(uint32_t val);
 
 // all_indix_nb mem_index_concat(all_indix_t file_l_indix,char *dbase, int loc, int acc);
 
-long index_file_concat(FILE * fd_d,int prev_nb, long nb, FILE * fd_s, long);
+long index_file_concat(int fd_d,int prev_nb, long nb, int, long);
+struct flock index_file_lock(int fd, off_t l_start, off_t l_len );
+void index_file_unlock(int fd, struct flock lock_t);
 void index_purge(const char * fic);
 
 

@@ -15,7 +15,7 @@
  Used to store description of 1 physical index file (index or locus, it doesn't matter).
  */
 typedef struct {
-  FILE * d_fidx;
+  int d_fidx;
   int idxnb;
 }fic_index_desc;
 
@@ -31,8 +31,8 @@ typedef struct {
  * Used to keep description of source index files that are being processed (read).
  */
 typedef struct {
-  FILE * d_facx; // for .acx files
-  FILE * d_ficx; // for .icx files
+  int d_facx; // for .acx files
+  int d_ficx; // for .icx files
   int accnb;
   int locnb;
   // TODO : dbx files are not that big, maybe storing their content in memory would be more efficient... Try that later.
@@ -45,9 +45,9 @@ typedef struct {
  * Used to keep description of destination index files that are being processed (write, update).
  */
 typedef struct {
-  FILE * d_facx; // for .acx files
-  FILE * d_ficx; // for .icx files
-  FILE * d_fdbx; // for .dbx files
+  int d_facx; // for .acx files
+  int d_ficx; // for .icx files
+  int d_fdbx; // for .dbx files
   int accnb;
   int locnb;
   int max_filenb; // number of lines in .dbx files.

@@ -34,6 +34,29 @@
 
 #define BUFINC 100
 
+/*
+ * Acquires or releases (depending on l_type value) an exclusive write lock on list file.
+ * l_type value is either F_WRLCK or F_UNLCK.
+ */
+void set_list_lock(int fd, int l_type) {
+  struct flock excl_wr_lock; // exclusive write lock.
+  excl_wr_lock.l_type=l_type; //F_WRLCK;
+  excl_wr_lock.l_whence=SEEK_SET;
+  excl_wr_lock.l_start=0;
+  excl_wr_lock.l_len=0;
+  int res=fcntl(fd,F_SETLKW,&excl_wr_lock);
+  if (res==-1) err(errno,"list_lock failed");
+}
+
+
+void list_lock(int fd) {
+  set_list_lock(fd,F_WRLCK);
+}
+
+void list_unlock(int fd) {
+  set_list_lock(fd,F_UNLCK);
+}
+
 /* Append database flat file list && return file nb
  * The files argument is a list of file names separated by \n.
  * Parameters :
@@ -46,66 +69,73 @@
  * Just put "." if you want previous behavior.
  */
 int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
-  FILE *f;
+  // FILE *f;
+  struct stat st;
+  int f,nb_read;
   int nb;
   char *p, *q, *buf, *name;
   size_t len;
-  char * file;
-  char * cp_files=strdup(files);
+  char * new_file, *old_file;
+  char * l_files;
+  char ** arr_buf=NULL;
+  int cnt_fic;
+
 
   nb = 0;
   name = index_file(new_index_dir, dbase, LSTSUF);
+  f = open(name, O_RDWR|O_APPEND|O_CREAT, 0666);
+  if (f == -1) err(errno,"Cannot open file : %s",name);
+  
+  if (stat(name, &st) == -1) err(errno,name, NULL);
+  list_lock(f);
 
-  if (access(name, F_OK) != -1) {
-    if ((f = fopen(name, "r+")) == NULL) err(errno,"Cannot open file : %s",name);
-    len = BUFINC;
-    if ((buf = (char *)malloc(len+1)) == NULL) err(errno,"memory");
-    while(fgets(buf, (int)len, f) != NULL) {
-      /* Checks for long line */
-      if ((p = strrchr(buf, '\n')) == NULL) {
-        len += BUFINC;
-        if ((buf = (char *)realloc(buf, len+1)) == NULL) err(errno, "memory");
-        if (fseeko(f, -1 * (off_t)strlen(buf), SEEK_CUR) != 0) err(errno,"error seeking in file : %s", name);
-        continue;
-      }
-      /* Checks for existing file */
-      *p = '\0';
-      file=strtok(cp_files,"\n");
-      while (file!=NULL) {
-        q = file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
-        if (strcmp(buf, q) == 0) warn("duplicate file in database : %s",q);
-        file=strtok(NULL,"\n");
-      }
-      nb++;
-    }
-    free(buf);
-    /* Append new files to list */
-    strcpy(cp_files,files);
-    file=strtok(cp_files,"\n");
-    while (file!=NULL) {
-      q = file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
-      if (dir!=NULL) (void)fprintf(f, "%s/%s\n", dir, q);
-      else (void)fprintf(f, "%s\n", q);
-      nb++;
-      file=strtok(NULL,"\n");
-    }
-    if (fclose(f) == EOF) error_fatal(name, NULL);
-  } else {
-    if ((f = fopen(name, "a")) == NULL) err(errno,"Cannot open file : %s",name);
-    /* Append new files to list */
-    strcpy(cp_files,files);
-    file=strtok(cp_files,"\n");
-    while (file!=NULL) {
-      q = file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
-      if (dir!=NULL) (void)fprintf(f, "%s/%s\n", dir, q);
-      else (void)fprintf(f, "%s\n", q);
-      nb++;
-      file=strtok(NULL,"\n");
-    }
-    if (fclose(f) == EOF) error_fatal(name, NULL);
+  len=st.st_size;
+  if ((buf = (char *)malloc(len+1)) == NULL) err(errno,"memory");
+  if ((nb_read=read(f,buf,st.st_size))==-1) err(errno,"Error while reading source file.");
+  char * a_fic=strtok(buf,"\n");
+  while (a_fic!=NULL) {
+    nb++;
+    arr_buf=realloc(arr_buf,nb*sizeof(char *));
+    arr_buf[nb-1]=a_fic;
+    a_fic=strtok(NULL,"\n");
   }
+  
+  /* Checks for duplicate file */
+  for (cnt_fic=0;cnt_fic<nb;cnt_fic++) {
+    old_file=arr_buf[cnt_fic];
+    l_files=strdup(files);
+    new_file=strtok(l_files,"\n");
+    while (new_file!=NULL) {
+      if ((p = strrchr(new_file, '/')) != NULL) ++p;
+      else p=new_file;
+      if ((q = strrchr(old_file, '/')) != NULL) ++q;
+      else q=old_file;
+      if (strcmp(p, q) == 0) warn("duplicate file in database : %s",q);
+      new_file=strtok(NULL,"\n");
+    }
+    free(l_files);
+  }
+
+  /* Add new files (even if they are duplicate) */
+  l_files=strdup(files);
+  new_file=strtok(l_files,"\n");
+  while (new_file!=NULL) {
+    q = new_file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
+    if (dir!=NULL) {
+      int tmp=write(f,dir,strlen(dir));
+      tmp=write(f,"/",1);
+    }
+    write(f,q,strlen(q));
+    write(f,"\n",1);
+    new_file=strtok(NULL,"\n");
+    nb++;
+  }
+  free(l_files);
+  list_unlock(f);
+  if (close(f)!=0) err(errno,"Error while closing file : %s",name);
   free(name);
-  free(cp_files);
+  free(buf);
+  free(arr_buf);
   return (nb);
 }
 
