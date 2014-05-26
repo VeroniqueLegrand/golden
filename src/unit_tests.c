@@ -630,8 +630,8 @@ void clean() {
 
 int main(int argc, char **argv) {
   clean();
-  /*all_indix_t tmp_idx=index_load("/Users/vlegrand/Desktop/golden-3.0/test/tmp_new","wgs_ac_c1_sp_1",ACCSUF);
-  all_indix_t tmp_idx2=index_load("/Users/vlegrand/Desktop/golden-3.0/test/tmp_new","wgs_ac_c1_sp_2",ACCSUF);
+  all_indix_t tmp_idx=index_load("/Users/vlegrand/Desktop/golden-3.0/src","all",ACCSUF);
+  all_indix_t tmp_idx2=index_load("/Users/vlegrand/Desktop/golden-3.0/src","old",ACCSUF);
   printf("%ld %ld\n",tmp_idx.accnb,tmp_idx2.accnb);
   int i;
   for (i=0;i<tmp_idx.accnb;i++) {
@@ -639,7 +639,7 @@ int main(int argc, char **argv) {
   }
 
   freeAllIndix(tmp_idx);
-  freeAllIndix(tmp_idx2);*/
+  freeAllIndix(tmp_idx2);
 
   all_indix_t t_idx=test_index_create();
   freeAllIndix(t_idx);

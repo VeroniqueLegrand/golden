@@ -7,6 +7,8 @@ test "x$VERBOSE" = "xx" && set -x
 test $srcdir != . && ln -s $srcdir/all .
 dbs=`ls all/*dat`
 
+echo "databanks :"$dbs
+
 ## Check indexes generation
 rm -f *.acx *.idx *.dbx
 ../src/goldin all $dbs || exit 1
@@ -17,7 +19,7 @@ for e in $ext; do
   mv all.$e old.$e || exit 1
 done
 for d in $dbs; do
-  ../src/goldin all $d || exit 1
+../src/goldin all $d || exit 1
 done
 for e in $ext; do
   cmp old.$e all.$e || exit 1
@@ -31,6 +33,8 @@ test $fnb = $inb || exit 1
 ## tests for new version
 dbs=`ls all/*.g*`
 mkdir tmp_new
+
+echo "now testing with other databanks :" $dbs
 
 ## generates indexes in the classic way (merged and sorted)
 ../src/goldin --index_dir tmp_new -d all -i wgs_classic $dbs || exit 1
@@ -89,8 +93,17 @@ cmp tmp_new/wgs_ac_c1_sp_1.acx tmp_new/wgs_ac_c1_sp_2.acx || exit 1
 ../src/goldin --index_dir tmp_new  -a wgs_ac_c1_m_2 all/wgs_extract.1.gbff all/wgs_extract.1.gnp all/wgs_extract.2.gbff all/wgs_extract.2.gnp all/wgs_extract.3.gnp || exit 1
 cmp tmp_new/wgs_ac_c1_sp_1.acx tmp_new/wgs_ac_c1_m_2.acx || exit 1
 
-## Try another way of creating indexes from flat files than the "merge" one. This should roduce the same result.
-## --concat_sort --purge --index_dir /Users/vlegrand/wgs_tmp_index wgs_test /users/vlegrand/Desktop/GOLDENDATA/prod/index/golden/wgs/wgs.AAAA.1.gbff
+## Try another way of creating indexes from flat files than the "merge" one. This should produce the same result as with the old goldin version.
+../src/goldin --concat_sort --purge --index_dir tmp_new wgs_testN all/wgs_extract.1.gbff || exit 1
+
+## Check that old behavior still works
+../src/goldin wgs_testO all/wgs_extract.1.gbff || exit 1
+
+## now results should be the same
+cmp tmp_new/wgs_testN.acx wgs_testO.acx || exit 1
+cmp tmp_new/wgs_testN.idx wgs_testO.idx || exit 1
+cmp tmp_new/wgs_testN.dbx wgs_testO.dbx || exit 1
+
 
 ## this should throw an error since locus were not indexed previously.
 my_output=`../src/goldin --index_dir tmp_new --idx_input --concat_only -i wgs_ac_c1 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3`
@@ -120,7 +133,7 @@ rmdir tmp_new
 
 ## Cleanup
 test $srcdir != . && rm -f all
-rm -f *.acx *.idx *.dbx
+#rm -f *.acx *.idx *.dbx
 
 ## Normal end
 exit 0
