@@ -9,6 +9,8 @@
 #include "list.h"
 #include "query.h"
 #include "index.h"
+#include "index_hl.h"
+#include "entry.h"
 
 #define MAXNAME 100
 //#define DEBUG
