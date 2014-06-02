@@ -168,7 +168,7 @@ void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) 
      process_index_file(s_parms ,rac_file,&d_descr);
   }
   // update dest index files with right number of indexes.
-  if (s_parms.acc) {
+  /*if (s_parms.acc) {
     lck=index_file_lock(d_descr.d_facx,0,sizeof(d_descr.accnb));
     if (lseek(d_descr.d_facx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx",s_parms.dbase);
     if (write(d_descr.d_facx,&d_descr.accnb, sizeof(d_descr.accnb)) != sizeof(d_descr.accnb)) err(errno,"error writing number of indexes");
@@ -179,7 +179,7 @@ void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) 
     if (lseek(d_descr.d_ficx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx",s_parms.dbase);
     if (write(d_descr.d_ficx,&d_descr.locnb, sizeof(d_descr.locnb)) != sizeof(d_descr.locnb)) err(errno,"error writing number of indexes");
     index_file_unlock(d_descr.d_ficx,lck);
-  }
+  }*/
 
   tot_idx.accnb=d_descr.accnb;
   tot_idx.locnb=d_descr.locnb;

@@ -339,11 +339,11 @@ void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr
     d_descr->max_filenb=new_nb;
     close_source_index_desc(&ls_descr[i-1]);
   }
-  if (lseek(d_descr->d_facx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx","wgs_c");
+  /*if (lseek(d_descr->d_facx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx","wgs_c");
   if (write(d_descr->d_facx,&d_descr->accnb, sizeof(d_descr->accnb)) != sizeof(d_descr->accnb)) err(errno,"error writing number of indexes");
 
   if (lseek(d_descr->d_ficx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.idx","wgs_c");
-  if (write(d_descr->d_ficx,&d_descr->locnb, sizeof(d_descr->locnb)) != sizeof(d_descr->locnb)) err(errno,"error writing number of indexes");
+  if (write(d_descr->d_ficx,&d_descr->locnb, sizeof(d_descr->locnb)) != sizeof(d_descr->locnb)) err(errno,"error writing number of indexes");*/
 
   
   close_dest_index_desc(d_descr);
@@ -630,7 +630,7 @@ void clean() {
 
 int main(int argc, char **argv) {
   clean();
-  all_indix_t tmp_idx=index_load("/Users/vlegrand/Desktop/golden-3.0/src","all",ACCSUF);
+  /*all_indix_t tmp_idx=index_load("/Users/vlegrand/Desktop/golden-3.0/src","all",ACCSUF);
   all_indix_t tmp_idx2=index_load("/Users/vlegrand/Desktop/golden-3.0/src","old",ACCSUF);
   printf("%ld %ld\n",tmp_idx.accnb,tmp_idx2.accnb);
   int i;
@@ -639,7 +639,7 @@ int main(int argc, char **argv) {
   }
 
   freeAllIndix(tmp_idx);
-  freeAllIndix(tmp_idx2);
+  freeAllIndix(tmp_idx2);*/
 
   all_indix_t t_idx=test_index_create();
   freeAllIndix(t_idx);

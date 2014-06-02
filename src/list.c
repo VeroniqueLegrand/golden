@@ -33,6 +33,8 @@
 #endif
 
 #define BUFINC 100
+#define LOCK_DEBUG
+#include <time.h>
 
 /*
  * Acquires or releases (depending on l_type value) an exclusive write lock on list file.
@@ -50,11 +52,31 @@ void set_list_lock(int fd, int l_type) {
 
 
 void list_lock(int fd) {
+#ifdef LOCK_DEBUG
+  clock_t start_t, stop_t, total_t;
+  printf("Going to try to lock list file for writing.\n");
+  start_t=clock();
+#endif
   set_list_lock(fd,F_WRLCK);
+#ifdef LOCK_DEBUG
+  stop_t=clock();
+  total_t=(double) (stop_t -start_t) / CLOCKS_PER_SEC;
+  printf("list file locked for writing : %f.\n",total_t);
+#endif
 }
 
 void list_unlock(int fd) {
+#ifdef LOCK_DEBUG
+  clock_t start_t, stop_t, total_t;
+  printf("Going to try to unlock list file for writing.\n");
+  start_t=clock();
+#endif
   set_list_lock(fd,F_UNLCK);
+#ifdef LOCK_DEBUG
+  stop_t=clock();
+  total_t=(double) (stop_t -start_t) / CLOCKS_PER_SEC;
+  printf("list file unlocked for writing : %f.\n",total_t);
+#endif
 }
 
 /* Append database flat file list && return file nb
@@ -74,7 +96,7 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   int f,nb_read;
   int nb;
   char *p, *q, *buf, *name;
-  size_t len;
+  //size_t len;
   char * new_file, *old_file;
   char * l_files;
   char ** arr_buf=NULL;
@@ -93,10 +115,10 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   if ((buf = (char *)malloc(st.st_size+1)) == NULL) err(errno,"memory");
   if ((nb_read=read(f,buf,st.st_size))!=st.st_size) err(errno,"Error while reading source file.");
   buf[st.st_size]='\0';
-  printf("list_nb : read \n%s\n from existing file.\n",buf);
+  // printf("list_nb : read \n%s\n from existing file.\n",buf);
   char * a_fic=strtok(buf,"\n");
   while (a_fic!=NULL) {
-    printf("list_nb, a_fic=%s\n",a_fic);
+    // printf("list_nb, a_fic=%s\n",a_fic);
     nb++;
     arr_buf=realloc(arr_buf,nb*sizeof(char *));
     arr_buf[nb-1]=a_fic;
@@ -119,19 +141,19 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
     free(l_files);
   }
 
-  printf("list_append : before adding files, nb= %d \n",nb);
+  // printf("list_append : before adding files, nb= %d \n",nb);
   /* Add new files (even if they are duplicate) */
   l_files=strdup(files);
-  printf("going to add files : %s\n",l_files);
+  // printf("going to add files : %s\n",l_files);
   new_file=strtok(l_files,"\n");
   while (new_file!=NULL) {
-    printf("strtok returned : %s \n",new_file);
+    // printf("strtok returned : %s \n",new_file);
     q = new_file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
     if (dir!=NULL) {
       int tmp=write(f,dir,strlen(dir));
       tmp=write(f,"/",1);
     }
-    printf("going to write : %s , len: %ld to dbx file\n",q,strlen(q));
+    // printf("going to write : %s , len: %ld to dbx file\n",q,strlen(q));
     write(f,q,strlen(q));
     write(f,"\n",1);
     new_file=strtok(NULL,"\n");
@@ -143,7 +165,7 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   free(name);
   free(buf);
   free(arr_buf);
-  printf("list_append : going to return nb=%d \n",nb);
+  // printf("list_append : going to return nb=%d \n",nb);
   return nb;
 }
 
@@ -283,6 +305,6 @@ char * list_get(char * file) {
   if ((nb_read=read(fd,lst_to_concat,st.st_size))==-1) err(errno,"Error while reading source file.");
   close(fd);
   lst_to_concat[len]='\0';
-  printf("read : %s from file : %s \n",lst_to_concat,file);
+  // printf("read : %s from file : %s \n",lst_to_concat,file);
   return lst_to_concat;
 }
