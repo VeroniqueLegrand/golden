@@ -42,7 +42,7 @@
 #define TMPDIR "/tmp"
 #endif
 
-#define LOCK_DEBUG
+// #define LOCK_DEBUG
 #include <time.h>
 
 #define MAX_IDX_READ 10240 // maximum number of indix_t structures that can be read from an index file.
@@ -273,14 +273,14 @@ struct flock index_file_lock(int fd, off_t l_start, off_t l_len ) {
   lock_t.l_type = F_WRLCK;
 #ifdef LOCK_DEBUG
   clock_t start_t, stop_t, total_t;
-  printf("Going to try to lock index file for writing: %d.\n",l_start);
+  printf("Going to try to lock index file for writing: %lld.\n",l_start);
   start_t=clock();
 #endif
   set_lock(fd,lock_t);
 #ifdef LOCK_DEBUG
   stop_t=clock();
   total_t=(double) (stop_t -start_t) / CLOCKS_PER_SEC;
-  printf("index file locked for writing : %f.\n",total_t);
+  printf("index file locked for writing : %lu.\n",total_t);
 #endif
   return lock_t;
 }
@@ -297,7 +297,7 @@ void index_file_unlock(int fd, struct flock lock_t) {
 #ifdef LOCK_DEBUG
   stop_t=clock();
   total_t=(double) (stop_t -start_t) / CLOCKS_PER_SEC;
-  printf("index file unlocked for writing : %f.\n",total_t);
+  printf("index file unlocked for writing : %lu.\n",total_t);
 #endif
 }
 
@@ -305,10 +305,10 @@ void index_file_unlock(int fd, struct flock lock_t) {
  * reads at most MAX_IDX_READ indexes from source index file, updates theit filenb and writes
  * them to destination file.
  */
-void index_append(int fd_d,int prev_nb_flat,long nb_to_read,int fd_s,long prev_nb_idx) {
+void index_append(int fd_d,int prev_nb_flat,long nb_to_read,int fd_s,indix_t * buf) {
   int cnt;
   indix_t * inx;
-  indix_t * buf=malloc(nb_to_read*sizeof(indix_t));
+  // indix_t * buf=malloc(nb_to_read*sizeof(indix_t));
   if (read(fd_s,buf, nb_to_read*sizeof(indix_t)) == -1) err(errno,"Cannot read index from source file", NULL);
   inx=buf;
   for (cnt=0;cnt<nb_to_read;cnt++) {
@@ -316,7 +316,7 @@ void index_append(int fd_d,int prev_nb_flat,long nb_to_read,int fd_s,long prev_n
     inx++;
   }
   if (write(fd_d,buf, nb_to_read*sizeof(indix_t)) != nb_to_read*sizeof(indix_t)) err(errno,"Cannot write index to destination file",NULL);
-  free(buf);
+  // free(buf);
 }
 
 /* concatenates indexes that have already been written to a file by a previous call to goldin. */
@@ -326,6 +326,7 @@ long index_file_concat(int fd_d,int prev_nb_flat, long nb_idx, int fd_s, long pr
   struct flock lock_w; // lock to perform the writing in the "reserved" area of the destination file.
   struct stat s_dest, s_source;
   int res;
+  indix_t * buf=NULL;
 
   totnb+=nb_idx;
   lock_t=index_file_lock(fd_d,0,sizeof(long)); // lock used to perform the truncate operation
@@ -336,9 +337,9 @@ long index_file_concat(int fd_d,int prev_nb_flat, long nb_idx, int fd_s, long pr
 
   res = fstat(fd_s, &s_source);
   if (res == -1) err(1, "stat failed on source file");
+
   size_t s_to_add = s_source.st_size-sizeof(long); // do not concatenate number of indexes in index file.
   if (lseek(fd_d, 0, SEEK_END) == -1) err(errno,"index_file_concat: error while getting at the end of dest index file.",NULL);
-
   res = ftruncate(fd_d, s_dest.st_size + s_to_add);
   if (res == -1 && S_ISREG(s_dest.st_mode)) err(1, "Truncate failed");
 
@@ -347,12 +348,13 @@ long index_file_concat(int fd_d,int prev_nb_flat, long nb_idx, int fd_s, long pr
 
 
   int nb=nb_idx;
+  if (buf==NULL) buf=malloc(MAX_IDX_READ*sizeof(indix_t));
   while (nb-MAX_IDX_READ>0) {
-   index_append(fd_d,prev_nb_flat,nb,fd_s,prev_nb_idx);
+   index_append(fd_d,prev_nb_flat,MAX_IDX_READ,fd_s,buf);
    nb=nb-MAX_IDX_READ;
   }
-  index_append(fd_d,prev_nb_flat,nb,fd_s,prev_nb_idx);
-
+  index_append(fd_d,prev_nb_flat,nb,fd_s,buf);
+  free(buf);
   index_file_unlock(fd_d,lock_w);
   return totnb;
 }

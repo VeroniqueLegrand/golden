@@ -45,7 +45,7 @@
 
 
 void process_databank_files(int,int,char ** ,goldin_parms);
-all_indix_nb process_databank_file(goldin_parms, char * );
+all_indix_nb process_databank_file(goldin_parms, char *,char **);
 
 void process_index_files(int,int,char **,goldin_parms);
 
@@ -78,10 +78,12 @@ void process_databank_files(int optind,int argc,char ** argv,goldin_parms s_parm
   int i;
   char* file;
   all_indix_nb tot_idx;
+  char * buf=NULL;
   for(i = optind + 1; i < argc; i++) {
      file = argv[i];
-     tot_idx=process_databank_file(s_parms,file);
+     tot_idx=process_databank_file(s_parms,file,&buf);
   }
+  if (buf!=NULL) free(buf);
   if (s_parms.csort_flag) { // sort index file.
     all_index_sort(s_parms,tot_idx);
   }
@@ -91,7 +93,7 @@ void process_databank_files(int optind,int argc,char ** argv,goldin_parms s_parm
 }
 
 
-all_indix_nb process_databank_file(goldin_parms s_parms , char * file) {
+all_indix_nb process_databank_file(goldin_parms s_parms , char * file, char ** buf) {
   struct stat st;
   int nb;
   int ret;
@@ -101,7 +103,7 @@ all_indix_nb process_databank_file(goldin_parms s_parms , char * file) {
   if ((st.st_mode & S_IFMT) != S_IFREG) err(errno, file, "not a regular file");
 
   /* Add file to list */
-  nb = list_append(s_parms.dbase, s_parms.dir, file,s_parms.new_index_dir);
+  nb = list_append(s_parms.dbase, s_parms.dir, file,s_parms.new_index_dir,buf);
   all_indix_t file_l_indix=create_index(file,nb,s_parms.loc,s_parms.acc);
   tot_idx.accnb=file_l_indix.accnb;
   tot_idx.locnb=file_l_indix.accnb;
@@ -120,7 +122,7 @@ all_indix_nb process_databank_file(goldin_parms s_parms , char * file) {
   return tot_idx;
 }
 
-void process_index_file(goldin_parms s_parms ,char * rac_file,  dest_index_desc * d_descr) {
+void process_index_file(goldin_parms s_parms ,char * rac_file,  dest_index_desc * d_descr, char ** buf) {
   source_index_desc s_descr;
   int nb;
   char * s_dbx_file;
@@ -137,7 +139,7 @@ void process_index_file(goldin_parms s_parms ,char * rac_file,  dest_index_desc 
   free(s_dbx_file);
 
   // concatenate
-  nb = list_append(s_parms.dbase, s_parms.dir,l_flats,s_parms.new_index_dir);
+  nb = list_append(s_parms.dbase, s_parms.dir,l_flats,s_parms.new_index_dir,buf);
   free(l_flats);
   if (s_parms.acc) {
     // if (fseeko(d_descr->d_facx, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.acx",s_parms.dbase);
@@ -157,7 +159,7 @@ void process_index_file(goldin_parms s_parms ,char * rac_file,  dest_index_desc 
 void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) {
   int i;
   char* rac_file;
-
+  char*  buf=NULL;
   all_indix_nb tot_idx;
   dest_index_desc d_descr;
   struct flock lck;
@@ -165,8 +167,9 @@ void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) 
   d_descr=get_dest_index_desc(s_parms.acc,s_parms.loc,s_parms.new_index_dir,s_parms.dbase); // get description of destination index files.
   for(i = optind + 1; i < argc; i++) {
      rac_file = argv[i];
-     process_index_file(s_parms ,rac_file,&d_descr);
+     process_index_file(s_parms ,rac_file,&d_descr,&buf);
   }
+  if (buf!=NULL) free(buf);
   // update dest index files with right number of indexes.
   /*if (s_parms.acc) {
     lck=index_file_lock(d_descr.d_facx,0,sizeof(d_descr.accnb));

@@ -179,7 +179,8 @@ titi/toto1.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   
   char * dbase="db_test_tmp";
   struct stat st;
-  char * buf;
+  char * buf=NULL;
+  char * list_buf=NULL;
   int fd;
 
   list_new("../test/unit/new_tmp.dbx");
@@ -193,17 +194,17 @@ titi/toto1.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   free(l_flat);
 
   copy_file("../test/unit/db_test.dbx","../test/unit/db_test_tmp.dbx");
-  int nb=list_append(dbase,NULL,"toto1.dat","../test/unit");
+  int nb=list_append(dbase,NULL,"toto1.dat","../test/unit",&list_buf);
   assert(nb==4);
   assert(stat("../test/unit/db_test_tmp.dbx", &st) != -1);
   n_nb=list_nb("../test/unit","db_test_tmp");
   assert(n_nb==4);
   
-  nb=list_append(dbase,"titi","toto1.dat\n","../test/unit");
+  nb=list_append(dbase,"titi","toto1.dat\n","../test/unit",&list_buf);
   assert(stat("../test/unit/db_test_tmp.dbx", &st) != -1);
   assert(nb==5);
   // TODO : check that we got a warning for duplicate toto1.dat
-  nb=list_append(dbase,"titi","toto1.dat\ntoto2.dat\ntoto3.dat\n","../test/unit");
+  nb=list_append(dbase,"titi","toto1.dat\ntoto2.dat\ntoto3.dat\n","../test/unit",&list_buf);
   assert(nb==8);
   assert(stat("../test/unit/db_test_tmp.dbx", &st) != -1);
   buf= malloc(st.st_size);
@@ -218,10 +219,10 @@ titi/toto1.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   free(l_flat);
 
   // check new dbx file creation for new indexes.
-  nb=list_append("db_test_tmp2",NULL,"toto1.dat","../test/unit");
+  nb=list_append("db_test_tmp2",NULL,"toto1.dat","../test/unit",&list_buf);
   assert(nb==1);
   assert(stat("../test/unit/db_test_tmp2.dbx", &st) != -1);
-
+  if (list_buf!=NULL) free(list_buf);
 }
 
 void test_index_merge() {
@@ -231,23 +232,25 @@ void test_index_merge() {
 
 
 void create_idx_for_concat() {
+  char * buf=NULL;
   all_indix_t t_idx=create_index("../test/unit/wgs_extract.1.gnp",1,1,1);
-  int nb=list_append("wgs1",NULL,"../test/unit/wgs_extract.1.gnp","../test/unit");
+  int nb=list_append("wgs1",NULL,"../test/unit/wgs_extract.1.gnp","../test/unit",&buf);
   int ret=index_dump("wgs1",REPLACE_INDEXES,t_idx, ACCSUF,"../test/unit");
   ret=index_dump("wgs1",REPLACE_INDEXES,t_idx, LOCSUF,"../test/unit");
   freeAllIndix(t_idx);
 
   t_idx=create_index("../test/unit/wgs_extract.2.gnp",1,1,1);
-  nb=list_append("wgs2",NULL,"../test/unit/wgs_extract.2.gnp","../test/unit");
+  nb=list_append("wgs2",NULL,"../test/unit/wgs_extract.2.gnp","../test/unit",&buf);
   ret=index_dump("wgs2",REPLACE_INDEXES,t_idx, ACCSUF,"../test/unit");
   ret=index_dump("wgs2",REPLACE_INDEXES,t_idx, LOCSUF,"../test/unit");
   freeAllIndix(t_idx);
 
   t_idx=create_index("../test/unit/wgs_extract.3.gnp",1,1,1);
-  nb=list_append("wgs3",NULL,"../test/unit/wgs_extract.3.gnp","../test/unit");
+  nb=list_append("wgs3",NULL,"../test/unit/wgs_extract.3.gnp","../test/unit",&buf);
   ret=index_dump("wgs3",REPLACE_INDEXES,t_idx, ACCSUF,"../test/unit");
   ret=index_dump("wgs3",REPLACE_INDEXES,t_idx, LOCSUF,"../test/unit/");
   freeAllIndix(t_idx);
+  if (buf!=NULL) free(buf);
 }
 
 void test_index_desc(dest_index_desc* d_descr,source_index_desc* ls_descr) {
@@ -291,8 +294,9 @@ void test_index_desc(dest_index_desc* d_descr,source_index_desc* ls_descr) {
  */
 void test_index_concat() {
   struct stat st;
+  char * buf=NULL;
   all_indix_t t_idx=create_index("../test/unit/wgs_extract.1.gnp",1,1,1);
-  int nb=list_append("wgs_orig",NULL,"../test/unit/wgs_extract.1.gnp","../test/unit");
+  int nb=list_append("wgs_orig",NULL,"../test/unit/wgs_extract.1.gnp","../test/unit",&buf);
   char * acx_file=index_file("../test/unit","wgs_orig",ACCSUF);
   int new_nb=index_concat(acx_file, nb, t_idx.l_accind);
 
@@ -310,6 +314,7 @@ void test_index_concat() {
   freeAllIndix(t_idx);
   freeAllIndix(t_idx_2);
   free(acx_file);
+  if (buf!=NULL) free(buf);
 }
 
 /*
@@ -319,6 +324,7 @@ void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr
   int new_nb,i;
   char * s_dbx_file, *l_flats;
   char source_base[5];
+  char * buf=NULL;
 
   // concatenate
   for(i=1; i<=nb_source; i++) {
@@ -326,7 +332,7 @@ void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr
     s_dbx_file=index_file("../test/unit",source_base,LSTSUF);
     l_flats=list_get(s_dbx_file);
     free(s_dbx_file);
-    new_nb = list_append("wgs_c",NULL,l_flats,"../test/unit");
+    new_nb = list_append("wgs_c",NULL,l_flats,"../test/unit",&buf);
     assert(new_nb==i);
     free(l_flats);
 
@@ -339,6 +345,7 @@ void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr
     d_descr->max_filenb=new_nb;
     close_source_index_desc(&ls_descr[i-1]);
   }
+  if (buf!=NULL) free(buf);
   /*if (lseek(d_descr->d_facx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx","wgs_c");
   if (write(d_descr->d_facx,&d_descr->accnb, sizeof(d_descr->accnb)) != sizeof(d_descr->accnb)) err(errno,"error writing number of indexes");
 
@@ -378,7 +385,8 @@ void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr
 
 all_indix_t test_index_create() {
   int nb;
-  nb = list_append("enzyme_extract",NULL, data_file,"../test/unit");
+  char * buf=NULL;
+  nb = list_append("enzyme_extract",NULL, data_file,"../test/unit",&buf);
   all_indix_t t_idx=create_index(data_file,nb,0,1);
   // assert(strcmp(t_idx.flatfile_name,data_file)==0);
   assert(t_idx.accnb==0);
@@ -392,7 +400,7 @@ all_indix_t test_index_create() {
   assert(strcmp(idx.name,"7.1.1.4")==0);
   idx=t_idx.l_locind[0];
   assert(strcmp(idx.name,"1.1.1.36")==0);
-
+  if (buf!=NULL) free(buf);
   // return indexes for later tests.
   return t_idx;
 }
@@ -407,29 +415,32 @@ void index_fbegin_go(int fidx,char * filename) {
 }
 
 void create_files_for_purge() {
+  char * buf=NULL;
   dest_index_desc my_dest;
   my_dest=get_dest_index_desc(1,1,"../test/unit","wgs_cfp");
   char * s_dbx_file = index_file("../test/unit","wgs2",LSTSUF);
   char * l_flats=list_get(s_dbx_file);
   free(s_dbx_file);
-  int new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
+  int new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit",&buf);
   
   source_index_desc my_source=get_source_index_desc(1,1,"../test/unit","wgs2");
   my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
   my_dest.max_filenb=new_nb;
-  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
+  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit",&buf);
   index_fbegin_go(my_source.d_facx,"wgs2.acx");
   
   
   my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
   my_dest.max_filenb=new_nb;
-  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
+  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit",&buf);
   
   index_fbegin_go(my_source.d_facx,"wgs2.acx");
 
   my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
   my_dest.max_filenb=new_nb;
-  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
+  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit",&buf);
+
+  if (buf!=NULL) free(buf);
   
   index_fbegin_go(my_source.d_facx,"wgs2.acx");
   
@@ -630,16 +641,16 @@ void clean() {
 
 int main(int argc, char **argv) {
   clean();
-  /*all_indix_t tmp_idx=index_load("/Users/vlegrand/Desktop/golden-3.0/src","all",ACCSUF);
-  all_indix_t tmp_idx2=index_load("/Users/vlegrand/Desktop/golden-3.0/src","old",ACCSUF);
-  printf("%ld %ld\n",tmp_idx.accnb,tmp_idx2.accnb);
+  /*all_indix_t tmp_idx=index_load("/Users/vlegrand/wgs_tmp_index","wgsC0",ACCSUF);
+  //all_indix_t tmp_idx2=index_load("/Users/vlegrand/Desktop/golden-3.0/src","old",ACCSUF);
+  printf("%ld\n",tmp_idx.accnb);
   int i;
   for (i=0;i<tmp_idx.accnb;i++) {
-    printf("%s %d | %s %d\n",tmp_idx.l_accind[i].name,tmp_idx.l_accind[i].filenb,tmp_idx2.l_accind[i].name,tmp_idx2.l_accind[i].filenb);
+    printf("%s %d %lu\n",tmp_idx.l_accind[i].name,tmp_idx.l_accind[i].filenb,tmp_idx.l_accind[i].offset);
   }
 
-  freeAllIndix(tmp_idx);
-  freeAllIndix(tmp_idx2);*/
+  freeAllIndix(tmp_idx);*/
+  // freeAllIndix(tmp_idx2);
 
   all_indix_t t_idx=test_index_create();
   freeAllIndix(t_idx);

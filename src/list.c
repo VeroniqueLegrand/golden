@@ -33,7 +33,7 @@
 #endif
 
 #define BUFINC 100
-#define LOCK_DEBUG
+// #define LOCK_DEBUG
 #include <time.h>
 
 /*
@@ -61,7 +61,7 @@ void list_lock(int fd) {
 #ifdef LOCK_DEBUG
   stop_t=clock();
   total_t=(double) (stop_t -start_t) / CLOCKS_PER_SEC;
-  printf("list file locked for writing : %f.\n",total_t);
+  printf("list file locked for writing : %lu.\n",total_t);
 #endif
 }
 
@@ -75,7 +75,7 @@ void list_unlock(int fd) {
 #ifdef LOCK_DEBUG
   stop_t=clock();
   total_t=(double) (stop_t -start_t) / CLOCKS_PER_SEC;
-  printf("list file unlocked for writing : %f.\n",total_t);
+  printf("list file unlocked for writing : %lu.\n",total_t);
 #endif
 }
 
@@ -89,20 +89,21 @@ void list_unlock(int fd) {
  * they were always generated in the execution directory but I do not find this 
  * very practical for unit testing and other kind of testing as well. 
  * Just put "." if you want previous behavior.
+ * buf : a buffer to store content of the .dbx file before appending data to it.
  */
-int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
+int list_append(char *dbase, char *dir, char *files,char * new_index_dir, char **buf) {
   // FILE *f;
   struct stat st;
   int f,nb_read;
   int nb;
-  char *p, *q, *buf, *name;
-  //size_t len;
+  char *p, *q,*name;
+  
   char * new_file, *old_file;
   char * l_files;
   char ** arr_buf=NULL;
   int cnt_fic;
 
-
+  char * l_buf=*buf;
   nb = 0;
   name = index_file(new_index_dir, dbase, LSTSUF);
   f = open(name, O_RDWR|O_APPEND|O_CREAT, 0666);
@@ -112,11 +113,12 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   list_lock(f);
 
   //len=st.st_size;
-  if ((buf = (char *)malloc(st.st_size+1)) == NULL) err(errno,"memory");
-  if ((nb_read=read(f,buf,st.st_size))!=st.st_size) err(errno,"Error while reading source file.");
-  buf[st.st_size]='\0';
+  if ((l_buf = (char *)realloc(l_buf,st.st_size+1)) == NULL) err(errno,"memory");
+  *buf=l_buf;
+  if ((nb_read=read(f,l_buf,st.st_size))!=st.st_size) err(errno,"Error while reading list file.");
+  l_buf[st.st_size]='\0';
   // printf("list_nb : read \n%s\n from existing file.\n",buf);
-  char * a_fic=strtok(buf,"\n");
+  char * a_fic=strtok(l_buf,"\n");
   while (a_fic!=NULL) {
     // printf("list_nb, a_fic=%s\n",a_fic);
     nb++;
@@ -163,7 +165,8 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   list_unlock(f);
   if (close(f)!=0) err(errno,"Error while closing file : %s",name);
   free(name);
-  free(buf);
+  // free(buf);
+  // buf=NULL;
   free(arr_buf);
   // printf("list_append : going to return nb=%d \n",nb);
   return nb;
