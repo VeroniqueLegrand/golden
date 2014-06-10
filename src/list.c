@@ -22,6 +22,8 @@
 #include <errno.h>
 #include <err.h>
 #include <fcntl.h>
+#include <limits.h>
+#include <stdbool.h>
 
 #include "error.h"
 #include "index.h"
@@ -79,6 +81,38 @@ void list_unlock(int fd) {
 #endif
 }
 
+void check_doublon(char * a_fic,char *files_orig) {
+  char * p,*q;
+  int len_files=strlen(files_orig);
+  int cnt=0;
+  char * files=strdup(files_orig);
+  char * a=files;
+  char * new_file=files;
+  while (new_file!=NULL) {
+    while (*a!='\n' && cnt!=len_files) { // check for end of current filename un the list of filenames given in argument.
+      a++;
+      cnt++;
+    }
+    if (cnt!=len_files) {
+      // printf("a=%s\n",a);
+      a[0]='\0';
+    }
+    if ((p = strrchr(new_file, '/')) != NULL) ++p;
+    else p=new_file;
+    if ((q = strrchr(a_fic, '/')) != NULL) ++q;
+    else q=a_fic;
+    if (strcmp(p, q) == 0) warn("duplicate file in database : %s",q);
+    if (cnt==len_files) {
+      new_file=NULL;
+    } else {
+      a++;
+      new_file=a;
+      cnt++;
+    }
+  }
+  free(files);
+}
+
 /* Append database flat file list && return file nb
  * The files argument is a list of file names separated by \n.
  * Parameters :
@@ -91,57 +125,66 @@ void list_unlock(int fd) {
  * Just put "." if you want previous behavior.
  * buf : a buffer to store content of the .dbx file before appending data to it.
  */
-int list_append(char *dbase, char *dir, char *files,char * new_index_dir, char **buf) {
-  // FILE *f;
+int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   struct stat st;
   int f,nb_read;
   int nb;
   char *p, *q,*name;
   
-  char * new_file, *old_file;
+  char * new_file;
   char * l_files;
-  char ** arr_buf=NULL;
-  int cnt_fic;
 
-  char * l_buf=*buf;
+  char l_buf[2*PATH_MAX+1];
+  char remain[PATH_MAX+1]="";
+  bool is_cut;  // indicates if filename read is cut
+  int len_remain;
+  char * a_fic;
+
   nb = 0;
+  l_buf[0]='\0';
+  len_remain=0;
   name = index_file(new_index_dir, dbase, LSTSUF);
   f = open(name, O_RDWR|O_APPEND|O_CREAT, 0666);
   if (f == -1) err(errno,"Cannot open file : %s",name);
-  
   if (stat(name, &st) == -1) err(errno,name, NULL);
   list_lock(f);
 
-  //len=st.st_size;
-  if ((l_buf = (char *)realloc(l_buf,st.st_size+1)) == NULL) err(errno,"memory");
-  *buf=l_buf;
-  if ((nb_read=read(f,l_buf,st.st_size))!=st.st_size) err(errno,"Error while reading list file.");
-  l_buf[st.st_size]='\0';
-  // printf("list_nb : read \n%s\n from existing file.\n",buf);
-  char * a_fic=strtok(l_buf,"\n");
-  while (a_fic!=NULL) {
-    // printf("list_nb, a_fic=%s\n",a_fic);
-    nb++;
-    arr_buf=realloc(arr_buf,nb*sizeof(char *));
-    arr_buf[nb-1]=a_fic;
-    a_fic=strtok(NULL,"\n");
-  }
-  
-  /* Checks for duplicate file */
-  for (cnt_fic=0;cnt_fic<nb;cnt_fic++) {
-    old_file=arr_buf[cnt_fic];
-    l_files=strdup(files);
-    new_file=strtok(l_files,"\n");
-    while (new_file!=NULL) {
-      if ((p = strrchr(new_file, '/')) != NULL) ++p;
-      else p=new_file;
-      if ((q = strrchr(old_file, '/')) != NULL) ++q;
-      else q=old_file;
-      if (strcmp(p, q) == 0) warn("duplicate file in database : %s",q);
-      new_file=strtok(NULL,"\n");
+  // 1rst part : count flat files and check for duplicates.
+  off_t nb_to_read=st.st_size;
+  is_cut=true;
+  while (nb_to_read-PATH_MAX>=0) {
+    len_remain=strlen(remain);
+    if (is_cut && len_remain>0) {
+      strcpy(l_buf,remain);
     }
-    free(l_files);
+    if ((nb_read=read(f,l_buf+len_remain,PATH_MAX))==-1) err(errno,"Error while reading list file.");
+    if (l_buf[PATH_MAX+len_remain]=='\n') is_cut=false;
+    else is_cut=true;
+    l_buf[PATH_MAX+len_remain]='\0';
+    a_fic=strtok(l_buf,"\n");
+    // strcpy(remain,a_fic);
+    while (a_fic!=NULL) {
+      check_doublon(a_fic,files);
+      nb++;
+      strcpy(remain,a_fic);
+      a_fic=strtok(NULL,"\n");
+    }
+    if (is_cut) nb--; // if read cut a path, then full path will be process with the next data read.
+    nb_to_read=nb_to_read-PATH_MAX;
   }
+  if (is_cut && len_remain>0) {
+     strcpy(l_buf,remain);
+  }
+  if ((nb_read=read(f,(char *)l_buf+len_remain,nb_to_read))==-1) err(errno,"Error while reading list file.");
+  l_buf[len_remain+nb_to_read]='\0';
+  a_fic=strtok(l_buf,"\n");
+  while (a_fic!=NULL) {
+     check_doublon(a_fic,files);
+     nb++;
+     strcpy(remain,a_fic);
+     a_fic=strtok(NULL,"\n");
+  }
+
 
   // printf("list_append : before adding files, nb= %d \n",nb);
   /* Add new files (even if they are duplicate) */
@@ -165,9 +208,6 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir, char *
   list_unlock(f);
   if (close(f)!=0) err(errno,"Error while closing file : %s",name);
   free(name);
-  // free(buf);
-  // buf=NULL;
-  free(arr_buf);
   // printf("list_append : going to return nb=%d \n",nb);
   return nb;
 }

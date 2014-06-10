@@ -198,7 +198,7 @@ void print_results(int nb_res,int chk,result_t * res,char * file) {
   int g=fileno(stdout);
   /* Set output stream */
   // g = stdout;
-  if (file != NULL && (g = open(file, O_WRONLY|O_CREAT)) == -1) err(errno,"cannot open file: %s.",file);
+  if (file != NULL && (g = open(file, O_WRONLY|O_CREAT,0666)) == -1) err(errno,"cannot open file: %s.",file);
 
   // first version prints output. Don't want to change main's prototype at the beginning.
   for (i=0; i<nb_res; i++) {
