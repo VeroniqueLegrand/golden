@@ -122,8 +122,8 @@ all_indix_nb process_databank_file(goldin_parms s_parms , char * file, char ** b
   return tot_idx;
 }
 
-void process_index_file(goldin_parms s_parms ,char * rac_file,  dest_index_desc * d_descr, char ** buf) {
-  source_index_desc s_descr;
+void process_index_file(goldin_parms s_parms ,char * rac_file,  index_desc * d_descr, char ** buf) {
+  index_desc s_descr;
   int nb;
   char * s_dbx_file;
   char * l_flats;
@@ -150,7 +150,7 @@ void process_index_file(goldin_parms s_parms ,char * rac_file,  dest_index_desc 
     d_descr->locnb=index_file_concat(d_descr->d_ficx,d_descr->max_filenb, s_descr.locnb, s_descr.d_ficx,d_descr->locnb);
   }
   // close source index files
-  close_source_index_desc(&s_descr);
+  close_index_desc(&s_descr);
   d_descr->max_filenb=nb;
   free(cp1);
   free(cp2);
@@ -161,7 +161,7 @@ void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) 
   char* rac_file;
   char*  buf=NULL;
   all_indix_nb tot_idx;
-  dest_index_desc d_descr;
+  index_desc d_descr;
   struct flock lck;
 
   d_descr=get_dest_index_desc(s_parms.acc,s_parms.loc,s_parms.new_index_dir,s_parms.dbase); // get description of destination index files.
@@ -174,7 +174,7 @@ void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) 
   tot_idx.locnb=d_descr.locnb;
   
   // close dest index files
-  close_dest_index_desc(&d_descr);
+  close_index_desc(&d_descr);
 
   if (s_parms.csort_flag) { // sort index file.
     all_index_sort(s_parms,tot_idx);

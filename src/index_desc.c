@@ -25,7 +25,7 @@
 #define BUFINC 100
 
 /* Initialize data structure*/
-void init_sidx_desc(source_index_desc * p_sdesc) {
+void init_idx_desc(index_desc * p_sdesc) {
   p_sdesc->d_facx=-1; // for .acx files
   p_sdesc->d_ficx=-1; // for .icx files
   p_sdesc->accnb=0;
@@ -33,14 +33,6 @@ void init_sidx_desc(source_index_desc * p_sdesc) {
   p_sdesc->max_filenb=0;
 }
 
-void init_didx_desc(dest_index_desc * p_ddesc) {
-  p_ddesc->d_facx=-1; // for .acx files
-  p_ddesc->d_ficx=-1; // for .icx files
-  p_ddesc->d_fdbx=-1; // for .dbx files.
-  p_ddesc->accnb=0;
-  p_ddesc->locnb=0;
-  p_ddesc->max_filenb=0;
-}
 
 
 fic_index_desc get_ficidx_desc(char *cur_index_dir, char *dbase,char* suff, char *opn_mode, int create_flg) {
@@ -75,27 +67,18 @@ fic_index_desc get_ficidx_desc(char *cur_index_dir, char *dbase,char* suff, char
   return cur_idx;
 }
 
-void close_source_index_desc(source_index_desc * p_sdesc) {
-  if (p_sdesc->d_ficx!=-1) {
-    if (close(p_sdesc->d_ficx) == -1) err(errno,"error closing source locus index file.");
-  }
-  if (p_sdesc->d_facx!=-1) {
-    if (close(p_sdesc->d_facx) == -1) err(errno,"error closing source AC index file.");
-  }
-  init_sidx_desc(p_sdesc);
-}
 
-source_index_desc get_source_index_desc(int acc,int loc,char * s_index_dir, char * dbase) {
+index_desc get_source_index_desc(int acc,int loc,char * s_index_dir, char * dbase) {
   char *acx_file, *icx_file, *dbx_file;
   uint64_t indnb;
-  source_index_desc s_idx;
+  index_desc s_idx;
   fic_index_desc w_idx;
   int ret;
   size_t len;
   char * buf, *p;
   FILE * dbx_fd;
 
-  init_sidx_desc(&s_idx);
+  init_idx_desc(&s_idx);
   s_idx.max_filenb=list_nb(s_index_dir, dbase);
   if (acc) {
       w_idx=get_ficidx_desc(s_index_dir, dbase, ACCSUF, "r", 0);
@@ -110,10 +93,10 @@ source_index_desc get_source_index_desc(int acc,int loc,char * s_index_dir, char
   return  s_idx;
 }
 
-dest_index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char * dbase) {
+index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char * dbase) {
   char *acx_file, *icx_file, *dbx_file;
   uint64_t indnb;
-  dest_index_desc d_idx;
+  index_desc d_idx;
   fic_index_desc w_idx;
   int ret;
   size_t len;
@@ -122,7 +105,7 @@ dest_index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char *
 
   // remove old index files.No! concatenation will be done by several different processes. Process N must not erase what process M has written!
   // index_hl_remove(acc,loc,new_index_dir,dbase);
-  init_didx_desc(&d_idx);
+  init_idx_desc(&d_idx);
   if (acc) {
      w_idx=get_ficidx_desc(new_index_dir, dbase, ACCSUF, "r+", 1);
      d_idx.accnb=w_idx.idxnb;
@@ -134,22 +117,18 @@ dest_index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char *
     d_idx.d_ficx=w_idx.d_fidx;
   }
   dbx_file=index_file(new_index_dir,dbase,LSTSUF);
-// just create the file in fact.
-  // S_IROTH|S_IWOTH|S_IRGRP|S_IWGRP|S_IWUSR|S_IRUSR
-  if ((d_idx.d_fdbx = open(dbx_file, O_RDWR|O_CREAT,0666)) == -1) err(errno,"error opening file : %s", dbx_file);
-  if (close(d_idx.d_fdbx) == -1) err(errno,"error closing destination LST file");
-  d_idx.d_fdbx=-1;
+  // just create the file in fact.
+  list_new(dbx_file);
   free(dbx_file);
   return d_idx;
 }
 
-void close_dest_index_desc(dest_index_desc * p_ddesc) {
+void close_index_desc(index_desc * p_ddesc) {
   if (p_ddesc->d_ficx!=-1) {
     if (close(p_ddesc->d_ficx) == -1) err(errno,"error closing destination locus index file");
   }
   if (p_ddesc->d_facx!=-1) {
     if (close(p_ddesc->d_facx) == -1) err(errno,"error closing destination AC index file");
   }
-  // if (close(p_ddesc->d_fdbx) == -1) err(errno,"error closing destination LST file");
-  init_didx_desc(p_ddesc);
+  init_idx_desc(p_ddesc);
 }

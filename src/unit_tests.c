@@ -253,7 +253,7 @@ void create_idx_for_concat() {
   if (buf!=NULL) free(buf);
 }
 
-void test_index_desc(dest_index_desc* d_descr,source_index_desc* ls_descr) {
+void test_index_desc(index_desc* d_descr,index_desc* ls_descr) {
   int nb_source=3;// number of elements in ls_descr.
   int i;
   struct stat st;
@@ -280,7 +280,7 @@ void test_index_desc(dest_index_desc* d_descr,source_index_desc* ls_descr) {
   assert(ls_descr[0].accnb==2);
   assert(ls_descr[0].locnb==2);
 
-  source_index_desc tmp=ls_descr[1];
+  index_desc tmp=ls_descr[1];
   assert(ls_descr[1].accnb==5);
   assert(ls_descr[1].locnb==5);
 
@@ -320,7 +320,7 @@ void test_index_concat() {
 /*
  Concatenates several unsorted index files That may contain doublons.
  */
-void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr,int nb_source) {
+void test_index_file_concat(index_desc* d_descr,index_desc* ls_descr,int nb_source) {
   int new_nb,i;
   char * s_dbx_file, *l_flats;
   char source_base[5];
@@ -343,17 +343,11 @@ void test_index_file_concat(dest_index_desc* d_descr,source_index_desc* ls_descr
     d_descr->locnb=index_file_concat(d_descr->d_ficx,d_descr->max_filenb, ls_descr[i-1].locnb, ls_descr[i-1].d_ficx,d_descr->locnb);
 
     d_descr->max_filenb=new_nb;
-    close_source_index_desc(&ls_descr[i-1]);
+    close_index_desc(&ls_descr[i-1]);
   }
   if (buf!=NULL) free(buf);
-  /*if (lseek(d_descr->d_facx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx","wgs_c");
-  if (write(d_descr->d_facx,&d_descr->accnb, sizeof(d_descr->accnb)) != sizeof(d_descr->accnb)) err(errno,"error writing number of indexes");
-
-  if (lseek(d_descr->d_ficx, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.idx","wgs_c");
-  if (write(d_descr->d_ficx,&d_descr->locnb, sizeof(d_descr->locnb)) != sizeof(d_descr->locnb)) err(errno,"error writing number of indexes");*/
-
   
-  close_dest_index_desc(d_descr);
+  close_index_desc(d_descr);
 
   // check resulting index file.
   int nb = list_nb("../test/unit","wgs_c");
@@ -416,14 +410,14 @@ void index_fbegin_go(int fidx,char * filename) {
 
 void create_files_for_purge() {
   char * buf=NULL;
-  dest_index_desc my_dest;
+  index_desc my_dest;
   my_dest=get_dest_index_desc(1,1,"../test/unit","wgs_cfp");
   char * s_dbx_file = index_file("../test/unit","wgs2",LSTSUF);
   char * l_flats=list_get(s_dbx_file);
   free(s_dbx_file);
   int new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
   
-  source_index_desc my_source=get_source_index_desc(1,1,"../test/unit","wgs2");
+  index_desc my_source=get_source_index_desc(1,1,"../test/unit","wgs2");
   my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
   my_dest.max_filenb=new_nb;
   new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
@@ -446,12 +440,12 @@ void create_files_for_purge() {
   
   my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
   my_dest.max_filenb=new_nb;
-  close_source_index_desc(&my_source);
+  close_index_desc(&my_source);
   
   if (lseek(my_dest.d_facx, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s","wgs_cfp");
   write(my_dest.d_facx, &my_dest.accnb, sizeof(my_dest.accnb));
   int nb_idx=my_dest.accnb;
-  close_dest_index_desc(&my_dest);
+  close_index_desc(&my_dest);
   
   char * acx_file=index_file("../test/unit","wgs_cfp",ACCSUF);
   index_sort(acx_file,nb_idx);
@@ -459,7 +453,7 @@ void create_files_for_purge() {
 
   // create empty index file
   my_dest=get_dest_index_desc(1,1,"../test/unit","wgs_cfp_empty");
-  close_dest_index_desc(&my_dest);
+  close_index_desc(&my_dest);
   
   // create index file with only 1 element
   my_dest=get_dest_index_desc(1,1,"../test/unit","wgs_cfp_single");
@@ -470,7 +464,7 @@ void create_files_for_purge() {
   s_idx.filenb=1;
   s_idx.offset=22500;
   write(my_dest.d_facx,&s_accnb, sizeof(s_accnb));
-  close_dest_index_desc(&my_dest);
+  close_index_desc(&my_dest);
 }
 
 array_indix_t fic_index_load_test(const char * file) {
@@ -654,8 +648,8 @@ int main(int argc, char **argv) {
 
   all_indix_t t_idx=test_index_create();
   freeAllIndix(t_idx);
-  dest_index_desc d_descr;
-  source_index_desc * ls_desc=malloc(3*sizeof(source_index_desc));
+  index_desc d_descr;
+  index_desc * ls_desc=malloc(3*sizeof(index_desc));
   // test_index_dump_load(t_idx);
   test_index_sort();
   test_list_append();

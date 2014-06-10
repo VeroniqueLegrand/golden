@@ -278,7 +278,7 @@ struct flock index_file_lock(int fd, off_t l_start, off_t l_len ) {
 
 void index_file_unlock(int fd, struct flock lock_t) {
   lock_t.l_type = F_UNLCK;
-  lock(fd,lock_t);
+  set_lock(fd,lock_t);
 }
 
 /*
