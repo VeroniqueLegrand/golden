@@ -1,0 +1,341 @@
+LOCUS       EYS92513                 640 aa            linear   BCT 28-MAR-2014
+DEFINITION  hypothetical protein X471_00001 [Bartonella bacilliformis str.
+            Heidi Mejia].
+ACCESSION   EYS92513
+VERSION     EYS92513.1  GI:601445413
+DBLINK      BioProject: PRJNA229741
+            BioSample: SAMN02419802
+DBSOURCE    accession JHPQ01000001.1
+KEYWORDS    .
+SOURCE      Bartonella bacilliformis str. Heidi Mejia 
+  ORGANISM  Bartonella bacilliformis str. Heidi Mejia 
+            Bacteria; Proteobacteria; Alphaproteobacteria; Rhizobiales;
+            Bartonellaceae; Bartonella.
+REFERENCE   1  (residues 1 to 640)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     The Genome Sequence of Bartonella bacilliformis str. Heidi Mejia 
+  JOURNAL   Unpublished
+REFERENCE   2  (residues 1 to 640)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-MAR-2014) Broad Institute of MIT and Harvard, 7
+            Cambridge Center, Cambridge, MA 02142, USA
+COMMENT     Please be aware that the annotation is done automatically with
+            little or no manual curation.
+      
+            ##Genome-Assembly-Data-START##
+            Assembly Method       :: allpaths v. R48559
+            Assembly Name         :: Bart_baci_Heidi_Mejia_V1
+            Genome Coverage       :: 131.0x
+            Sequencing Technology :: Illumina
+            ##Genome-Assembly-Data-END##
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..640
+                     /organism="Bartonella bacilliformis str. Heidi Mejia"
+                     /strain="Heidi Mejia"
+                     /isolation_source="clinical specimen, blood"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:1427332"
+                     /collection_date="1997"
+     Protein         1..640
+                     /product="hypothetical protein"
+     CDS             1..640
+                     /locus_tag="X471_00001"
+                     /coded_by="complement(JHPQ01000001.1:174..2096)"
+                     /transl_table=11
+ORIGIN      
+        1 mqlklllffl sllltlhtsf aapippqiiq kppqepgdra irvkvhtgke ycytptfvng
+       61 esyvyigdcn ygkvarydlf kriawkingv wlcmtapssv tgigekstak wdyillrpcv
+      121 indpnqqwii kdnafytadk kfrvkdykwy tyisknpndy ydhtliptmn qwekivatpv
+      181 ninlktfigw nfasgprfsr yyitddgsks nvfdlyynpe ngriaryfps tgamscmvsq
+      241 qsssenwdwv kwllcndkdt vtarqdiasw dislfarreg tltdykgnfl rvtqygsswg
+      301 spytakpdyl ekdttnspks nfifsydmer wyryvngnlg dtlaycpapg tkenvakirv
+      361 krslphdfhf tdqwkkrlwq iavsstpmgl etiglcgpcm vqtmqilael qerhqrepfq
+      421 ngegyffntq egvdpfislr trfpdltrrl ettrinhdrp yhvgedfvtr msrlaramal
+      481 mmlpqyewrp ltlartheem isrirdilra pagttwfsva irqderglfl ghvqpiirtg
+      541 ngiiilptnt sgttleqfrg yftpitdpqt vlfelsrgss triqtrsiaf fqmtqldeip
+      601 lslyvsqsnc tgegdgrrgn kklprssfin qclsgrcsiq
+//
+LOCUS       EYS92514                 248 aa            linear   BCT 28-MAR-2014
+DEFINITION  hypothetical protein X471_00002 [Bartonella bacilliformis str.
+            Heidi Mejia].
+ACCESSION   EYS92514
+VERSION     EYS92514.1  GI:601445414
+DBLINK      BioProject: PRJNA229741
+            BioSample: SAMN02419802
+DBSOURCE    accession JHPQ01000001.1
+KEYWORDS    .
+SOURCE      Bartonella bacilliformis str. Heidi Mejia
+  ORGANISM  Bartonella bacilliformis str. Heidi Mejia
+            Bacteria; Proteobacteria; Alphaproteobacteria; Rhizobiales;
+            Bartonellaceae; Bartonella.
+REFERENCE   1  (residues 1 to 248)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     The Genome Sequence of Bartonella bacilliformis str. Heidi Mejia
+  JOURNAL   Unpublished
+REFERENCE   2  (residues 1 to 248)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-MAR-2014) Broad Institute of MIT and Harvard, 7
+            Cambridge Center, Cambridge, MA 02142, USA
+COMMENT     Please be aware that the annotation is done automatically with
+            little or no manual curation.
+
+            ##Genome-Assembly-Data-START##
+            Assembly Method       :: allpaths v. R48559
+            Assembly Name         :: Bart_baci_Heidi_Mejia_V1
+            Genome Coverage       :: 131.0x
+            Sequencing Technology :: Illumina
+            ##Genome-Assembly-Data-END##
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..248
+                     /organism="Bartonella bacilliformis str. Heidi Mejia"
+                     /strain="Heidi Mejia"
+                     /isolation_source="clinical specimen, blood"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:1427332"
+                     /collection_date="1997"
+     Protein         1..248
+                     /product="hypothetical protein"
+     CDS             1..248
+                     /locus_tag="X471_00002"
+                     /coded_by="complement(JHPQ01000001.1:2389..3135)"
+                     /transl_table=11
+ORIGIN
+        1 mkvldsighl sykviqkkhi iagverrket pataqnflka lnslfkwame qglleknptl
+       61 gvkapplknk dgfivwsead idkyyyhwpl gthervwidi llytglrrgd airigwkdvt
+      121 dniihiktek skfqmdvflp ilpelaetle igpigeetfi cgkngkkltk egfgnvfrea
+      181 cnvanvkksa hglrklaatr aanagatvaq lkaifgwted nmaslytksa drkrlaleai
+      241 kklqkneg
+//
+LOCUS       EYS92515                  52 aa            linear   BCT 28-MAR-2014
+DEFINITION  hypothetical protein X471_00003 [Bartonella bacilliformis str.
+            Heidi Mejia].
+ACCESSION   EYS92515
+VERSION     EYS92515.1  GI:601445415
+DBLINK      BioProject: PRJNA229741
+            BioSample: SAMN02419802
+DBSOURCE    accession JHPQ01000001.1
+KEYWORDS    .
+SOURCE      Bartonella bacilliformis str. Heidi Mejia
+  ORGANISM  Bartonella bacilliformis str. Heidi Mejia
+            Bacteria; Proteobacteria; Alphaproteobacteria; Rhizobiales;
+            Bartonellaceae; Bartonella.
+REFERENCE   1  (residues 1 to 52)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     The Genome Sequence of Bartonella bacilliformis str. Heidi Mejia
+  JOURNAL   Unpublished
+REFERENCE   2  (residues 1 to 52)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-MAR-2014) Broad Institute of MIT and Harvard, 7
+            Cambridge Center, Cambridge, MA 02142, USA
+COMMENT     Please be aware that the annotation is done automatically with
+            little or no manual curation.
+
+            ##Genome-Assembly-Data-START##
+            Assembly Method       :: allpaths v. R48559
+            Assembly Name         :: Bart_baci_Heidi_Mejia_V1
+            Genome Coverage       :: 131.0x
+            Sequencing Technology :: Illumina
+            ##Genome-Assembly-Data-END##
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..52
+                     /organism="Bartonella bacilliformis str. Heidi Mejia"
+                     /strain="Heidi Mejia"
+                     /isolation_source="clinical specimen, blood"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:1427332"
+                     /collection_date="1997"
+     Protein         1..52
+                     /product="hypothetical protein"
+     CDS             1..52
+                     /locus_tag="X471_00003"
+                     /coded_by="complement(JHPQ01000001.1:3273..3431)"
+                     /transl_table=11
+ORIGIN
+        1 mpktrpphlv kqitqygkly gmsvlamaqd geyvepmerk nssttiklrs ln
+//
+LOCUS       EYS68655                 375 aa            linear   BCT 28-MAR-2014
+DEFINITION  acyl-CoA dehydrogenase, N-terminal domain protein [Acinetobacter
+            baumannii 16553_6].
+ACCESSION   EYS68655
+VERSION     EYS68655.1  GI:601420411
+DBLINK      BioProject: PRJNA195186
+            BioSample: SAMN02646224
+DBSOURCE    accession JHPI01000001.1
+KEYWORDS    .
+SOURCE      Acinetobacter baumannii 16553_6
+  ORGANISM  Acinetobacter baumannii 16553_6
+            Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+            Moraxellaceae; Acinetobacter; Acinetobacter calcoaceticus/baumannii
+            complex.
+REFERENCE   1  (residues 1 to 375)
+  AUTHORS   Harris,A.D., Johnson,K.J., George,J., Nadendla,S., Daugherty,S.C.,
+            Parankush,S., Sadzewicz,L., Tallon,L., Sengamalay,N., Hazen,T.H.
+            and Rasko,D.A.
+  TITLE     Comparative genomics and transcriptomics to identify genetic
+            mechanisms underlying the emergence of carbapenem resistant
+            Acinetobacter baumannii (CRAb)
+  JOURNAL   Unpublished
+REFERENCE   2  (residues 1 to 375)
+  AUTHORS   Harris,A.D., Johnson,K.J., George,J., Nadendla,S., Daugherty,S.C.,
+            Parankush,S., Sadzewicz,L., Tallon,L., Sengamalay,N., Hazen,T.H.
+            and Rasko,D.A.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (26-MAR-2014) Institute for Genome Sciences, University
+            of Maryland School of Medicine, BioPark II, 801 W. Baltimore St.,
+            Suite 619, Baltimore, MD 21201, USA
+COMMENT     Bacteria and source DNA available from BEI.
+
+            ##Genome-Assembly-Data-START##
+            Assembly Method       :: MaSuRCA v. 2.0.3.1
+            Genome Coverage       :: 106.13x
+            Sequencing Technology :: Illumina
+            ##Genome-Assembly-Data-END##
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..375
+                     /organism="Acinetobacter baumannii 16553_6"
+                     /strain="16553_6"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:1311103"
+                     /country="USA"
+     Protein         1..375
+                     /product="acyl-CoA dehydrogenase, N-terminal domain
+                     protein"
+     CDS             1..375
+                     /locus_tag="K002_0001"
+                     /coded_by="JHPI01000001.1:1..1128"
+                     /transl_table=11
+ORIGIN
+        1 mirdaahayc qerlqprvle qfrhettdps ifremgelgl lgptipeqyg gaglnyvsyg
+       61 lvareieyvd sgyrsmasvq sslvmvpihe fgteeqkqky lpklatgeyi gcfgltepdh
+      121 gsdpgsmitr akkvdggyrl tgakmwitns piadvfvvwa kevsaegnvg dirgfilekg
+      181 weglsapaih gkvglrasit geivmdnvfv peenafpeir glkgpftcln sarygiawga
+      241 mgaaefcwht ahqytmdrkq fgrplaanql iqkkladmqt eialglqaal rfgrmkdegi
+      301 asvegtslik rnncgkaldi armardmmgg ngisdefgva rhlvnlevvn tyegthdvha
+      361 lilgraqtgi aafsn
+//
+LOCUS       EYS95826                 365 aa            linear   BCT 28-MAR-2014
+DEFINITION  hypothetical protein X470_00003 [Bartonella bacilliformis Peru-18].
+ACCESSION   EYS95826
+VERSION     EYS95826.1  GI:601448918
+DBLINK      BioProject: PRJNA229740
+            BioSample: SAMN02419801
+DBSOURCE    accession JHPR01000001.1
+KEYWORDS    .
+SOURCE      Bartonella bacilliformis Peru-18
+  ORGANISM  Bartonella bacilliformis Peru-18
+            Bacteria; Proteobacteria; Alphaproteobacteria; Rhizobiales;
+            Bartonellaceae; Bartonella.
+REFERENCE   1  (residues 1 to 365)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     The Genome Sequence of Bartonella bacilliformis Peru-18
+  JOURNAL   Unpublished
+REFERENCE   2  (residues 1 to 365)
+  AUTHORS   Feldgarden,M., Kirby,J., Birtles,R., Dasch,G., Hendrix,L.,
+            Koehler,J., Kosoy,M., Young,S., Zeng,Q., Gargeya,S., Fitzgerald,M.,
+            Abouelleil,A., Alvarado,L., Chapman,S.B., Gainer-Dewar,J.,
+            Goldberg,J., Griggs,A., Gujja,S., Hansen,M., Howarth,C.,
+            Imamovic,A., Ireland,A., Larimer,J., McCowan,C., Murphy,C.,
+            Pearson,M., Poon,T.W., Priest,M., Roberts,A., Saif,S., Shea,T.,
+            Sykes,S., Wortman,J., Nusbaum,C. and Birren,B.
+  CONSRTM   The Broad Institute Genomics Platform, The Broad Institute Genome
+            Sequencing Center for Infectious Disease
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-MAR-2014) Broad Institute of MIT and Harvard, 7
+            Cambridge Center, Cambridge, MA 02142, USA
+COMMENT     Please be aware that the annotation is done automatically with
+            little or no manual curation.
+
+            ##Genome-Assembly-Data-START##
+            Assembly Method       :: allpaths v. R48559
+            Assembly Name         :: Bart_baci_Peru-18_V1
+            Genome Coverage       :: 138.0x
+            Sequencing Technology :: Illumina
+            ##Genome-Assembly-Data-END##
+            Method: conceptual translation.
+FEATURES             Location/Qualifiers
+     source          1..365
+                     /organism="Bartonella bacilliformis Peru-18"
+                     /strain="Peru-18"
+                     /isolation_source="clinical specimen, blood"
+                     /host="Homo sapiens"
+                     /db_xref="taxon:1427331"
+                     /collection_date="1998-05-01"
+     Protein         1..365
+                     /product="hypothetical protein"
+     CDS             1..365
+                     /locus_tag="X470_00003"
+                     /coded_by="complement(JHPR01000001.1:1798..2895)"
+                     /transl_table=11
+ORIGIN
+        1 mtkiaygayr vfwafrlmlv vigalavsaa iglavsaafa kdeeilnleq slntvqdfsk
+       61 nkraqkipqi lragkydeay dyyvqgfylk afraalrrae nndpkaqtlv gkmymegyav
+      121 tqdgaraalw fgraakqgdp haqlryglml fngnfvkkne eegeklihea mqaglkeayf
+      181 ycgqlllykt mrekenlkgv aaaddndens dkalafflkg aalgdaeaaf aaaqilavgt
+      241 mkyprhdhya rrlmtiaaqk khvmaqmmla qwllqgrgge adfkeafsll ydnalkrvmp
+      301 aqvnlarvyr dglgvegdiv taaawylvvk sgkgqaadle mmlegmsqaq leqahqkaye
+      361 lmqlf
+//
+
