@@ -271,44 +271,23 @@ struct flock index_file_lock(int fd, off_t l_start, off_t l_len ) {
   lock_t.l_start = l_start;
   lock_t.l_len = l_len;
   lock_t.l_type = F_WRLCK;
-#ifdef LOCK_DEBUG
-  clock_t start_t, stop_t, total_t;
-  printf("Going to try to lock index file for writing: %lld.\n",l_start);
-  start_t=clock();
-#endif
   set_lock(fd,lock_t);
-#ifdef LOCK_DEBUG
-  stop_t=clock();
-  total_t=(double) (stop_t -start_t) / CLOCKS_PER_SEC;
-  printf("index file locked for writing : %lu.\n",total_t);
-#endif
   return lock_t;
 }
 
 
 void index_file_unlock(int fd, struct flock lock_t) {
   lock_t.l_type = F_UNLCK;
-#ifdef LOCK_DEBUG
-  clock_t start_t, stop_t, total_t;
-  printf("Going to try to unlock index file for writing.\n");
-  start_t=clock();
-#endif
-  set_lock(fd,lock_t);
-#ifdef LOCK_DEBUG
-  stop_t=clock();
-  total_t=(double) (stop_t -start_t) / CLOCKS_PER_SEC;
-  printf("index file unlocked for writing : %lu.\n",total_t);
-#endif
+  lock(fd,lock_t);
 }
 
 /*
- * reads at most MAX_IDX_READ indexes from source index file, updates theit filenb and writes
+ * reads at most MAX_IDX_READ indexes from source index file, update their filenb and write
  * them to destination file.
  */
 void index_append(int fd_d,int prev_nb_flat,long nb_to_read,int fd_s,indix_t * buf) {
   int cnt;
   indix_t * inx;
-  // indix_t * buf=malloc(nb_to_read*sizeof(indix_t));
   if (read(fd_s,buf, nb_to_read*sizeof(indix_t)) == -1) err(errno,"Cannot read index from source file", NULL);
   inx=buf;
   for (cnt=0;cnt<nb_to_read;cnt++) {
@@ -316,7 +295,6 @@ void index_append(int fd_d,int prev_nb_flat,long nb_to_read,int fd_s,indix_t * b
     inx++;
   }
   if (write(fd_d,buf, nb_to_read*sizeof(indix_t)) != nb_to_read*sizeof(indix_t)) err(errno,"Cannot write index to destination file",NULL);
-  // free(buf);
 }
 
 /* concatenates indexes that have already been written to a file by a previous call to goldin. */
@@ -453,19 +431,8 @@ void index_purge(const char * fic) {
   newnb=0;
 
   while(oldnb-1) {
-    /*if (feof(g)) {
-      printf("end of file reached. ");
-    }*/
     int ret=fread(&cur2, sizeof(cur2), 1, g);
-    // printf("fread returned : %d\n",ret);
-    if (ret != 1) {
-      /*printf("%d \n",errno);
-      if (ferror(g)) {
-        printf("At file: %ld\n", ftell(g));
-        perror("read error: ");
-      }*/
-      err(errno,"Cannot read indexes from file : %s",fic);
-    }
+    if (ret != 1) err(errno,"Cannot read indexes from file : %s",fic);
     int i=index_compare(&cur1,&cur2);
     if (i!=0) {
       if (fwrite(&cur1, sizeof(cur1), 1, f) != 1) err(errno,"Cannot write index to : %s",new);

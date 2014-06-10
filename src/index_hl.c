@@ -29,7 +29,6 @@
 
 void init_all_indix_t(all_indix_t * sToInit) {
   sToInit->accnb=0;
-  // sToInit->flatfile_name=NULL;
   sToInit->l_accind=NULL;
   sToInit->l_locind=NULL;
   sToInit->locnb=0;
@@ -37,7 +36,6 @@ void init_all_indix_t(all_indix_t * sToInit) {
 
 
 void freeAllIndix(all_indix_t sToFree) {
-  // if (sToFree.flatfile_name!=NULL) free(sToFree.flatfile_name);
   if (sToFree.l_locind!=NULL) free(sToFree.l_locind);
   if (sToFree.l_accind!=NULL) free(sToFree.l_accind);
 }
@@ -66,7 +64,6 @@ array_indix_t fic_index_load(const char * file) {
  Load an index file into a memory structure. Mostly used for unit tests. Or else,trying to load huge files (X Gb) in memory
  would fail.
  */
-// all_indix_t index_load(char * flat_filename, char * file,int typ) {
 all_indix_t index_load(const char *idx_dir, const char * dbase,const char * suff) {
   char * file;
   array_indix_t t_idx;
@@ -143,12 +140,6 @@ all_indix_t create_index(char * file, int filenb, int loc, int acc) {
   indnb = 0;
   fic_indix.l_locind=NULL;
   fic_indix.l_accind=NULL;
-  // fic_indix.flatfile_name=strdup(file);
-#ifdef PERF_PROFILE
-  clock_t cpu_time_start=clock();
-  time_t wall_time_start=time(NULL);
-  srand(wall_time_start);
-#endif
 
   if ((f = fopen(file, "r")) == NULL)
     err(errno,"cannot open file: %s.",file);
@@ -180,16 +171,9 @@ all_indix_t create_index(char * file, int filenb, int loc, int acc) {
       }
       cur->filenb = filenb; cur->offset = ent.offset;
     }
-
-#ifdef PERF_PROFILE
-    // for the needs of performance testing, modify cur->name so that index file grows bigger and bigger.
-    sprintf(cur->name,"%d",rand());
-#endif
   }
   if (fclose(f) == EOF)
     err(errno,"cannot close file: %s.",file);
-    // error_fatal(file, NULL);
-
   return fic_indix;
 }
 

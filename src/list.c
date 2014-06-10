@@ -54,31 +54,11 @@ void set_list_lock(int fd, int l_type) {
 
 
 void list_lock(int fd) {
-#ifdef LOCK_DEBUG
-  clock_t start_t, stop_t, total_t;
-  printf("Going to try to lock list file for writing.\n");
-  start_t=clock();
-#endif
   set_list_lock(fd,F_WRLCK);
-#ifdef LOCK_DEBUG
-  stop_t=clock();
-  total_t=(double) (stop_t -start_t) / CLOCKS_PER_SEC;
-  printf("list file locked for writing : %lu.\n",total_t);
-#endif
 }
 
 void list_unlock(int fd) {
-#ifdef LOCK_DEBUG
-  clock_t start_t, stop_t, total_t;
-  printf("Going to try to unlock list file for writing.\n");
-  start_t=clock();
-#endif
   set_list_lock(fd,F_UNLCK);
-#ifdef LOCK_DEBUG
-  stop_t=clock();
-  total_t=(double) (stop_t -start_t) / CLOCKS_PER_SEC;
-  printf("list file unlocked for writing : %lu.\n",total_t);
-#endif
 }
 
 void check_doublon(char * a_fic,char *files_orig) {
@@ -93,10 +73,7 @@ void check_doublon(char * a_fic,char *files_orig) {
       a++;
       cnt++;
     }
-    if (cnt!=len_files) {
-      // printf("a=%s\n",a);
-      a[0]='\0';
-    }
+    if (cnt!=len_files) a[0]='\0';
     if ((p = strrchr(new_file, '/')) != NULL) ++p;
     else p=new_file;
     if ((q = strrchr(a_fic, '/')) != NULL) ++q;
@@ -130,10 +107,8 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   int f,nb_read;
   int nb;
   char *p, *q,*name;
-  
   char * new_file;
   char * l_files;
-
   char l_buf[2*PATH_MAX+1];
   char remain[PATH_MAX+1]="";
   bool is_cut;  // indicates if filename read is cut
@@ -185,9 +160,8 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
      a_fic=strtok(NULL,"\n");
   }
 
-
   // printf("list_append : before adding files, nb= %d \n",nb);
-  /* Add new files (even if they are duplicate) */
+  /* 2nd part: Add new files (even if they are duplicate) */
   l_files=strdup(files);
   // printf("going to add files : %s\n",l_files);
   new_file=strtok(l_files,"\n");
