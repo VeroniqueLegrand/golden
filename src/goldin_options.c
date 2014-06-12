@@ -18,6 +18,23 @@
 #endif
 #include "goldin_options.h"
 
+// static int dump_flag;
+static int concat_sflg=0;
+static int concat_oflg=0;
+static int idx_input_flg=0;
+static int purge_flg=0;
+
+static struct option long_options[] =
+{
+  /* These options set a flag. */
+  {"sort",   no_argument, &concat_sflg, 's'}, // sort indexes and keep doublons, not like default behavior. Allows only 1 filename arg
+  {"concat",  no_argument, &concat_oflg, 'c'}, // concatenates all indexes and do not sort them; keep doublons.
+  {"idx_input", no_argument, &idx_input_flg, 1}, // indicates that filenames given in argument are base name for index files.
+  /* These options don't set a flag. */
+  {"index_dir",  required_argument, 0, 'b'}, // indicates place where to put produced index files. default value is "."
+  {"purge", no_argument, &purge_flg, 'p'}
+};
+
 void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
   int i;
   int option_index = 0;
@@ -27,7 +44,7 @@ void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
   p_parms->acc = 0;
   p_parms->wrn = 1;
   p_parms->dir = NULL;
-  while((i = getopt_long(argc, argv, "ad:hiq",long_options,&option_index)) != -1) {
+  while((i = getopt_long(argc, argv, "ab:cd:hipqs",long_options,&option_index)) != -1) {
       switch(i) {
       case 0 :
           // printf("Option: %s \n",long_options[option_index].name);
@@ -52,12 +69,15 @@ void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
     p_parms->co_flag=concat_oflg;
     p_parms->csort_flag=concat_sflg;
     p_parms->purge_flag=purge_flg;
-    if (!p_parms->csort_flag && !p_parms->co_flag && !p_parms->purge_flag && !p_parms->idx_input_flag) p_parms->serial_behavior=1;
+    if (!p_parms->idx_input_flag && (p_parms->co_flag || p_parms->purge_flag || p_parms->csort_flag)) usage(EXIT_FAILURE,prog);
+    if (!p_parms->idx_input_flag) p_parms->serial_behavior=1;
+    if (p_parms->idx_input_flag && (p_parms->co_flag && p_parms->purge_flag)) usage(EXIT_FAILURE,prog);
+    /*if (!p_parms->csort_flag && !p_parms->co_flag && !p_parms->purge_flag && !p_parms->idx_input_flag) p_parms->serial_behavior=1;
     if (p_parms->purge_flag && (p_parms->co_flag )) usage(EXIT_FAILURE,prog);
     if ((p_parms->purge_flag && !p_parms->idx_input_flag) && !p_parms->csort_flag) usage(EXIT_FAILURE,prog);
     if (p_parms->idx_input_flag && p_parms->dir !=NULL) usage(EXIT_FAILURE,prog);
     if ((p_parms->idx_input_flag && (!p_parms->co_flag && !p_parms->csort_flag && !p_parms->purge_flag)) ) usage(EXIT_FAILURE,prog); // TODO later? Implement merge of existing index files.
-    if (p_parms->co_flag && p_parms->csort_flag) usage(EXIT_FAILURE,prog);
+    if (p_parms->co_flag && p_parms->csort_flag) usage(EXIT_FAILURE,prog);*/
     if (argc - optind < 2) usage(EXIT_FAILURE,prog);
     p_parms->dbase = argv[optind];
     if ((p_parms->loc + p_parms->acc) == 0) { p_parms->loc = p_parms->acc = 1; }
@@ -76,7 +96,7 @@ void usage(int status,char * prog) {
   (void)fprintf(f, "  -q       ... Be quiet, do not display some warnings.\n");
   (void)fprintf(f, "  --index_dir   ... Specify directory where to put generated index files. \n");
   (void)fprintf(f, "  --idx_input   ...Process input files as index files and not as flat files. \n");
-  (void)fprintf(f, "  --concat_only ... concatenates index files whose base name are given in argument; result is new index files (acx and/or idx). \n");
-  (void)fprintf(f, "  --concat_sort ... Concatenates and sort result file. \n");
+  (void)fprintf(f, "  --concat ... concatenates index files whose base name are given in argument. \n");
+  (void)fprintf(f, "  --sort ... sort file given in input. \n");
   (void)fprintf(f, "  --purge ...Removes doublons from index file. Must be used together with --concat_sort or on a index file that was previously sorted. \n");
   exit(status); }

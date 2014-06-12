@@ -3,22 +3,7 @@
 
 #include <getopt.h>
 
-// static int dump_flag;
-static int concat_sflg;
-static int concat_oflg;
-static int idx_input_flg;
-static int purge_flg;
 
-static struct option long_options[] =
-{
-  /* These options set a flag. */
-  {"concat_sort",   no_argument, &concat_sflg, 1}, // concatenates all indexes and sort them (keep doublons, not like default behavior).
-  {"concat_only",  no_argument, &concat_oflg, 1}, // concatenates all indexes and do not sort them; keep doublons.
-  {"idx_input", no_argument, &idx_input_flg, 1}, // indicates that filenames given in argument are base name for index files.
-  /* These options don't set a flag. */
-  {"index_dir",  required_argument, 0, 'b'}, // indicates place where to put produced index files. default value is "."
-  {"purge", no_argument,&purge_flg, 1}
-};
 
 /*
  This structure is used to store the goldin command line options.

@@ -43,13 +43,13 @@ typedef struct {
 const char *index_dir(void);
 char *index_file(const char *, const char *, const char *);
 void print_wrk_struct(result_t ** lst_work,int nb_cards,int);
-void index_sort(char *, long);
+void index_sort(char *, uint64_t);
 void create_missing_idxfile(char *);
 char *index_temp(const char *dir);
 int index_compare(const void *a, const void *b);
 uint64_t iswap64(uint64_t val);
 uint32_t iswap32(uint32_t val);
-long index_file_concat(int fd_d,int prev_nb, long nb, int, long);
+uint64_t index_file_concat(int fd_d,int prev_nb, uint64_t, int, uint64_t);
 struct flock index_file_lock(int fd, off_t l_start, off_t l_len );
 void index_file_unlock(int fd, struct flock lock_t);
 void index_purge(const char * fic);

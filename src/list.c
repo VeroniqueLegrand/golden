@@ -31,7 +31,7 @@
 
 #ifndef HAVE_FSEEKO
 #define fseeko fseek
-#define off_t long
+#define off_t uint64_t
 #endif
 
 #define BUFINC 100
@@ -78,7 +78,7 @@ void check_doublon(char * a_fic,char *files_orig) {
     else p=new_file;
     if ((q = strrchr(a_fic, '/')) != NULL) ++q;
     else q=a_fic;
-    if (strcmp(p, q) == 0) warn("duplicate file in database : %s",q);
+    if (strcmp(p, q) == 0) err(EXIT_FAILURE, "duplicate file in database : %s",q);
     if (cnt==len_files) {
       new_file=NULL;
     } else {
@@ -120,8 +120,8 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   len_remain=0;
   name = index_file(new_index_dir, dbase, LSTSUF);
   f = open(name, O_RDWR|O_APPEND|O_CREAT, 0666);
-  if (f == -1) err(errno,"Cannot open file : %s",name);
-  if (stat(name, &st) == -1) err(errno,name, NULL);
+  if (f == -1) err(EXIT_FAILURE,"Cannot open file : %s",name);
+  if (stat(name, &st) == -1) err(EXIT_FAILURE,name, NULL);
   list_lock(f);
 
   // 1rst part : count flat files and check for duplicates.
@@ -132,7 +132,7 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
     if (is_cut && len_remain>0) {
       strcpy(l_buf,remain);
     }
-    if ((nb_read=read(f,l_buf+len_remain,PATH_MAX))==-1) err(errno,"Error while reading list file.");
+    if ((nb_read=read(f,l_buf+len_remain,PATH_MAX))==-1) err(EXIT_FAILURE,"Error while reading list file.");
     if (l_buf[PATH_MAX+len_remain]=='\n') is_cut=false;
     else is_cut=true;
     l_buf[PATH_MAX+len_remain]='\0';
@@ -150,7 +150,7 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   if (is_cut && len_remain>0) {
      strcpy(l_buf,remain);
   }
-  if ((nb_read=read(f,(char *)l_buf+len_remain,nb_to_read))==-1) err(errno,"Error while reading list file.");
+  if ((nb_read=read(f,(char *)l_buf+len_remain,nb_to_read))==-1) err(EXIT_FAILURE,"Error while reading list file.");
   l_buf[len_remain+nb_to_read]='\0';
   a_fic=strtok(l_buf,"\n");
   while (a_fic!=NULL) {

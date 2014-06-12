@@ -31,7 +31,7 @@
 
 #ifndef HAVE_FSEEKO
 #define fseeko fseek
-#define off_t long
+#define off_t uint64_t
 #endif
 
 #ifndef DATADIR
@@ -166,7 +166,7 @@ char *index_file(const char *dir, const char *dbase, const char *suf) {
 
 
 
-void index_sort(char *file, long nb) {
+void index_sort(char *file, uint64_t nb) {
   // FILE *g;
   int fd;
   const char *dir;
@@ -228,7 +228,7 @@ void index_sort(char *file, long nb) {
  * If index file doesn't exist, create it.
  * returns the total number of indexes.
  */
-int index_concat(char *file, long nb, indix_t *ind) {
+int index_concat(char *file, uint64_t nb, indix_t *ind) {
   indix_t *cur;
   FILE *g;
   uint64_t newnb, oldnb;
@@ -285,7 +285,7 @@ void index_file_unlock(int fd, struct flock lock_t) {
  * reads at most MAX_IDX_READ indexes from source index file, update their filenb and write
  * them to destination file.
  */
-void index_append(int fd_d,int prev_nb_flat,long nb_to_read,int fd_s,indix_t * buf) {
+void index_append(int fd_d,int prev_nb_flat,uint64_t nb_to_read,int fd_s,indix_t * buf) {
   int cnt;
   indix_t * inx;
   if (read(fd_s,buf, nb_to_read*sizeof(indix_t)) == -1) err(errno,"Cannot read index from source file", NULL);
@@ -298,8 +298,8 @@ void index_append(int fd_d,int prev_nb_flat,long nb_to_read,int fd_s,indix_t * b
 }
 
 /* concatenates indexes that have already been written to a file by a previous call to goldin. */
-long index_file_concat(int fd_d,int prev_nb_flat, long nb_idx, int fd_s, long prev_nb_idx) {
-  long totnb=prev_nb_idx;
+uint64_t index_file_concat(int fd_d,int prev_nb_flat, uint64_t nb_idx, int fd_s, uint64_t prev_nb_idx) {
+  uint64_t totnb=prev_nb_idx;
   struct flock lock_t; // lock used to perform the truncate operation
   struct flock lock_w; // lock to perform the writing in the "reserved" area of the destination file.
   struct stat s_dest, s_source;
@@ -307,23 +307,23 @@ long index_file_concat(int fd_d,int prev_nb_flat, long nb_idx, int fd_s, long pr
   indix_t * buf=NULL;
 
   totnb+=nb_idx;
-  lock_t=index_file_lock(fd_d,0,sizeof(long)); // lock used to perform the truncate operation
+  lock_t=index_file_lock(fd_d,0,sizeof(prev_nb_idx)); // lock used to perform the truncate operation
   if (lseek(fd_d, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx","wgs_c");
-  if (write(fd_d,&totnb,sizeof(long))!=sizeof(long)) err(errno,"Cannot write index to destination file",NULL);
+  if (write(fd_d,&totnb,sizeof(totnb))!=sizeof(totnb)) err(errno,"Cannot write index to destination file",NULL);
   res = fstat(fd_d, &s_dest);
   if (res == -1) err(1, "stat failed on destination file");
 
   res = fstat(fd_s, &s_source);
   if (res == -1) err(1, "stat failed on source file");
 
-  size_t s_to_add = s_source.st_size-sizeof(long); // do not concatenate number of indexes in index file.
+  size_t s_to_add = s_source.st_size-sizeof(nb_idx); // do not concatenate number of indexes in index file.
   if (lseek(fd_d, 0, SEEK_END) == -1) err(errno,"index_file_concat: error while getting at the end of dest index file.",NULL);
   res = ftruncate(fd_d, s_dest.st_size + s_to_add);
   if (res == -1 && S_ISREG(s_dest.st_mode)) err(1, "Truncate failed");
 
   lock_w=index_file_lock(fd_d,s_dest.st_size,s_source.st_size);
-  if (s_dest.st_size>0) index_file_unlock(fd_d,lock_t);
-
+  // if (s_dest.st_size>0) index_file_unlock(fd_d,lock_t);
+  index_file_unlock(fd_d,lock_t);
 
   int nb=nb_idx;
   if (buf==NULL) buf=malloc(MAX_IDX_READ*sizeof(indix_t));
@@ -339,7 +339,7 @@ long index_file_concat(int fd_d,int prev_nb_flat, long nb_idx, int fd_s, long pr
 
 
 /* Merge indexes */
-int index_merge(char *file, long nb, indix_t *ind) {
+int index_merge(char *file, uint64_t nb, indix_t *ind) {
   FILE *f, *g;
   int i;
   char *new;

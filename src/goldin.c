@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
   int i;
   char *p, *dbase, *file;
   entry_t ent;
-  long locnb, accnb, indnb;
+  uint64_t locnb, accnb, indnb;
   indix_t *cur, *locind, *accind;
   size_t len;
   goldin_parms s_parms;
@@ -68,6 +68,7 @@ int main(int argc, char **argv) {
   if (!s_parms.idx_input_flag) {
     process_databank_files(optind,argc,argv,s_parms);
   } else {/* I am expecting index files as input */
+    if ((argc-optind>1) && (s_parms.csort_flag || s_parms.purge_flag)) usage(EXIT_FAILURE,"goldin");
     process_index_files(optind,argc,argv,s_parms);
   }
   return EXIT_SUCCESS;
@@ -84,12 +85,12 @@ void process_databank_files(int optind,int argc,char ** argv,goldin_parms s_parm
      tot_idx=process_databank_file(s_parms,file,&buf);
   }
   if (buf!=NULL) free(buf);
-  if (s_parms.csort_flag) { // sort index file.
+  /*if (s_parms.csort_flag) { // sort index file.
     all_index_sort(s_parms,tot_idx);
   }
   if (s_parms.purge_flag) {
     all_index_purge(s_parms);
-  }
+  }*/
 }
 
 
@@ -111,15 +112,15 @@ all_indix_nb process_databank_file(goldin_parms s_parms , char * file, char ** b
      warn("%s %s",file, "file contains no entries");
      return tot_idx;
   }
-  if (!s_parms.csort_flag && !s_parms.co_flag && !s_parms.purge_flag) { // same behavior as in previous versions : merge new index with previous one.
+  // if (!s_parms.csort_flag && !s_parms.co_flag && !s_parms.purge_flag) { // same behavior as in previous versions : merge new index with previous one.
     all_index_mmerge(file_l_indix,s_parms);
     freeAllIndix(file_l_indix);
     return tot_idx;
-  }
-  // concatenate new index with previous ones.
-  tot_idx=all_index_mconcat(file_l_indix,s_parms);
+  // }
+  // concatenate new index with previous ones. ?? No concatenation is only available when working directly on index files.
+  /*tot_idx=all_index_mconcat(file_l_indix,s_parms);
   freeAllIndix(file_l_indix);
-  return tot_idx;
+  return tot_idx;*/
 }
 
 void process_index_file(goldin_parms s_parms ,char * rac_file,  index_desc * d_descr, char ** buf) {

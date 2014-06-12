@@ -11,6 +11,6 @@ typedef struct {
 void all_index_sort(goldin_parms,all_indix_nb);
 void all_index_purge(goldin_parms);
 void all_index_mmerge(all_indix_t file_l_indix,goldin_parms);
-all_indix_nb all_index_mconcat(all_indix_t file_l_indix,goldin_parms);
+// all_indix_nb all_index_mconcat(all_indix_t file_l_indix,goldin_parms);
 
 #endif

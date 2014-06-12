@@ -174,8 +174,8 @@ void test_index_sort() {
 
 void test_list_append() {
   char * expected_content="toto/titi/premier_fichier.dat\ntoto/titi/second_fichier.dat\ntoto/titi/troisieme_fichier.dat\n\
-toto1.dat\ntiti/toto1.dat\n\
-titi/toto1.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
+toto1.dat\ntiti/totoX.dat\n\
+titi/totoY.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   
   char * dbase="db_test_tmp";
   struct stat st;
@@ -200,11 +200,11 @@ titi/toto1.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   n_nb=list_nb("../test/unit","db_test_tmp");
   assert(n_nb==4);
   
-  nb=list_append(dbase,"titi","toto1.dat\n","../test/unit");
+  nb=list_append(dbase,"titi","totoX.dat\n","../test/unit");
   assert(stat("../test/unit/db_test_tmp.dbx", &st) != -1);
   assert(nb==5);
   // TODO : check that we got a warning for duplicate toto1.dat
-  nb=list_append(dbase,"titi","toto1.dat\ntoto2.dat\ntoto3.dat\n","../test/unit");
+  nb=list_append(dbase,"titi","totoY.dat\ntoto2.dat\ntoto3.dat\n","../test/unit");
   assert(nb==8);
   assert(stat("../test/unit/db_test_tmp.dbx", &st) != -1);
   buf= malloc(st.st_size);
@@ -634,6 +634,7 @@ void clean() {
 
 
 int main(int argc, char **argv) {
+  printf("coucou");
   clean();
   /*all_indix_t tmp_idx=index_load("/Users/vlegrand/wgs_tmp_index","wgsC0",ACCSUF);
   //all_indix_t tmp_idx2=index_load("/Users/vlegrand/Desktop/golden-3.0/src","old",ACCSUF);

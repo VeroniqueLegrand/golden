@@ -129,7 +129,7 @@ void index_hl_remove(int acc,int loc,char *new_index_dir,char *dbase) {
 all_indix_t create_index(char * file, int filenb, int loc, int acc) {
   FILE *f;
   char *p;
-  long indnb;
+  uint64_t indnb;
   entry_t ent;
   size_t len;
   indix_t *cur;
@@ -182,7 +182,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
   FILE *f;
   int i, swap;
   uint64_t indnb;
-  long min, cur, max;
+  uint64_t min, cur, max;
   off_t pos, chk;
   size_t len;
   struct stat st;
@@ -229,7 +229,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
     len = strlen(name);
     if (len > NAMLEN) err(errno,"name too long : %s",name);
 
-    min = 0; max = (long)indnb - 1;
+    min = 0; max = indnb - 1;
     i=-1; // to avoid pb in case indnb=0 and i is not initialized.
 #ifdef DEBUG
     printf("entering while search loop : min=%ld max=%ld\n",min,max);

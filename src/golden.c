@@ -36,7 +36,7 @@
 
 #ifndef HAVE_FSEEKO
 #define fseeko fseek
-#define off_t long
+#define off_t uint64_t
 #endif
 
 //#define DEBUG

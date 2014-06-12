@@ -105,7 +105,7 @@ void access_search(WDBQueryData wData, char * db_name, int * nb_AC_not_found) {
 
 
 /* Merge accession indexes */
-int access_merge(char *dbase, long nb, indix_t *ind,char * new_index_dir) {
+int access_merge(char *dbase, uint64_t nb, indix_t *ind,char * new_index_dir) {
   int i;
   char *file;
 
@@ -115,7 +115,7 @@ int access_merge(char *dbase, long nb, indix_t *ind,char * new_index_dir) {
 
   return i; }
 
-int access_concat(char *dbase, long nb, indix_t *ind, char * new_index_dir) {
+int access_concat(char *dbase, uint64_t nb, indix_t *ind, char * new_index_dir) {
   int i=IDX_ERR;
   char *file;
 

@@ -21,7 +21,7 @@
 #ifndef HAVE_FSEEKO
 #define ftello ftell
 #define fseeko fseek
-#define off_t long
+#define off_t uint64_t
 #endif
 
 /* Buffers values */

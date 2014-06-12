@@ -51,8 +51,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = golden$(EXEEXT) goldin$(EXEEXT) unit_tests$(EXEEXT) \
-	perf_tests$(EXEEXT)
+bin_PROGRAMS = golden$(EXEEXT) goldin$(EXEEXT) unit_tests$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(srcdir)/config.h.in $(top_srcdir)/mkinstalldirs \
@@ -88,9 +87,6 @@ golden_DEPENDENCIES = libgolden.a
 am_goldin_OBJECTS = goldin.$(OBJEXT)
 goldin_OBJECTS = $(am_goldin_OBJECTS)
 goldin_DEPENDENCIES = libgolden.a
-am_perf_tests_OBJECTS = perf_tests.$(OBJEXT)
-perf_tests_OBJECTS = $(am_perf_tests_OBJECTS)
-perf_tests_DEPENDENCIES = libgolden.a
 am_unit_tests_OBJECTS = unit_tests.$(OBJEXT)
 unit_tests_OBJECTS = $(am_unit_tests_OBJECTS)
 unit_tests_DEPENDENCIES = libgolden.a
@@ -123,9 +119,9 @@ am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libgolden_a_SOURCES) $(golden_SOURCES) $(goldin_SOURCES) \
-	$(perf_tests_SOURCES) $(unit_tests_SOURCES)
+	$(unit_tests_SOURCES)
 DIST_SOURCES = $(libgolden_a_SOURCES) $(golden_SOURCES) \
-	$(goldin_SOURCES) $(perf_tests_SOURCES) $(unit_tests_SOURCES)
+	$(goldin_SOURCES) $(unit_tests_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -217,10 +213,10 @@ OBJEXT = o
 PACKAGE = golden
 PACKAGE_BUGREPORT = 
 PACKAGE_NAME = golden
-PACKAGE_STRING = golden 3
+PACKAGE_STRING = golden 3.0
 PACKAGE_TARNAME = golden
 PACKAGE_URL = 
-PACKAGE_VERSION = 3
+PACKAGE_VERSION = 3.0
 PATH_SEPARATOR = :
 POD2MAN = pod2man
 PYTHON = /usr/bin/python
@@ -228,7 +224,7 @@ RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = 
-VERSION = 3
+VERSION = 3.0
 abs_builddir = /Users/vlegrand/Desktop/golden-3.0/src
 abs_srcdir = /Users/vlegrand/Desktop/golden-3.0/src
 abs_top_builddir = /Users/vlegrand/Desktop/golden-3.0
@@ -282,8 +278,6 @@ goldin_SOURCES = goldin.c
 goldin_LDADD = libgolden.a
 unit_tests_SOURCES = unit_tests.c
 unit_tests_LDADD = libgolden.a
-perf_tests_SOURCES = perf_tests.c
-perf_tests_LDADD = libgolden.a
 libgolden_a_SOURCES = $(SRC)
 SRC = access.c entry.c error.c index.c index_hl.c index_desc.c list.c locus.c query.c goldin_options.c goldin_utils.c
 HDR = access.h entry.h error.h index.h index_hl.h index_desc.h list.h locus.h query.h goldin_options.h goldin_utils.h
@@ -392,9 +386,6 @@ golden$(EXEEXT): $(golden_OBJECTS) $(golden_DEPENDENCIES) $(EXTRA_golden_DEPENDE
 goldin$(EXEEXT): $(goldin_OBJECTS) $(goldin_DEPENDENCIES) $(EXTRA_goldin_DEPENDENCIES) 
 	@rm -f goldin$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(goldin_OBJECTS) $(goldin_LDADD) $(LIBS)
-perf_tests$(EXEEXT): $(perf_tests_OBJECTS) $(perf_tests_DEPENDENCIES) $(EXTRA_perf_tests_DEPENDENCIES) 
-	@rm -f perf_tests$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(perf_tests_OBJECTS) $(perf_tests_LDADD) $(LIBS)
 unit_tests$(EXEEXT): $(unit_tests_OBJECTS) $(unit_tests_DEPENDENCIES) $(EXTRA_unit_tests_DEPENDENCIES) 
 	@rm -f unit_tests$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit_tests_OBJECTS) $(unit_tests_LDADD) $(LIBS)
@@ -417,7 +408,6 @@ include ./$(DEPDIR)/index_desc.Po
 include ./$(DEPDIR)/index_hl.Po
 include ./$(DEPDIR)/list.Po
 include ./$(DEPDIR)/locus.Po
-include ./$(DEPDIR)/perf_tests.Po
 include ./$(DEPDIR)/query.Po
 include ./$(DEPDIR)/unit_tests.Po
 

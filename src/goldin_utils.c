@@ -48,6 +48,7 @@ void all_index_purge(goldin_parms s_parms) {
 /*
 * Concatenates all indexes in memory (locus+AC) with existing index file on disk.
 */
+/*
 all_indix_nb all_index_mconcat(all_indix_t file_l_indix,goldin_parms s_parms) {
   all_indix_nb tot_idx;
 
@@ -60,7 +61,7 @@ all_indix_nb all_index_mconcat(all_indix_t file_l_indix,goldin_parms s_parms) {
     if (tot_idx.accnb==IDX_ERR) err(errno,"accession numbers indexes concatenation failed : %s",s_parms.dbase);
   }
   return tot_idx;
-}
+}*/
 
 
 /*
