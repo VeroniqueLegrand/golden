@@ -107,7 +107,7 @@ void usage(int status,char * prog) {
   (void)fprintf(f, "  -q       ... Be quiet, do not display some warnings.\n");
   (void)fprintf(f, "  --index_dir   ... Specify directory where to put generated index files. \n");
   (void)fprintf(f, "  --idx_input   ...Process input files as index files and not as flat files. \n");
-  (void)fprintf(f, "  --concat ... concatenates index files whose base name are given in argument. \n");
-  (void)fprintf(f, "  --sort ... sort file given in input. \n");
-  (void)fprintf(f, "  --purge ...Removes doublons from index file. Must be used together with --concat_sort or on a index file that was previously sorted. \n");
+  (void)fprintf(f, "  -c, --concat  ... concatenates index files whose base name are given in argument. \n");
+  (void)fprintf(f, "  -s, --sort    ... sort file given in input. \n");
+  (void)fprintf(f, "  -p, --purge   ...Removes doublons from index file. Must be used together with --concat_sort or on a index file that was previously sorted. \n");
   exit(status); }
