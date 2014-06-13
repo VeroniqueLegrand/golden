@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
   if (!s_parms.idx_input_flag) {
     process_databank_files(optind,argc,argv,s_parms);
   } else {/* I am expecting index files as input */
-    if ((argc-optind>1) && (s_parms.csort_flag || s_parms.purge_flag)) usage(EXIT_FAILURE,"goldin");
+    if ((argc-optind>2) && (!s_parms.co_flag &&(s_parms.csort_flag || s_parms.purge_flag))) usage(EXIT_FAILURE,"goldin");
     process_index_files(optind,argc,argv,s_parms);
   }
   return EXIT_SUCCESS;

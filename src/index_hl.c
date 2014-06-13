@@ -15,6 +15,7 @@
 #include <unistd.h>
 #endif
 #include <libgen.h>
+#include <limits.h>
 
 #include "index.h"
 #include "index_hl.h"
@@ -182,7 +183,8 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
   FILE *f;
   int i, swap;
   uint64_t indnb;
-  uint64_t min, cur, max;
+  // uint64_t min, cur, max;
+  long long min, cur, max;  // max must be able to take a negative value in order to exit the while loop. Si keep it a signed type.
   off_t pos, chk;
   size_t len;
   struct stat st;
@@ -216,6 +218,9 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
     if ((swap = (chk != st.st_size)) == 1) {
       indnb = iswap64(indnb); }
 
+  /* Check that there are not too many indexes in the file so that while loop can work. */
+  if (indnb>LLONG_MAX) err(EXIT_FAILURE," Index file contains too many indexes, it should be splitted in order for index_search to work.");
+  
   int idx_card;
   //printf("lst_size=%d\n",lst_size);
   for (idx_card=0;idx_card<lst_size;idx_card++)

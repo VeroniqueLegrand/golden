@@ -420,19 +420,19 @@ void create_files_for_purge() {
   index_desc my_source=get_source_index_desc(1,1,"../test/unit","wgs2");
   my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
   my_dest.max_filenb=new_nb;
-  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
+  new_nb = list_append("wgs_cfp",NULL,"T3","../test/unit");
   index_fbegin_go(my_source.d_facx,"wgs2.acx");
   
   
   my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
   my_dest.max_filenb=new_nb;
-  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
+  new_nb = list_append("wgs_cfp",NULL,"T4","../test/unit");
   
   index_fbegin_go(my_source.d_facx,"wgs2.acx");
 
   my_dest.accnb=index_file_concat(my_dest.d_facx,my_dest.max_filenb, my_source.accnb, my_source.d_facx,my_dest.accnb);
   my_dest.max_filenb=new_nb;
-  new_nb = list_append("wgs_cfp",NULL,l_flats,"../test/unit");
+  new_nb = list_append("wgs_cfp",NULL,"T5","../test/unit");
 
   if (buf!=NULL) free(buf);
   
@@ -636,16 +636,16 @@ void clean() {
 int main(int argc, char **argv) {
   printf("coucou");
   clean();
-  /*all_indix_t tmp_idx=index_load("/Users/vlegrand/wgs_tmp_index","wgsC0",ACCSUF);
-  //all_indix_t tmp_idx2=index_load("/Users/vlegrand/Desktop/golden-3.0/src","old",ACCSUF);
+  all_indix_t tmp_idx=index_load("/Users/vlegrand/Desktop/golden-3.0/test/tmp_new","wgs_ac_c1_sorted_2",ACCSUF);
+  all_indix_t tmp_idx2=index_load("/Users/vlegrand/Desktop/golden-3.0/test/tmp_new","wgs_ac_c1_sorted",ACCSUF);
   printf("%ld\n",tmp_idx.accnb);
   int i;
   for (i=0;i<tmp_idx.accnb;i++) {
     printf("%s %d %lu\n",tmp_idx.l_accind[i].name,tmp_idx.l_accind[i].filenb,tmp_idx.l_accind[i].offset);
   }
 
-  freeAllIndix(tmp_idx);*/
-  // freeAllIndix(tmp_idx2);
+  freeAllIndix(tmp_idx);
+  freeAllIndix(tmp_idx2);
 
   all_indix_t t_idx=test_index_create();
   freeAllIndix(t_idx);

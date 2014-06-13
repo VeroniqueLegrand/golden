@@ -56,7 +56,7 @@ nb_flat3=`cat tmp_new/wgs_ac3.dbx | wc -l`
 nb_idx3=`od tmp_new/wgs_ac3.acx|awk 'FNR==1 {print $2}'`
 test $nb_idx3 = "000003" || exit 1
 
-../src/goldin --index_dir tmp_new --idx_input --concat_only -a wgs_ac_c1 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3 || exit 1
+../src/goldin --index_dir tmp_new --idx_input --concat -a wgs_ac_c1 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3 || exit 1
 
 nb_flat_new=`cat tmp_new/wgs_ac_c1.dbx | wc -l`
 echo "nb_flat_classic" $nb_flat_classic
@@ -75,17 +75,17 @@ cp tmp_new/wgs_ac_c1.acx tmp_new/wgs_ac_c1_ns.acx # ns stands for "not sorted"
 cp tmp_new/wgs_ac_c1.dbx tmp_new/wgs_ac_c1_ns.dbx
 
 ## now sort and compare results
-../src/goldin --index_dir tmp_new --idx_input --concat_sort -a wgs_ac_c1_sorted tmp_new/wgs_ac_c1 || exit 1
+../src/goldin --index_dir tmp_new --idx_input --sort -a wgs_ac_c1_sorted tmp_new/wgs_ac_c1 || exit 1
 
 cmp tmp_new/wgs_ac_c1_sorted.acx tmp_new/wgs_ac_c1_ns.acx|grep "differ" || exit 1
 
-../src/goldin --index_dir tmp_new --idx_input --concat_sort -a wgs_ac_c1_sorted_2 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3 || exit 1
+../src/goldin --index_dir tmp_new --idx_input --concat --s -a wgs_ac_c1_sorted_2 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3 || exit 1
 
 cmp tmp_new/wgs_ac_c1_sorted.acx tmp_new/wgs_ac_c1_sorted_2.acx || exit 1
 
 ## now purge and compare results
-../src/goldin --index_dir tmp_new --concat_sort --purge -a wgs_ac_c1_sp_2 all/wgs_extract.1.gbff all/wgs_extract.1.gnp all/wgs_extract.2.gbff all/wgs_extract.2.gnp all/wgs_extract.3.gnp || exit 1
-../src/goldin --index_dir tmp_new --idx_input --purge -a wgs_ac_c1_sp_1 tmp_new/wgs_ac_c1_sorted_2 || exit 1
+../src/goldin --index_dir tmp_new --idx_input -c --sort -p -a wgs_ac_c1_sp_2 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3 || exit 1
+../src/goldin --index_dir tmp_new --idx_input -p -a wgs_ac_c1_sp_1 tmp_new/wgs_ac_c1_sorted_2 || exit 1
 
 cmp tmp_new/wgs_ac_c1_sp_1.acx tmp_new/wgs_ac_c1_sp_2.acx || exit 1
 
@@ -93,20 +93,20 @@ cmp tmp_new/wgs_ac_c1_sp_1.acx tmp_new/wgs_ac_c1_sp_2.acx || exit 1
 ../src/goldin --index_dir tmp_new  -a wgs_ac_c1_m_2 all/wgs_extract.1.gbff all/wgs_extract.1.gnp all/wgs_extract.2.gbff all/wgs_extract.2.gnp all/wgs_extract.3.gnp || exit 1
 cmp tmp_new/wgs_ac_c1_sp_1.acx tmp_new/wgs_ac_c1_m_2.acx || exit 1
 
-## Try another way of creating indexes from flat files than the "merge" one. This should produce the same result as with the old goldin version.
-../src/goldin --concat_sort --purge --index_dir tmp_new wgs_testN all/wgs_extract.1.gbff || exit 1
 
 ## Check that old behavior still works
-../src/goldin wgs_testO all/wgs_extract.1.gbff || exit 1
+../src/goldin wgs_test0 all/wgs_extract.1.gbff || exit 1
+
+../src/goldin --idx_input -c -s -p --index_dir tmp_new wgs_testN wgs_test0|| exit 1
 
 ## now results should be the same
-cmp tmp_new/wgs_testN.acx wgs_testO.acx || exit 1
-cmp tmp_new/wgs_testN.idx wgs_testO.idx || exit 1
-cmp tmp_new/wgs_testN.dbx wgs_testO.dbx || exit 1
+cmp tmp_new/wgs_testN.acx wgs_test0.acx || exit 1
+cmp tmp_new/wgs_testN.idx wgs_test0.idx || exit 1
+cmp tmp_new/wgs_testN.dbx wgs_test0.dbx || exit 1
 
 
 ## this should throw an error since locus were not indexed previously.
-my_output=`../src/goldin --index_dir tmp_new --idx_input --concat_only -i wgs_ac_c1 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3`
+my_output=`../src/goldin --index_dir tmp_new --idx_input --concat -i wgs_ac_c1 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3`
 test $? = 2 || exit 1
 #echo "my_output : "
 #echo $my_output
@@ -117,10 +117,10 @@ test $? = 2 || exit 1
 
 
 ## this should cause a print usage
-my_output=`../src/goldin --index_dir tmp_new --idx_input --concat_sort --concat_only wgs_ac_c1_SNE tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3`
-echo $my_output|grep "usage" || exit 1
+#my_output=`../src/goldin -d tmp_new --idx_input --sort --concat wgs_ac_c1_SNE tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3`
+#echo $my_output|grep "usage" || exit 1
 
-my_output=`../src/goldin --index_dir tmp_new --idx_input --concat_only --purge wgs_ac_c1_SNE tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3`
+my_output=`../src/goldin -d tmp_new --idx_input -c -p wgs_ac_c1_SNE tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3`
 echo $my_output|grep "usage" || exit 1
 
 my_output=`../src/goldin --index_dir tmp_new --purge wgs_ac_c1_SNE all/wgs_extract.2.gnp all/wgs_extract.3.gnp`
@@ -133,7 +133,6 @@ rmdir tmp_new
 
 ## Cleanup
 test $srcdir != . && rm -f all
-#rm -f *.acx *.idx *.dbx
 
 ## Normal end
 exit 0

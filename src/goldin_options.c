@@ -51,17 +51,28 @@ void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
         break;
       case 'a':
         p_parms->acc = 1; break;
+      case 'b':
+        p_parms->new_index_dir=optarg;break;
+      case 'c':
+        p_parms->co_flag=1;
+        concat_oflg=1;
+        break;
       case 'd':
         p_parms->dir = optarg; break;
       case 'h':
         usage(EXIT_SUCCESS,prog); break;
       case 'i':
         p_parms->loc = 1; break;
+      case 'p':
+        p_parms->purge_flag=1;
+        purge_flg=1;
+        break;
       case 'q':
         p_parms->wrn = 0; break;
-      /* long options */
-      case 'b':
-        p_parms->new_index_dir=optarg;break;
+      case 's':
+        p_parms->csort_flag=1;
+        concat_sflg=1;
+        break;
       default:
         usage(EXIT_FAILURE,prog); break; }
     }
@@ -71,7 +82,7 @@ void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
     p_parms->purge_flag=purge_flg;
     if (!p_parms->idx_input_flag && (p_parms->co_flag || p_parms->purge_flag || p_parms->csort_flag)) usage(EXIT_FAILURE,prog);
     if (!p_parms->idx_input_flag) p_parms->serial_behavior=1;
-    if (p_parms->idx_input_flag && (p_parms->co_flag && p_parms->purge_flag)) usage(EXIT_FAILURE,prog);
+    if (p_parms->idx_input_flag && ((p_parms->co_flag && p_parms->purge_flag) && !p_parms->csort_flag)) usage(EXIT_FAILURE,prog);
     /*if (!p_parms->csort_flag && !p_parms->co_flag && !p_parms->purge_flag && !p_parms->idx_input_flag) p_parms->serial_behavior=1;
     if (p_parms->purge_flag && (p_parms->co_flag )) usage(EXIT_FAILURE,prog);
     if ((p_parms->purge_flag && !p_parms->idx_input_flag) && !p_parms->csort_flag) usage(EXIT_FAILURE,prog);
