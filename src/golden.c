@@ -255,7 +255,7 @@ void logEntriesNotFound(WAllQueryData wData,int nb_notFound) {
   while ((i<wData.nb_cards) && (j<nb_notFound)) {
     cur_res=wData.lst_work[i];
     if (cur_res->filenb==NOT_FOUND) {
-      fprintf(stderr, "%s:%s ",cur_res->dbase,cur_res->name);
+      fprintf(stderr, "\"%s:%s\"",cur_res->dbase,cur_res->name);
       j++;
     }
     i++;
