@@ -1,4 +1,10 @@
-What's new in ?:
+What's new in 3.0
+
+* goldin input can now be index files. Index files can be concatenated, sorted and purged.
+  This allows parallelization of the indexation phase. Dued to this, we are now able again
+  to index huge databases composed of a multitude of a small flat files (such as wgs).
+
+What's new in 2.0:
 
 * multiple queries in 1 sigle run for golden.
 

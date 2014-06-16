@@ -204,7 +204,7 @@ void print_results(int nb_res,int chk,result_t * res,char * file) {
   for (i=0; i<nb_res; i++) {
     if (res[i].filenb==NOT_FOUND) continue; // only call print for results that were found. 
       res_display(res[i],chk, g);
-      printf("\n#####\n");
+      // printf("\n#####\n");
       result_t cur_res;
       cur_res=res[i];
       free(cur_res.name); free(cur_res.dbase);
@@ -248,13 +248,16 @@ void res_display(result_t res, int chk, int fd) {
  Displays the list of entries that were not found.
  */
 void logEntriesNotFound(WAllQueryData wData,int nb_notFound) {
-  fprintf(stderr, "entries not found : ");
+  // fprintf(stderr, "entries not found : ");
+  int cnt_nf=0;
   result_t * cur_res;
   int i=0;
   int j=0;
   while ((i<wData.nb_cards) && (j<nb_notFound)) {
     cur_res=wData.lst_work[i];
     if (cur_res->filenb==NOT_FOUND) {
+      if (cnt_nf==0) fprintf(stderr, "entries not found : ");
+      cnt_nf++;
       fprintf(stderr, "\"%s:%s\"",cur_res->dbase,cur_res->name);
       j++;
     }

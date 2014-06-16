@@ -1,3 +1,44 @@
+Author: vlegrand <vlegrand@pasteur.fr>
+Date:   Fri Jun 13 17:15:58 2014 +0200
+    * src/golden.c:
+    Now display names of entries not found in a way that should help the users notice their data entry errors.
+    Removed "#################" cards separator in golden output.
+    Fixed bug : now display "entries not found" only if some entries were not found.
+
+Author: vlegrand <vlegrand@pasteur.fr>
+Date:   Fri Jun 13 16:57:28 2014 +0200
+
+    - Added short names for new options,
+    - Changed names of new options into more explicit
+    - working with index files in input is now limited to 1 file if <E2><80><94>concat is not specified,
+    - added size checking of index files in index_search,
+    - file indexation now exits with an error when a doublon is encountered in the .dbx file (old behavior could lead to inconsist
+
+Author: vlegrand <vlegrand@pasteur.fr>
+Date:   Tue Jun 10 14:17:01 2014 +0200
+
+    Corrected bug related to output file creation in golden.
+    New implementation of list_append: trying to have better performances on big .dbx file.
+
+Author: vlegrand <vlegrand@pasteur.fr>
+Date:   Fri May 23 10:48:58 2014 +0200
+
+    Now use unix file locking mechanism to make index files concatenation parallelizable (allow several processes to write to the same output file).
+
+Author: vlegrand <vlegrand@pasteur.fr>
+Date:   Tue Apr 29 17:10:16 2014 +0200
+
+    Fixed bug.
+    Added nrt/integration tests for new golden version.
+    Improved command-line options consistency checkings.
+
+Author: vlegrand <vlegrand@pasteur.fr>
+Date:   Fri Apr 25 10:45:36 2014 +0200
+
+    Completed unit tests.
+    Created indesc_desc.c/.h for structures and functions related to descriptors of physical index files (needed for index concatenation).
+    Created index_hl.c/.h for functions operating on more complex structures (typically array of indexes) than those in index.c/.c
+
 2014-27-01 Veronique Legrand <vlegrand@pasteur.fr>
 
   * src/*.c: Added the possibilty to perform several queries in a single golden run.
