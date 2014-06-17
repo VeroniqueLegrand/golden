@@ -22,7 +22,9 @@
 void locus_search(WDBQueryData wData, char * dbase, int * nb_locus_not_found) {
   FILE *f;
   char *p, *file, buf[1024];
+#ifdef DEBUG
   result_t ** start_l=wData.start_l; // for printing debug info
+#endif
   
   /* Virtual database indexes */
   file = index_file(NULL, dbase, VIRSUF);

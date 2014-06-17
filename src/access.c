@@ -60,6 +60,7 @@ result_t * access_search_deprecated(char *dbase, char *name) {
 void access_search(WDBQueryData wData, char * db_name, int * nb_AC_not_found) {
   FILE *f;
   char *p, *file, buf[1024];
+  int nb_AC_found;
 #ifdef DEBUG
   result_t ** start_l=wData.start_l; // for printing debug info
 #endif
@@ -96,7 +97,7 @@ void access_search(WDBQueryData wData, char * db_name, int * nb_AC_not_found) {
 #ifdef DEBUG
   printf("Searching in file : %s \n",file);
 #endif
-    int nb_AC_found=index_search(file, db_name, wData, nb_AC_not_found);
+    nb_AC_found=index_search(file, db_name, wData, nb_AC_not_found);
 #ifdef DEBUG
   printf("access_search : returned from index_search DB : %s : nb_not_found_for_db=%d, nb_res_found=%d \n",db_name,*nb_AC_not_found,nb_AC_found);
 #endif

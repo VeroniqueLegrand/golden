@@ -215,6 +215,8 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
 
   /* Check indexes endianness */
     chk = sizeof(indnb) + indnb * sizeof(inx);
+/*  int a=sizeof(indnb);
+  int b=sizeof(inx);*/
     if ((swap = (chk != st.st_size)) == 1) {
       indnb = iswap64(indnb); }
 

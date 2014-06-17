@@ -125,6 +125,7 @@ static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
   static result_t * res;
   static WAllQueryData wData;
   PyObject *str;
+  int nb_res;
   
   //printf("%d call to Golden_access_new\n",idx_cur_res);
   if (idx_cur_res==0) { // first call perform query
@@ -140,7 +141,7 @@ static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
     // instantiate storage for query results.
     res=(result_t*) malloc(sizeof(result_t)*nb_cards);
     wData=prepareQueryData(l_args,res,nb_cards);
-    int nb_res=performGoldenQuery(wData,1,0);
+    nb_res=performGoldenQuery(wData,1,0);
   }
   
   // logEntriesNotFound(wData,nb_cards-nb_res); // TODO? : How to display that to the python caller?

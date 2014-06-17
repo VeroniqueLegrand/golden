@@ -634,18 +634,18 @@ void clean() {
 
 
 int main(int argc, char **argv) {
-  printf("coucou");
   clean();
-  all_indix_t tmp_idx=index_load("/Users/vlegrand/Desktop/golden-3.0/test/tmp_new","wgs_ac_c1_sorted_2",ACCSUF);
-  all_indix_t tmp_idx2=index_load("/Users/vlegrand/Desktop/golden-3.0/test/tmp_new","wgs_ac_c1_sorted",ACCSUF);
-  printf("%ld\n",tmp_idx.accnb);
+  /*
+  all_indix_t tmp_idx=index_load("/volumes/@home/wgs_tmp_index","wgs_concat_ns",ACCSUF);
+  // all_indix_t tmp_idx2=index_load("/Users/vlegrand/Desktop/golden-3.0/test/tmp_new","wgs_ac_c1_sorted",ACCSUF);
+  printf("%llu\n",tmp_idx.accnb);
   int i;
   for (i=0;i<tmp_idx.accnb;i++) {
     printf("%s %d %lu\n",tmp_idx.l_accind[i].name,tmp_idx.l_accind[i].filenb,tmp_idx.l_accind[i].offset);
   }
 
   freeAllIndix(tmp_idx);
-  freeAllIndix(tmp_idx2);
+  // freeAllIndix(tmp_idx2); */// old debug stuff
 
   all_indix_t t_idx=test_index_create();
   freeAllIndix(t_idx);
