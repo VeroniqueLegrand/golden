@@ -24,15 +24,16 @@ static int concat_oflg=0;
 static int idx_input_flg=0;
 static int purge_flg=0;
 
-static struct option long_options[] =
+struct option long_options[] =
 {
   /* These options set a flag. */
   {"sort",   no_argument, &concat_sflg, 's'}, // sort indexes and keep doublons, not like default behavior. Allows only 1 filename arg
   {"concat",  no_argument, &concat_oflg, 'c'}, // concatenates all indexes and do not sort them; keep doublons.
   {"idx_input", no_argument, &idx_input_flg, 1}, // indicates that filenames given in argument are base name for index files.
   /* These options don't set a flag. */
-  {"index_dir",  required_argument, 0, 'b'}, // indicates place where to put produced index files. default value is "."
-  {"purge", no_argument, &purge_flg, 'p'}
+  {"idx_dir",  required_argument, 0, 'b'}, // indicates place where to put produced index files. default value is "."
+  {"purge", no_argument, &purge_flg, 'p'},
+  {NULL, 0, 0, 0}
 };
 
 void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
@@ -105,7 +106,7 @@ void usage(int status,char * prog) {
   (void)fprintf(f, "  -h       ... Prints this message and exit.\n");
   (void)fprintf(f, "  -i       ... Make entry names indexes.\n");
   (void)fprintf(f, "  -q       ... Be quiet, do not display some warnings.\n");
-  (void)fprintf(f, "  --index_dir   ... Specify directory where to put generated index files. \n");
+  (void)fprintf(f, "  --idx_dir   ... Specify directory where to put generated index files. \n");
   (void)fprintf(f, "  --idx_input   ...Process input files as index files and not as flat files. \n");
   (void)fprintf(f, "  -c, --concat  ... concatenates index files whose base name are given in argument. \n");
   (void)fprintf(f, "  -s, --sort    ... sort file given in input. \n");

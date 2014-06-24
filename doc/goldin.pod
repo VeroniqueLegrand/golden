@@ -25,7 +25,7 @@ Following command line options are allowed:
 
 Generate accession number indexes.
 
-=item -b, --new_index_dir
+=item -b, --idx_dir
 
 Generate index file in the specified directory. Default is '.'.
 
@@ -62,7 +62,7 @@ Used with this option, goldin only allows 2 arguments : dbase and index file nam
 Beware: this functionnality only works if the file has previously been sorted.
 
 ex:
-goldin --idx_input  -a --new_index_dir purged my_bank_p ./my_bank
+goldin --idx_input  -a --idx_dir purged my_bank_p ./my_bank
 
 will remove all doublons from index file my_bank.acx in current directory. It will produce a new file
 called my_bank_p.acx in the "purged" directory. 

@@ -31,8 +31,8 @@ typedef struct {
 // void init_array_indix_t();
 
 
-void init_all_indix_t();
-void freeAllIndix(); // free memory allocated for the elements of the all_indix_t structure.
+void init_all_indix_t(all_indix_t *);
+void freeAllIndix(all_indix_t); // free memory allocated for the elements of the all_indix_t structure.
 
 typedef struct {
   result_t ** start_l;

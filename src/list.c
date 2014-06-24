@@ -78,7 +78,7 @@ void check_doublon(char * a_fic,char *files_orig) {
     else p=new_file;
     if ((q = strrchr(a_fic, '/')) != NULL) ++q;
     else q=a_fic;
-    if (strcmp(p, q) == 0) err(EXIT_FAILURE, "duplicate file in database : %s",q);
+    if (strcmp(p, q) == 0) errx(EXIT_FAILURE, "duplicate file in database : %s",q);
     if (cnt==len_files) {
       new_file=NULL;
     } else {
@@ -119,14 +119,26 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   l_buf[0]='\0';
   len_remain=0;
   name = index_file(new_index_dir, dbase, LSTSUF);
-  f = open(name, O_RDWR|O_APPEND|O_CREAT, 0666);
+  /*if (stat(name, &st) == -1) err(EXIT_FAILURE,name, NULL);
+  printf("list_append, size of list file before writing: %lld\n",(long long) st.st_size);*/ 
+#ifdef DEBUG  
+  printf("going to open and lock : %s \n",name);
+#endif
+  f = open(name, O_RDWR|O_CREAT, 0666);
   if (f == -1) err(EXIT_FAILURE,"Cannot open file : %s",name);
-  if (stat(name, &st) == -1) err(EXIT_FAILURE,name, NULL);
   list_lock(f);
-
+  if (stat(name, &st) == -1) err(EXIT_FAILURE,name, NULL);
+#ifdef DEBUG
+  printf("list_append, size of list file before writing: %lld\n",(long long) st.st_size); 
+  printf("list_append, File inode: %ld\n",st.st_ino);
+  printf("reading : \n");
+#endif
   // 1rst part : count flat files and check for duplicates.
   off_t nb_to_read=st.st_size;
   is_cut=true;
+#ifdef DEBUG
+  printf("nb_to_read-PATH_MAX=%ld\n",nb_to_read-PATH_MAX);
+#endif
   while (nb_to_read-PATH_MAX>=0) {
     len_remain=strlen(remain);
     if (is_cut && len_remain>0) {
@@ -139,6 +151,9 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
     a_fic=strtok(l_buf,"\n");
     // strcpy(remain,a_fic);
     while (a_fic!=NULL) {
+#ifdef DEBUG
+      printf("%s\n",a_fic);
+#endif
       check_doublon(a_fic,files);
       nb++;
       strcpy(remain,a_fic);
@@ -152,15 +167,29 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
   }
   if ((nb_read=read(f,(char *)l_buf+len_remain,nb_to_read))==-1) err(EXIT_FAILURE,"Error while reading list file.");
   l_buf[len_remain+nb_to_read]='\0';
+#ifdef DEBUG
+  printf("read : %d bytes.\n",nb_read);
+  printf("len_remain+nb_to_read=%lld \n",len_remain+nb_to_read);
+  printf("l_buf=%s\n",l_buf);
+#endif
   a_fic=strtok(l_buf,"\n");
   while (a_fic!=NULL) {
+#ifdef DEBUG
+     printf("%s\n",a_fic);
+#endif
      check_doublon(a_fic,files);
      nb++;
      strcpy(remain,a_fic);
      a_fic=strtok(NULL,"\n");
   }
+#ifdef DEBUG   
+  printf("list_append : before adding files, nb= %d \n",nb);
+  printf("list_append, going to write : %ld bytes \n", strlen(files));
+  off_t offset = lseek( f, 0, SEEK_CUR ) ;
+  printf("list_append, current offset : %ld \n", offset);
+#endif
 
-  // printf("list_append : before adding files, nb= %d \n",nb);
+
   /* 2nd part: Add new files (even if they are duplicate) */
   l_files=strdup(files);
   // printf("going to add files : %s\n",l_files);
@@ -179,6 +208,12 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir) {
     nb++;
   }
   free(l_files);
+  if (fsync(f) ==-1) err(EXIT_FAILURE,"Error while fsync list file");
+#ifdef DEBUG
+  if (fstat(f, &st) == -1) err(EXIT_FAILURE,name, NULL);
+  printf("list_append, size of list file after writing: %ld\n",st.st_size); 
+  printf("list_append, File inode: %ld\n",st.st_ino);
+#endif  
   list_unlock(f);
   if (close(f)!=0) err(errno,"Error while closing file : %s",name);
   free(name);

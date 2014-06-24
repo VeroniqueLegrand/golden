@@ -89,10 +89,10 @@ all_indix_t index_load(const char *idx_dir, const char * dbase,const char * suff
     t_idx=fic_index_load(file);
     free(file);
   }
-  if (suff==LOCSUF) {
+  if (suff!=NULL && (strcmp(suff,LOCSUF))==0) {
     all_idx.locnb=t_idx.nb_idx;
     all_idx.l_locind=t_idx.l_idx;
-  } else if (suff==ACCSUF){
+  } else if (suff!=NULL && (strcmp(suff,ACCSUF)==0)) {
     all_idx.accnb=t_idx.nb_idx;
     all_idx.l_accind=t_idx.l_idx;
   }

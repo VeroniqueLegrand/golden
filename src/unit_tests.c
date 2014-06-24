@@ -126,7 +126,7 @@ void copy_file(char* fsource, char* fdest) {
   if (stat(fdest, &st) != -1) {
     if (remove(fdest)==-1) err(errno, "Couldn't remove dest file.");
   }
-  if (stat(fsource, &st) == -1) err(errno, "Couldn't find source file.");
+  if (stat(fsource, &st) == -1) err(errno, "Couldn't find source file: %s.",fsource);
   
   if ((fd=open(fsource,O_RDONLY))==-1) err(errno, "Cannot open source file.");
   if ((fd_dest=open(fdest,O_WRONLY|O_CREAT))==-1) err(errno, "Cannot open destination file.");
@@ -223,6 +223,12 @@ titi/totoY.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   assert(nb==1);
   assert(stat("../test/unit/db_test_tmp2.dbx", &st) != -1);
   if (list_buf!=NULL) free(list_buf);
+  
+  // new test with a file containing long path
+  list_new("../test/unit/long_tmp.dbx");
+  copy_file("../test/unit/long_path.dbx","../test/unit/long_tmp.dbx");
+  nb=list_append("long_tmp","test","blabla.dat","../test/unit");
+  assert(nb=17);
 }
 
 void test_index_merge() {
@@ -260,7 +266,7 @@ void test_index_desc(index_desc* d_descr,index_desc* ls_descr) {
   *d_descr=get_dest_index_desc(1,1,"../test/unit","wgs_c");
   assert(stat("../test/unit/wgs_c.acx", &st) != -1);
   assert(stat("../test/unit/wgs_c.idx", &st) != -1);
-  assert(stat("../test/unit/wgs_c.dbx", &st) != -1);
+  // assert(stat("../test/unit/wgs_c.dbx", &st) != -1);
   assert(d_descr->d_facx!=-1);
   assert(d_descr->d_ficx!=-1);
   //assert(d_descr->d_fdbx!=NULL);
@@ -629,6 +635,9 @@ void clean() {
     if (remove("../test/unit/wgs_orig.acx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_orig.acx");
   }
 
+  if (stat("../test/unit/long_tmp.dbx", &st) != -1) {
+    if (remove("../test/unit/long_tmp.dbx")==-1) err(errno, "Couldn't remove ../test/unit/long_tmp.dbx");
+  }
 }
 
 

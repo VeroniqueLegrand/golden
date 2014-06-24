@@ -288,13 +288,13 @@ void index_file_unlock(int fd, struct flock lock_t) {
 void index_append(int fd_d,int prev_nb_flat,uint64_t nb_to_read,int fd_s,indix_t * buf) {
   int cnt;
   indix_t * inx;
-  if (read(fd_s,buf, nb_to_read*sizeof(indix_t)) == -1) err(errno,"Cannot read index from source file", NULL);
+  if (read(fd_s,buf, nb_to_read*sizeof(indix_t)) == -1) err(errno,"Cannot read index from source file");
   inx=buf;
   for (cnt=0;cnt<nb_to_read;cnt++) {
     inx->filenb=inx->filenb+prev_nb_flat;
     inx++;
   }
-  if (write(fd_d,buf, nb_to_read*sizeof(indix_t)) != nb_to_read*sizeof(indix_t)) err(errno,"Cannot write index to destination file",NULL);
+  if (write(fd_d,buf, nb_to_read*sizeof(indix_t)) != nb_to_read*sizeof(indix_t)) err(errno,"Cannot write index to destination file");
 }
 
 /* concatenates indexes that have already been written to a file by a previous call to goldin. */
@@ -309,7 +309,7 @@ uint64_t index_file_concat(int fd_d,int prev_nb_flat, uint64_t nb_idx, int fd_s,
   totnb+=nb_idx;
   lock_t=index_file_lock(fd_d,0,sizeof(prev_nb_idx)); // lock used to perform the truncate operation
   if (lseek(fd_d, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx","wgs_c");
-  if (write(fd_d,&totnb,sizeof(totnb))!=sizeof(totnb)) err(errno,"Cannot write index to destination file",NULL);
+  if (write(fd_d,&totnb,sizeof(totnb))!=sizeof(totnb)) err(errno,"Cannot write index to destination file");
   res = fstat(fd_d, &s_dest);
   if (res == -1) err(1, "stat failed on destination file");
 
@@ -317,7 +317,7 @@ uint64_t index_file_concat(int fd_d,int prev_nb_flat, uint64_t nb_idx, int fd_s,
   if (res == -1) err(1, "stat failed on source file");
 
   size_t s_to_add = s_source.st_size-sizeof(nb_idx); // do not concatenate number of indexes in index file.
-  if (lseek(fd_d, 0, SEEK_END) == -1) err(errno,"index_file_concat: error while getting at the end of dest index file.",NULL);
+  if (lseek(fd_d, 0, SEEK_END) == -1) err(errno,"index_file_concat: error while getting at the end of dest index file.");
   res = ftruncate(fd_d, s_dest.st_size + s_to_add);
   if (res == -1 && S_ISREG(s_dest.st_mode)) err(1, "Truncate failed");
 
@@ -368,7 +368,7 @@ int index_merge(char *file, uint64_t nb, indix_t *ind) {
   if (fread(&oldnb, sizeof(oldnb), 1, g) != 1) err(errno,"Cannot read number of indexes from file : %s",file);
   
   while(oldnb) {
-    if (fread(&old, sizeof(old), 1, g) != 1) err(errno,"Cannot read indexes from file : %s",file);
+    if (fread(&old, sizeof(old), 1, g) != 1) err(errno,"Cannot read indexes from file %s : %s",__func__,file);
 
     /* Insert new entries */
     while(newnb && (i = index_compare(cur, &old)) < 0) {
@@ -427,12 +427,12 @@ void index_purge(const char * fic) {
   }
 
   if (fwrite(&oldnb, sizeof(oldnb), 1, f) != 1) err(errno,"Cannot write to : %s", new);
-  if (fread(&cur1, sizeof(cur1), 1, g) != 1) err(errno,"Cannot read indexes from file : %s",fic);
+  if (fread(&cur1, sizeof(cur1), 1, g) != 1) err(errno,"Cannot read indexes from file %s: %s",__func__,fic);
   newnb=0;
 
   while(oldnb-1) {
     int ret=fread(&cur2, sizeof(cur2), 1, g);
-    if (ret != 1) err(errno,"Cannot read indexes from file : %s",fic);
+    if (ret != 1) err(errno,"Cannot read indexes from file %s: %s",__func__,fic);
     int i=index_compare(&cur1,&cur2);
     if (i!=0) {
       if (fwrite(&cur1, sizeof(cur1), 1, f) != 1) err(errno,"Cannot write index to : %s",new);

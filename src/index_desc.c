@@ -116,10 +116,10 @@ index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char * dbas
     d_idx.locnb=w_idx.idxnb;
     d_idx.d_ficx=w_idx.d_fidx;
   }
-  dbx_file=index_file(new_index_dir,dbase,LSTSUF);
+  // dbx_file=index_file(new_index_dir,dbase,LSTSUF);
   // just create the file in fact.
-  list_new(dbx_file);
-  free(dbx_file);
+  // list_new(dbx_file);
+  // free(dbx_file);
   return d_idx;
 }
 
