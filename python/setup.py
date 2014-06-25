@@ -24,7 +24,14 @@ class build(_build):
 class sdist(_sdist):
   def run(self): pass
 
-cmdclass = { 'build':build, 'sdist':sdist }
+# Nothing particular to test but need that to be able to run make check
+class check(_build):
+  def run(self):
+    chk = os.access("../src/config.h", os.F_OK)
+    if not chk:
+      sys.exit("ERROR: Please run golden package configure")
+
+cmdclass = { 'build':build, 'sdist':sdist, 'check':check }
 
 setup( name = "Golden", version = "3.0", cmdclass=cmdclass,
        description = "Python bindings for the golden tool",
