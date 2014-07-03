@@ -104,7 +104,7 @@ all_indix_nb process_databank_file(goldin_parms s_parms , char * file, char ** b
   if ((st.st_mode & S_IFMT) != S_IFREG) err(errno, file, "not a regular file");
 
   /* Add file to list */
-  nb = list_append(s_parms.dbase, s_parms.dir, file,s_parms.new_index_dir);
+  nb = list_append(s_parms.dbase, s_parms.dir, file,s_parms.new_index_dir,false);
   all_indix_t file_l_indix=create_index(file,nb,s_parms.loc,s_parms.acc);
   tot_idx.accnb=file_l_indix.accnb;
   tot_idx.locnb=file_l_indix.accnb;
@@ -137,10 +137,11 @@ void process_index_file(goldin_parms s_parms ,char * rac_file,  index_desc * d_d
   s_descr=get_source_index_desc(s_parms.acc,s_parms.loc,path,base_filename);
   s_dbx_file=index_file(path,base_filename,LSTSUF);
   l_flats=list_get(s_dbx_file);
+  printf("goldin.c, call to list_get on %s returned :\n %s\n",s_dbx_file,l_flats);
   free(s_dbx_file);
 
   // concatenate
-  nb = list_append(s_parms.dbase, s_parms.dir,l_flats,s_parms.new_index_dir);
+  nb = list_append(s_parms.dbase, s_parms.dir,l_flats,s_parms.new_index_dir,true);
   free(l_flats);
   if (s_parms.acc) {
     // if (fseeko(d_descr->d_facx, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.acx",s_parms.dbase);

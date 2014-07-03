@@ -79,7 +79,7 @@ cp tmp_new/wgs_ac_c1.dbx tmp_new/wgs_ac_c1_ns.dbx
 
 cmp tmp_new/wgs_ac_c1_sorted.acx tmp_new/wgs_ac_c1_ns.acx|grep "differ" || exit 1
 
-../src/goldin --idx_dir tmp_new --idx_input --concat --s -a wgs_ac_c1_sorted_2 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3 || exit 1
+../src/goldin --idx_dir tmp_new --idx_input --concat -s -a wgs_ac_c1_sorted_2 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3 || exit 1
 
 cmp tmp_new/wgs_ac_c1_sorted.acx tmp_new/wgs_ac_c1_sorted_2.acx || exit 1
 
@@ -124,6 +124,12 @@ my_output=`../src/goldin -d tmp_new --idx_input -c -p wgs_ac_c1_SNE tmp_new/wgs_
 echo $my_output|grep "usage" || exit 1
 
 my_output=`../src/goldin --idx_dir tmp_new --purge wgs_ac_c1_SNE all/wgs_extract.2.gnp all/wgs_extract.3.gnp`
+echo $my_output|grep "usage" || exit 1
+
+my_output=`../src/goldin --idx_dir tmp_new --idx_input -d toto --concat -s -a wgs_ac_c1_not_sorted_2 tmp_new/wgs_ac1 tmp_new/wgs_ac2 tmp_new/wgs_ac3`
+echo $my_output|grep "usage" || exit 1
+
+my_output=`../src/goldin --idx_dir tmp_new --idx_input -d toto  -s -a  wgs_ac_c1_sorted_2 tmp_new/wgs_ac_c1_not_sorted_2`
 echo $my_output|grep "usage" || exit 1
 
 ## clean files

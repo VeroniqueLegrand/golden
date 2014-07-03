@@ -81,6 +81,7 @@ void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
     p_parms->co_flag=concat_oflg;
     p_parms->csort_flag=concat_sflg;
     p_parms->purge_flag=purge_flg;
+    if ((p_parms->co_flag || p_parms->csort_flag || p_parms->purge_flag)  && p_parms->dir!=NULL) usage(EXIT_FAILURE,prog);
     if (!p_parms->idx_input_flag && (p_parms->co_flag || p_parms->purge_flag || p_parms->csort_flag)) usage(EXIT_FAILURE,prog);
     if (!p_parms->idx_input_flag) p_parms->serial_behavior=1;
     if (p_parms->idx_input_flag && ((p_parms->co_flag && p_parms->purge_flag) && !p_parms->csort_flag)) usage(EXIT_FAILURE,prog);
