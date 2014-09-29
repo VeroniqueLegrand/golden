@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "GOLDIN 1"
-.TH GOLDIN 1 "2014-06-16" "Unix" "User Manuals"
+.TH GOLDIN 1 "2014-06-20" "Unix" "User Manuals"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -144,8 +144,8 @@ Following command line options are allowed:
 .IP "\-a" 4
 .IX Item "-a"
 Generate accession number indexes.
-.IP "\-b, \-\-new_index_dir" 4
-.IX Item "-b, --new_index_dir"
+.IP "\-b, \-\-idx_dir" 4
+.IX Item "-b, --idx_dir"
 Generate index file in the specified directory. Default is '.'.
 .IP "\-c, \-\-concat" 4
 .IX Item "-c, --concat"
@@ -176,7 +176,7 @@ Used with this option, goldin only allows 2 arguments : dbase and index file nam
 Beware: this functionnality only works if the file has previously been sorted.
 .Sp
 ex:
-goldin \-\-idx_input  \-a \-\-new_index_dir purged my_bank_p ./my_bank
+goldin \-\-idx_input  \-a \-\-idx_dir purged my_bank_p ./my_bank
 .Sp
 will remove all doublons from index file my_bank.acx in current directory. It will produce a new file
 called my_bank_p.acx in the \*(L"purged\*(R" directory.

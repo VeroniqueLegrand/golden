@@ -96,7 +96,7 @@ void process_databank_files(int optind,int argc,char ** argv,goldin_parms s_parm
 
 all_indix_nb process_databank_file(goldin_parms s_parms , char * file, char ** buf) {
   struct stat st;
-  int nb;
+  slist_inc l_nb;
   int ret;
   all_indix_nb tot_idx;
   /* Check for regular file */
@@ -104,10 +104,10 @@ all_indix_nb process_databank_file(goldin_parms s_parms , char * file, char ** b
   if ((st.st_mode & S_IFMT) != S_IFREG) err(errno, file, "not a regular file");
 
   /* Add file to list */
-  nb = list_append(s_parms.dbase, s_parms.dir, file,s_parms.new_index_dir,false);
-  all_indix_t file_l_indix=create_index(file,nb,s_parms.loc,s_parms.acc);
+  l_nb= list_append(s_parms.dbase, s_parms.dir, file,s_parms.new_index_dir,false);
+  all_indix_t file_l_indix=create_index(file,l_nb.newnb,s_parms.loc,s_parms.acc);
   tot_idx.accnb=file_l_indix.accnb;
-  tot_idx.locnb=file_l_indix.accnb;
+  tot_idx.locnb=file_l_indix.locnb;
   if (s_parms.wrn && (file_l_indix.locnb + file_l_indix.accnb) == 0) {
      warn("%s %s",file, "file contains no entries");
      return tot_idx;
@@ -125,7 +125,7 @@ all_indix_nb process_databank_file(goldin_parms s_parms , char * file, char ** b
 
 void process_index_file(goldin_parms s_parms ,char * rac_file,  index_desc * d_descr, char ** buf) {
   index_desc s_descr;
-  int nb;
+  slist_inc nb;
   char * s_dbx_file;
   char * l_flats;
   char * path, *base_filename;
@@ -134,14 +134,23 @@ void process_index_file(goldin_parms s_parms ,char * rac_file,  index_desc * d_d
   char * cp2=strdup(rac_file);
   path=dirname(cp1);
   base_filename=basename(cp2);
+#ifdef DEBUG
+  printf("goldin.c,begin of process_index_file, d_descr->max_filenb=%d\n",d_descr->max_filenb);
+#endif
   s_descr=get_source_index_desc(s_parms.acc,s_parms.loc,path,base_filename);
   s_dbx_file=index_file(path,base_filename,LSTSUF);
   l_flats=list_get(s_dbx_file);
+#ifdef DEBUG
   printf("goldin.c, call to list_get on %s returned :\n %s\n",s_dbx_file,l_flats);
+#endif
   free(s_dbx_file);
 
   // concatenate
   nb = list_append(s_parms.dbase, s_parms.dir,l_flats,s_parms.new_index_dir,true);
+#ifdef DEBUG
+  printf("goldin.c, call to list_append returned :\n%d\n ",nb.newnb);
+#endif
+  d_descr->max_filenb=nb.oldnb;
   free(l_flats);
   if (s_parms.acc) {
     // if (fseeko(d_descr->d_facx, 0, SEEK_END) == -1) err(errno,"error while getting at the end of file: %s.acx",s_parms.dbase);
@@ -153,7 +162,10 @@ void process_index_file(goldin_parms s_parms ,char * rac_file,  index_desc * d_d
   }
   // close source index files
   close_index_desc(&s_descr);
-  d_descr->max_filenb=nb;
+  d_descr->max_filenb=nb.newnb;
+#ifdef DEBUG
+  printf("goldin.c,end of process_index_file, d_descr->max_filenb=%d\n",d_descr->max_filenb);
+#endif
   free(cp1);
   free(cp2);
 }

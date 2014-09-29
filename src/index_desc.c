@@ -31,6 +31,7 @@ void init_idx_desc(index_desc * p_sdesc) {
   p_sdesc->accnb=0;
   p_sdesc->locnb=0;
   p_sdesc->max_filenb=0;
+  // printf("printf call to init_idx_desc\n");
 }
 
 
@@ -102,7 +103,7 @@ index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char * dbas
   size_t len;
   char * buf, *p;
   FILE * dbx_fd;
-
+  // printf("Call to get_dest_index_desc\n");
   // remove old index files.No! concatenation will be done by several different processes. Process N must not erase what process M has written!
   // index_hl_remove(acc,loc,new_index_dir,dbase);
   init_idx_desc(&d_idx);

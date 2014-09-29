@@ -130,7 +130,7 @@ void read_chunk(int f, char * remain,char * l_buf, off_t nb_to_read) {
     }
   }
   
-  #ifdef DEBUG
+#ifdef DEBUG
   printf("read : %d bytes.\n",nb_read);
   printf("len_remain+nb_to_read=%lld \n",len_remain+nb_to_read);
   printf("l_buf=%s\n",l_buf);
@@ -208,10 +208,11 @@ int count_check_doublons(char * name, int f, char * files) {
  * Just put "." if you want previous behavior.
  * buf : a buffer to store content of the .dbx file before appending data to it.
  */
-int list_append(char *dbase, char *dir, char *files,char * new_index_dir, bool keep_path) {
+slist_inc list_append(char *dbase, char *dir, char *files,char * new_index_dir, bool keep_path) {
   // struct stat st;
   int f;
   int nb;
+  slist_inc l_nb;
   char *p, *q,*name;
   char * new_file;
   char * l_files;
@@ -230,8 +231,9 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir, bool k
   if (f == -1) err(EXIT_FAILURE,"Cannot open file : %s",name);
   list_lock(f);
   // 1rst part, count elements and check that there are no dublons.
-  nb=count_check_doublons(name, f, files);
-
+  l_nb.oldnb=count_check_doublons(name, f, files);
+  nb=l_nb.oldnb;
+  printf("list_append, count_check_doublons returned : %d \n",nb);
   /* 2nd part: Add new files (even if they are duplicate) */
   l_files=strdup(files);
 
@@ -258,11 +260,13 @@ int list_append(char *dbase, char *dir, char *files,char * new_index_dir, bool k
   if (fstat(f, &st) == -1) err(EXIT_FAILURE,name, NULL);
   printf("list_append, size of list file after writing: %lld\n",st.st_size);
   printf("list_append, File inode: %lld\n",st.st_ino);
+  printf("list_append, before adding files, nb=%d\n",nb);
 #endif  
   list_unlock(f);
   if (close(f)!=0) err(errno,"Error while closing file : %s",name);
   free(name);
-  return nb;
+  l_nb.newnb=nb;
+  return l_nb;
 }
 
 

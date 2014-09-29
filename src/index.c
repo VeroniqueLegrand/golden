@@ -48,7 +48,7 @@
 #define MAX_IDX_READ 10240 // maximum number of indix_t structures that can be read from an index file.
 
 
-// #define DEBUG
+#define DEBUG
 /* Functions prototypes */
 
 static int index_move(const char *, const char *);
@@ -103,6 +103,12 @@ char *index_temp(const char *dir) {
 int index_compare(const void *a, const void *b) {
   const indix_t *p, *q;
   p = (const indix_t *)a; q = (const indix_t *)b;
+#ifdef DEBUG
+  if ((p->filenb==120) || (q->filenb==120)) {
+    printf("comparing : %s, %u, %lld",p->name,p->filenb,p->offset);
+    printf(" with : %s, %u, %lld\n",q->name,q->filenb,q->offset);
+  }
+#endif
   return strncmp(p->name, q->name, (size_t)NAMLEN);
 }
 
@@ -197,7 +203,7 @@ void index_sort(char *file, uint64_t nb) {
   printf("AC/locus before sort:\n.");
   int i;
   for (i=0;i<nb;i++) {
-    printf("%s\n",old2->name);
+    printf("%s, %u, %lld\n",old2->name,old2->filenb,old2->offset);
     old2++;
   }
   printf("--------------------------------------------------\n");
@@ -210,7 +216,7 @@ void index_sort(char *file, uint64_t nb) {
   // to check that it works.
   printf("AC/locus sorted in alphabetical order:\n.");
   for (i=0;i<nb;i++) {
-    printf("%s\n",old->name);
+    printf("%s, %u, %lld\n",old->name,old->filenb,old->offset);
     old++;
   }
   printf("--------------------------------------------------\n");
@@ -288,6 +294,9 @@ void index_file_unlock(int fd, struct flock lock_t) {
 void index_append(int fd_d,int prev_nb_flat,uint64_t nb_to_read,int fd_s,indix_t * buf) {
   int cnt;
   indix_t * inx;
+#ifdef DEBUG
+  printf("index.c, index_append filenb will be incremented of : %d\n",prev_nb_flat);
+#endif
   if (read(fd_s,buf, nb_to_read*sizeof(indix_t)) == -1) err(errno,"Cannot read index from source file");
   inx=buf;
   for (cnt=0;cnt<nb_to_read;cnt++) {
@@ -299,16 +308,27 @@ void index_append(int fd_d,int prev_nb_flat,uint64_t nb_to_read,int fd_s,indix_t
 
 /* concatenates indexes that have already been written to a file by a previous call to goldin. */
 uint64_t index_file_concat(int fd_d,int prev_nb_flat, uint64_t nb_idx, int fd_s, uint64_t prev_nb_idx) {
-  uint64_t totnb=prev_nb_idx;
+  // uint64_t totnb=prev_nb_idx;
+  uint64_t totnb;
   struct flock lock_t; // lock used to perform the truncate operation
   struct flock lock_w; // lock to perform the writing in the "reserved" area of the destination file.
   struct stat s_dest, s_source;
   int res;
   indix_t * buf=NULL;
 
-  totnb+=nb_idx;
+#ifdef DEBUG
+  printf("index.c, index_file_concat called with prev_nb_flat=%d\n",prev_nb_flat);
+#endif
   lock_t=index_file_lock(fd_d,0,sizeof(prev_nb_idx)); // lock used to perform the truncate operation
   if (lseek(fd_d, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx","wgs_c");
+  
+  // re-read number of indexes before writing because this value may have been changed by another process since the last time we read it.
+  if (read(fd_d, &totnb, sizeof(totnb)) != sizeof(totnb)) err(errno,"error reading destination index file");
+#ifdef DEBUG
+  printf("index.c, index_file_concat previous number of index=%lld new number of indexes=%lld \n",totnb,totnb+nb_idx);
+#endif
+  if (lseek(fd_d, 0, SEEK_SET) == -1) err(errno,"error while getting at the beginning of file: %s.acx","wgs_c");
+  totnb+=nb_idx;
   if (write(fd_d,&totnb,sizeof(totnb))!=sizeof(totnb)) err(errno,"Cannot write index to destination file");
   res = fstat(fd_d, &s_dest);
   if (res == -1) err(1, "stat failed on destination file");
@@ -320,9 +340,13 @@ uint64_t index_file_concat(int fd_d,int prev_nb_flat, uint64_t nb_idx, int fd_s,
   if (lseek(fd_d, 0, SEEK_END) == -1) err(errno,"index_file_concat: error while getting at the end of dest index file.");
   res = ftruncate(fd_d, s_dest.st_size + s_to_add);
   if (res == -1 && S_ISREG(s_dest.st_mode)) err(1, "Truncate failed");
-
-  lock_w=index_file_lock(fd_d,s_dest.st_size,s_source.st_size);
-  // if (s_dest.st_size>0) index_file_unlock(fd_d,lock_t);
+  
+#ifdef DEBUG
+  printf("index.c, index_file_concat locking destination index file from octet : %lld to octet: %lld for writing\n",s_dest.st_size,s_dest.st_size+s_source.st_size-sizeof(nb_idx));
+#endif
+  
+  lock_w=index_file_lock(fd_d,s_dest.st_size,s_source.st_size-sizeof(nb_idx));
+  
   index_file_unlock(fd_d,lock_t);
 
   int nb=nb_idx;
