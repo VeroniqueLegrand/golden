@@ -138,6 +138,8 @@
 		2DB799DD18A1184B001A857C /* query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = query.h; path = src/query.h; sourceTree = SOURCE_ROOT; };
 		2DB799E218A14D92001A857C /* taxo_test_golden_multi.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = taxo_test_golden_multi.py; sourceTree = "<group>"; };
 		2DB799E318A14D92001A857C /* test_golden_multi */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_golden_multi; sourceTree = "<group>"; };
+		2DBEA7FC1A237AAA005630F3 /* genbank_test_to_concat.dbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = genbank_test_to_concat.dbx; path = test/unit/genbank_test_to_concat.dbx; sourceTree = "<group>"; };
+		2DBEA7FD1A237AAA005630F3 /* genbank_test.dbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = genbank_test.dbx; path = test/unit/genbank_test.dbx; sourceTree = "<group>"; };
 		2DF5A20C18E3367200CE8C77 /* goldin_options.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = goldin_options.c; sourceTree = "<group>"; };
 		2DF5A20D18E3367200CE8C77 /* goldin_options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = goldin_options.h; sourceTree = "<group>"; };
 		2DF5A20F18EB04AB00CE8C77 /* goldin_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = goldin_utils.c; sourceTree = "<group>"; };
@@ -156,6 +158,8 @@
 		2D4D32421886C6AB00712232 = {
 			isa = PBXGroup;
 			children = (
+				2DBEA7FC1A237AAA005630F3 /* genbank_test_to_concat.dbx */,
+				2DBEA7FD1A237AAA005630F3 /* genbank_test.dbx */,
 				2D6A6ED6190A589C00D9DFFA /* wgs_extract.1.gnp */,
 				2D6A6ED7190A589C00D9DFFA /* wgs_extract.2.gnp */,
 				2D6A6ED8190A589C00D9DFFA /* wgs_extract.3.gnp */,
@@ -541,7 +545,7 @@
 				2D4D32491886C6AB00712232 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		2D4D324A1886C6AB00712232 /* Build configuration list for PBXLegacyTarget "golden-3.0" */ = {
 			isa = XCConfigurationList;
@@ -550,7 +554,7 @@
 				2D4D324C1886C6AB00712232 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

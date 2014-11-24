@@ -234,9 +234,12 @@ titi/totoY.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   list_new("../test/unit/new_tmp2.dbx");
   assert(stat("../test/unit/new_tmp2.dbx", &st) != -1);
   nb=list_append("new_tmp2",NULL,"mon_titi/toto1.dat","../test/unit",true);
+  assert(nb.oldnb==0);
+  assert(nb.newnb==1);
   nb=list_append("new_tmp2",NULL,"mon_nouveau_titi/toto3.dat\nencore_un_titi/toto3.dat","../test/unit",true);
   assert(stat("../test/unit/new_tmp2.dbx", &st) != -1);
-  assert(nb.newnb=3);
+  assert(nb.oldnb==1);
+  assert(nb.newnb==3);
   buf= malloc(st.st_size+1);
   fd=open("../test/unit/new_tmp2.dbx",O_RDONLY);
   assert(read(fd,buf,st.st_size)!=-1);
@@ -244,6 +247,13 @@ titi/totoY.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   assert(strcmp(buf,"mon_titi/toto1.dat\nmon_nouveau_titi/toto3.dat\nencore_un_titi/toto3.dat\n")==0);
   free(buf);
   close(fd);
+  
+  copy_file("../test/unit/genbank_test.dbx","../test/unit/genbank_release.dbx");
+  l_flat=list_get("../test/unit/genbank_test_to_concat.dbx");
+  nb=list_append("genbank_release",NULL,l_flat,"../test/unit",true);
+  assert(nb.oldnb==177);
+  assert(nb.newnb==277);
+  free(l_flat);
 }
 
 void test_index_merge() {
@@ -658,6 +668,11 @@ void clean() {
   if (stat("../test/unit/long_tmp.dbx", &st) != -1) {
     if (remove("../test/unit/long_tmp.dbx")==-1) err(errno, "Couldn't remove ../test/unit/long_tmp.dbx");
   }
+  
+  if (stat("../test/unit/genbank_release.dbx", &st) != -1) {
+    if (remove("../test/unit/genbank_release.dbx")==-1) err(errno, "Couldn't remove ../test/unit/genbank_release.dbx");
+  }
+
 }
 
 

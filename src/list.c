@@ -72,13 +72,15 @@ void check_doublon(char * a_fic,char *files_orig) {
   char * files=strdup(files_orig);
   char * a=files;
   char * new_file=files;
+  int len_a_fic=strlen(a_fic);
+  /*
 #ifdef DEBUG
   printf("check_doublons : going to check for %s in %s\n",a_fic,files_orig);
-  int len_a_fic=strlen(a_fic);
   if (a_fic[len_a_fic-1]=='/') {
     printf("WARNING a_fic is cut on the / caracter");
   }
 #endif
+   */
   if (a_fic[len_a_fic-1]=='/') return;
   while (new_file!=NULL) {
     while (*a!='\n' && cnt!=len_files) { // check for end of current filename un the list of filenames given in argument.
@@ -127,6 +129,7 @@ void read_chunk(int f, char * remain,char * l_buf, off_t nb_to_read) {
       i++;
       char * last=&l_buf[i];
       strcpy(remain,last);
+      l_buf[i]='\0';
     }
   }
   
@@ -150,9 +153,9 @@ int count_check_doublons(char * name, int f, char * files) {
   char remain[PATH_MAX+1]="";
   if (stat(name, &st) == -1) err(EXIT_FAILURE,name, NULL);
 #ifdef DEBUG
-  printf("list_append, size of list file before writing: %lld\n",(long long) st.st_size);
-  printf("list_append, File inode: %lld\n",st.st_ino);
-  printf("reading : \n");
+  printf("%s size of list file before writing: %lld\n",__func__,(long long) st.st_size);
+  printf("%s list_append, File inode: %lld\n",__func__,st.st_ino);
+  printf("%s reading : \n",__func__);
 #endif
   nb = 0;
   off_t nb_to_read=st.st_size;
@@ -188,10 +191,10 @@ int count_check_doublons(char * name, int f, char * files) {
     a_fic=strtok(NULL,"\n");
   }
 #ifdef DEBUG
-  printf("list_append : before adding files, nb= %d \n",nb);
-  printf("list_append, going to write : %ld bytes \n", strlen(files));
+  printf("%s : before adding files, nb= %d \n",__func__,nb);
+  printf("%s : list_append, going to write : %ld bytes \n", __func__,strlen(files));
   off_t offset = lseek( f, 0, SEEK_CUR ) ;
-  printf("list_append, current offset : %lld \n", offset);
+  printf("%s, current offset : %lld \n", __func__,offset);
 #endif
   return nb;
 }
@@ -233,7 +236,7 @@ slist_inc list_append(char *dbase, char *dir, char *files,char * new_index_dir, 
   // 1rst part, count elements and check that there are no dublons.
   l_nb.oldnb=count_check_doublons(name, f, files);
   nb=l_nb.oldnb;
-  printf("list_append, count_check_doublons returned : %d \n",nb);
+  // printf("list_append, count_check_doublons returned : %d \n",nb);
   /* 2nd part: Add new files (even if they are duplicate) */
   l_files=strdup(files);
 
