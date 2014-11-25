@@ -135,6 +135,7 @@ void copy_file(char* fsource, char* fdest) {
   if (write(fd_dest,buf,nb_read)==-1) err(errno,"Error while writing dest file.");
   close(fd);
   close(fd_dest);
+  free(buf);
   if ((ret=chmod(fdest, mod)) == -1) err(errno,"Cannot set permissions.");
 }
 
@@ -152,6 +153,7 @@ void test_index_sort() {
 #endif
   //
   index_dump("enzyme_test",REPLACE_INDEXES,t_idx,LOCSUF,"../test/unit"); // creates tst_file
+  freeAllIndix(t_idx);
   index_sort(tst_file,21);
   // load test file and icx_file (already sorted), and check that both results are the same.
   all_indix_t t_idx3=index_load("../test/unit","enzyme_test",LOCSUF);
@@ -170,6 +172,7 @@ void test_index_sort() {
     assert(strcmp(t_idx3.l_locind[i-1].name,t_idx3.l_locind[i].name)<=0);
     i++;
   }
+  freeAllIndix(t_idx3);
 }
 
 void test_list_append() {
@@ -417,6 +420,7 @@ all_indix_t test_index_create() {
   // assert(strcmp(t_idx.flatfile_name,data_file)==0);
   assert(t_idx.accnb==0);
   assert(t_idx.locnb==0);
+  freeAllIndix(t_idx);
 
   t_idx=create_index(data_file,nb.newnb,1,0);
   // assert(strcmp(t_idx.flatfile_name,data_file)==0);
