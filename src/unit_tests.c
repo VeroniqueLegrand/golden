@@ -210,9 +210,10 @@ titi/totoY.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   nb=list_append(dbase,"titi","totoY.dat\ntoto2.dat\ntoto3.dat\n","../test/unit",false);
   assert(nb.newnb==8);
   assert(stat("../test/unit/db_test_tmp.dbx", &st) != -1);
-  buf= malloc(st.st_size);
+  buf= malloc(st.st_size+1);
   fd=open("../test/unit/db_test_tmp.dbx",O_RDONLY);
   assert(read(fd,buf,st.st_size)!=-1);
+  buf[st.st_size]='\0';
   assert(strcmp(buf,expected_content)==0);
   close(fd);
   free(buf);
@@ -246,7 +247,11 @@ titi/totoY.dat\ntiti/toto2.dat\ntiti/toto3.dat\n";
   buf= malloc(st.st_size+1);
   fd=open("../test/unit/new_tmp2.dbx",O_RDONLY);
   assert(read(fd,buf,st.st_size)!=-1);
-  buf[st.st_size+1]='\0';
+  buf[st.st_size]='\0';
+  printf("Content of new_tmp2.dbx : \n");
+  printf("%s",buf);
+  int comp=strcmp(buf,"mon_titi/toto1.dat\nmon_nouveau_titi/toto3.dat\nencore_un_titi/toto3.dat\n");
+  printf("comp=%d\n",comp);
   assert(strcmp(buf,"mon_titi/toto1.dat\nmon_nouveau_titi/toto3.dat\nencore_un_titi/toto3.dat\n")==0);
   free(buf);
   close(fd);
@@ -574,108 +579,132 @@ void clean() {
   if (stat("../test/unit/db_test_tmp.dbx", &st) != -1) {
     if (remove("../test/unit/db_test_tmp.dbx")==-1) err(errno, "Couldn't remove ../test/unit/db_test_tmp.dbx");
   }
+  assert(stat("../test/unit/db_test_tmp.dbx",&st) == -1);
   
   if (stat("../test/unit/db_test_tmp2.dbx", &st) != -1) {
     if (remove("../test/unit/db_test_tmp2.dbx")==-1) err(errno, "Couldn't remove ../test/unit/db_test_tmp2.dbx");
   }
-
+  assert(stat("../test/unit/db_test_tmp2.dbx",&st) == -1);
   
   if (stat("../test/unit/enzyme_extract.dbx", &st) != -1) {
     if (remove("../test/unit/enzyme_extract.dbx")==-1) err(errno, "Couldn't remove ../test/unit/enzyme_extract.dbx");
   }
+  assert(stat("../test/unit/enzyme_extract.dbx", &st) == -1);
   
   if (stat("../test/unit/enzyme_test.idx", &st) != -1) {
     if (remove("../test/unit/enzyme_test.idx")==-1) err(errno, "Couldn't remove ../test/unit/enzyme_test.idx");
   }
+  assert(stat("../test/unit/enzyme_test.idx", &st) == -1);
   
   if (stat("../test/unit/new_tmp.dbx", &st) != -1) {
     if (remove("../test/unit/new_tmp.dbx")==-1) err(errno, "Couldn't remove ../test/unit/new_tmp.dbx");
   }
+  assert(stat("../test/unit/new_tmp.dbx", &st) == -1);
   
   if (stat("../test/unit/new_tmp2.dbx", &st) != -1) {
       if (remove("../test/unit/new_tmp2.dbx")==-1) err(errno, "Couldn't remove ../test/unit/new_tmp2.dbx");
     }
+  assert(stat("../test/unit/new_tmp2.dbx", &st) == -1);
 
   for (i=1; i<=3; i++) {
     sprintf(f_idx_wgs,"../test/unit/wgs%d.idx",i);
     if (stat(f_idx_wgs, &st) != -1) {
       if (remove(f_idx_wgs)==-1) err(errno, "Couldn't remove %s",f_idx_wgs);
     }
-  
+    assert(stat(f_idx_wgs, &st) == -1);
+    
     sprintf(f_acx_wgs,"../test/unit/wgs%d.acx",i);
     if (stat(f_acx_wgs, &st) != -1) {
       if (remove(f_acx_wgs)==-1) err(errno, "Couldn't remove %s",f_acx_wgs);
     }
-  
+    assert(stat(f_acx_wgs, &st) == -1);
+    
     sprintf(f_dbx_wgs,"../test/unit/wgs%d.dbx",i);
     if (stat(f_dbx_wgs, &st) != -1) {
       if (remove(f_dbx_wgs)==-1) err(errno, "Couldn't remove %s",f_dbx_wgs);
     }
+    assert(stat(f_dbx_wgs, &st) == -1);
   }
   
   if (stat("../test/unit/wgs_c.acx", &st) != -1) {
     if (remove("../test/unit/wgs_c.acx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_c.acx");
   }
+  assert(stat("../test/unit/wgs_c.acx", &st) == -1);
 
   if (stat("../test/unit/wgs_c.idx", &st) != -1) {
     if (remove("../test/unit/wgs_c.idx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_c.idx");
   }
+  assert(stat("../test/unit/wgs_c.idx", &st) == -1);
   
   if (stat("../test/unit/wgs_c.dbx", &st) != -1) {
     if (remove("../test/unit/wgs_c.dbx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_c.dbx");
   }
+  assert(stat("../test/unit/wgs_c.dbx", &st) == -1);
   
   if (stat("../test/unit/wgs_cfp.dbx", &st) != -1) {
     if (remove("../test/unit/wgs_cfp.dbx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp.dbx");
   }
-
+  assert(stat("../test/unit/wgs_cfp.dbx", &st) == -1);
+  
   if (stat("../test/unit/wgs_cfp.acx", &st) != -1) {
     if (remove("../test/unit/wgs_cfp.acx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_acx.dbx");
   }
+  assert(stat("../test/unit/wgs_cfp.acx", &st) == -1);
 
   if (stat("../test/unit/wgs_cfp.idx", &st) != -1) {
     if (remove("../test/unit/wgs_cfp.idx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_acx.idx");
   }
+  assert(stat("../test/unit/wgs_cfp.idx", &st) == -1);
   
   if (stat("../test/unit/wgs_cfp_empty.dbx", &st) != -1) {
     if (remove("../test/unit/wgs_cfp_empty.dbx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_empty.dbx");
   }
+  assert(stat("../test/unit/wgs_cfp_empty.dbx", &st) == -1);
 
   if (stat("../test/unit/wgs_cfp_empty.acx", &st) != -1) {
     if (remove("../test/unit/wgs_cfp_empty.acx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_empty.dbx");
   }
+  assert(stat("../test/unit/wgs_cfp_empty.acx", &st) == -1);
 
   if (stat("../test/unit/wgs_cfp_empty.idx", &st) != -1) {
     if (remove("../test/unit/wgs_cfp_empty.idx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_empty.idx");
   }
+  assert(stat("../test/unit/wgs_cfp_empty.idx", &st) == -1);
 
   if (stat("../test/unit/wgs_cfp_single.dbx", &st) != -1) {
       if (remove("../test/unit/wgs_cfp_single.dbx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_single.dbx");
   }
+  assert(stat("../test/unit/wgs_cfp_single.dbx", &st) == -1);
 
   if (stat("../test/unit/wgs_cfp_single.acx", &st) != -1) {
     if (remove("../test/unit/wgs_cfp_single.acx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_single.dbx");
   }
+  assert(stat("../test/unit/wgs_cfp_single.acx", &st) == -1);
 
   if (stat("../test/unit/wgs_cfp_single.idx", &st) != -1) {
     if (remove("../test/unit/wgs_cfp_single.idx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_cfp_single.idx");
   }
+  assert(stat("../test/unit/wgs_cfp_single.idx", &st) == -1);
   
   if (stat("../test/unit/wgs_orig.dbx", &st) != -1) {
     if (remove("../test/unit/wgs_orig.dbx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_orig.dbx");
   }
+  assert(stat("../test/unit/wgs_orig.dbx", &st) == -1);
 
   if (stat("../test/unit/wgs_orig.acx", &st) != -1) {
     if (remove("../test/unit/wgs_orig.acx")==-1) err(errno, "Couldn't remove ../test/unit/wgs_orig.acx");
   }
+  assert(stat("../test/unit/wgs_orig.acx", &st) == -1);
 
   if (stat("../test/unit/long_tmp.dbx", &st) != -1) {
     if (remove("../test/unit/long_tmp.dbx")==-1) err(errno, "Couldn't remove ../test/unit/long_tmp.dbx");
   }
+  assert(stat("../test/unit/long_tmp.dbx", &st) == -1);
   
   if (stat("../test/unit/genbank_release.dbx", &st) != -1) {
     if (remove("../test/unit/genbank_release.dbx")==-1) err(errno, "Couldn't remove ../test/unit/genbank_release.dbx");
   }
+  assert(stat("../test/unit/genbank_release.dbx", &st) == -1);
 
 }
 
