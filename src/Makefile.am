@@ -3,7 +3,8 @@ LINTDEFS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS)
 
 AM_CPPFLAGS = -DDATADIR=\"$(pkgdatadir)\"
 
-bin_PROGRAMS = golden goldin unit_tests
+bin_PROGRAMS = golden goldin
+noinst_PROGRAMS = unit_tests
 noinst_LIBRARIES = libgolden.a
 noinst_HEADERS = $(HDR)
 pkgdata_DATA =
