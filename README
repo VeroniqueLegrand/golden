@@ -13,4 +13,12 @@ numbers or even both (by default).
 Currently supported formats : Genbank, Embl, Pir codata, and
 assimiled.
 
+golden functionnalities can also be exported to python (in order to be called from your python script).
+In order to do that, you must of course have python installed on your machine.
+
+These python "bindings" or "exports" were tested with python 2.7.
+
+To install them, type:
+sudo python setup.py install
+
 Any remark/suggestion/problem should be reported to <njoly@pasteur.fr> and/or <vlegrand@pasteur.fr>.
