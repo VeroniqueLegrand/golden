@@ -129,7 +129,8 @@ void copy_file(char* fsource, char* fdest) {
   if (stat(fsource, &st) == -1) err(errno, "Couldn't find source file: %s.",fsource);
   
   if ((fd=open(fsource,O_RDONLY))==-1) err(errno, "Cannot open source file.");
-  if ((fd_dest=open(fdest,O_WRONLY|O_CREAT))==-1) err(errno, "Cannot open destination file.");
+  // mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+  if ((fd_dest=open(fdest,O_WRONLY|O_CREAT),mod)==-1) err(errno, "Cannot open destination file.");
   if ((buf=malloc(st.st_size))==NULL) err(errno, "Cannot allocate memory");
   if ((nb_read=read(fd,buf,st.st_size))==-1) err(errno,"Error while reading source file.");
   if (write(fd_dest,buf,nb_read)==-1) err(errno,"Error while writing dest file.");
