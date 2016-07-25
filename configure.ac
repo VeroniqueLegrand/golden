@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([golden],3.1)
+AC_INIT([golden],3.2)
 AC_CONFIG_SRCDIR([src/golden.c])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADERS([src/config.h])

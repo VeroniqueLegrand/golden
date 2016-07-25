@@ -116,28 +116,32 @@ int index_dump(char *dbase, int mode, all_indix_t file_l_indix,char * SUF, const
 
 // utility method to copy a file before sorting it. Only used for unit tests.
 void copy_file(char* fsource, char* fdest) {
-  char mode[]="0777";
-  int mod;
+  //char mode[]="0777";
+  //int mod;
   struct stat st;
   int fd, fd_dest,ret;
   int nb_read;
   char * buf;
-  mod=strtol(mode, 0, 8);
+  //mod=strtol(mode, 0, 8);
   if (stat(fdest, &st) != -1) {
     if (remove(fdest)==-1) err(errno, "Couldn't remove dest file.");
   }
   if (stat(fsource, &st) == -1) err(errno, "Couldn't find source file: %s.",fsource);
   
   if ((fd=open(fsource,O_RDONLY))==-1) err(errno, "Cannot open source file.");
-  // mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
-  if ((fd_dest=open(fdest,O_WRONLY|O_CREAT),mod)==-1) err(errno, "Cannot open destination file.");
+  // mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
+  if ((fd_dest=open(fdest,O_WRONLY | O_CREAT | O_TRUNC,00777))==-1) err(errno, "Cannot open destination file.");
+  printf("created file: %s with descriptor: %d \n",fdest,fd_dest);
   if ((buf=malloc(st.st_size))==NULL) err(errno, "Cannot allocate memory");
   if ((nb_read=read(fd,buf,st.st_size))==-1) err(errno,"Error while reading source file.");
-  if (write(fd_dest,buf,nb_read)==-1) err(errno,"Error while writing dest file.");
+  /*printf("going to write %s to dest file with descriptor: %d \n", buf,fd_dest);
+  int nb_written=write(fd_dest,buf,nb_read);
+  printf("wrote: %d characters to %s file \n",nb_written,fdest);*/
+  if (write(fd_dest,buf,nb_read)!=nb_read) err(errno,"Error while writing dest file.");
   close(fd);
   close(fd_dest);
   free(buf);
-  if ((ret=chmod(fdest, mod)) == -1) err(errno,"Cannot set permissions.");
+  //if ((ret=chmod(fdest, mod)) == -1) err(errno,"Cannot set permissions.");
 }
 
 void test_index_sort() {
@@ -485,7 +489,7 @@ void create_files_for_purge() {
   close_index_desc(&my_source);
   
   if (lseek(my_dest.d_facx, 0, SEEK_SET) == -1) err(errno,"Cannot go to beginning of file : %s","wgs_cfp");
-  write(my_dest.d_facx, &my_dest.accnb, sizeof(my_dest.accnb));
+  assert(write(my_dest.d_facx, &my_dest.accnb, sizeof(my_dest.accnb))>0);
   int nb_idx=my_dest.accnb;
   close_index_desc(&my_dest);
   
@@ -505,7 +509,7 @@ void create_files_for_purge() {
   strcpy(s_idx.name,"abc");
   s_idx.filenb=1;
   s_idx.offset=22500;
-  write(my_dest.d_facx,&s_accnb, sizeof(s_accnb));
+  assert(write(my_dest.d_facx,&s_accnb, sizeof(s_accnb))>0);
   close_index_desc(&my_dest);
 }
 
@@ -740,7 +744,7 @@ int main(int argc, char **argv) {
   test_index_purge();
   free(ls_desc);
   // clean files on disk
-  clean();
+  //clean();
 }
 
 
