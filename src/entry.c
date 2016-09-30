@@ -101,29 +101,24 @@ int entry_parse(FILE *f, entry_t *ent) {
 int entry_display(FILE *f, int fd) {
   static char *buf;
   int len,read_len;
-  // int MAX_BUFSIZE=1024000; // use BUF_MAX instead
- // static char * write_buf;
-  // static int prev_bsiz=0;
-
   len = BUFINC;
   if ((buf = (char *)malloc((size_t)len+1)) == NULL) {
     error_fatal("memory", NULL); }
-
+    int didnt_read_anything=1;
   while(fgets(buf, len, f) != NULL) {
-
+      didnt_read_anything=0;
     /* Print entry line */
     // (void)fprintf(g, "%s", buf); // seems to be time consumming
     //prev_bsiz+=len;
     // write_buf=(char *) realloc(prev_bsiz);
     read_len=strlen(buf);
     write(fd,buf,read_len);
-
     /* Checks for entry end */
     if (*buf == '/' && *(buf+1) == '/') { break; }
-
   }
 
   free(buf);
+    if (didnt_read_anything) error_fatal("couldn't read anything from flat file; offset indicated in index is probably wrong.","It is likely that golden indexes are broken");
 
   return 0; }
 

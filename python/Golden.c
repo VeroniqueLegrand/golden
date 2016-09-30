@@ -68,6 +68,14 @@ static PyObject *entry_load(result_t *res) {
       return NULL; }
     memmove(buf+len-tlen, tmp, tlen);
     if (strcmp(tmp, "//\n") == 0) break; }
+    if (buf==NULL) {
+        /* Peculiar case where indexes are broken. fssek is asked to go beyond end-of-file and it does it without raising an error.
+           Then fgets is asked to read at that place and it doesn't read anything but it returns NULL.*/
+        PyErr_SetString(PyExc_RuntimeError, "Nothing was read, golden indexes are probably broken");
+        PyErr_Print();
+        str = Py_BuildValue("s", ""); // do that since python interpreter crashes when we return NULL. But execution has to stop.
+        return str;
+    }
   *(buf+len) = '\0';
   if (fclose(f) == EOF) {
     PyErr_SetFromErrnoWithFilename(PyExc_IOError, res->dbase);

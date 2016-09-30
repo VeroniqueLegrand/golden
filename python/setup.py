@@ -33,7 +33,7 @@ class check(_build):
 
 cmdclass = { 'build':build, 'sdist':sdist, 'check':check }
 
-setup( name = "Golden", version = "3.1", cmdclass=cmdclass,
+setup( name = "Golden", version = "3.3", cmdclass=cmdclass,
        description = "Python bindings for the golden tool",
        url = " ", author = " ", author_email = " ",
        ext_modules = [ Goldenmod ] )
