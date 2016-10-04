@@ -46,6 +46,7 @@ static PyObject *entry_load(result_t *res) {
   char tmp[1024], *buf = NULL;
   size_t tlen, len = 0;
   PyObject *str;
+  char err_msg[200];
 
   file = list_name(res->real_dbase, res->filenb);
   if (file == NULL) {
@@ -71,9 +72,13 @@ static PyObject *entry_load(result_t *res) {
     if (buf==NULL) {
         /* Peculiar case where indexes are broken. fssek is asked to go beyond end-of-file and it does it without raising an error.
            Then fgets is asked to read at that place and it doesn't read anything but it returns NULL.*/
-        PyErr_SetString(PyExc_RuntimeError, "Nothing was read, golden indexes are probably broken");
+        sprintf(err_msg,"%s:%s Nothing was read, golden indexes are probably broken",res->dbase,res->name);
+        PyErr_SetString(PyExc_RuntimeError,err_msg);
         PyErr_Print();
         str = Py_BuildValue("s", ""); // do that since python interpreter crashes when we return NULL. But execution has to stop.
+        if (fclose(f) == EOF) {
+            PyErr_SetFromErrnoWithFilename(PyExc_IOError, res->dbase);
+            return NULL; }
         return str;
     }
   *(buf+len) = '\0';
