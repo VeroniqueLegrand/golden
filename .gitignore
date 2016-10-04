@@ -9,4 +9,5 @@ Dummy
 *.xcodeproj
 config.log
 config.status
-
+makefile
+Makefile
