@@ -29,11 +29,6 @@
 #include "query.h"
 
 
-#ifndef EXIT_SUCCESS
-#define EXIT_SUCCESS 0
-#define EXIT_FAILURE 1
-#endif
-
 #ifndef HAVE_FSEEKO
 #define fseeko fseek
 #define off_t uint64_t
@@ -77,19 +72,19 @@ int main(int argc, char **argv) {
     case 'c':
       chk = 1; break;
     case 'h':
-      usage(EXIT_SUCCESS); break;
+      usage(SUCCESS_ALL_FOUND); break;
     case 'i':
       loc = 1; break;
     case 'l':
       if (list_check()) {
         error_fatal("databases", "cannot retrieve list"); }
-      return EXIT_SUCCESS;
+      return SUCCESS_ALL_FOUND;
     case 'o':
       file = optarg; break;
     case 'f':
       from_file=1; break;
     default:
-      usage(EXIT_FAILURE); break; }
+      usage(FAILURE); break; }
   }
   if ((loc + acc) == 0) { loc = acc = 1; }
   if (optind==argc) {
@@ -100,18 +95,23 @@ int main(int argc, char **argv) {
   } else {
     my_list=build_query_from_str(optind, argc, argv);
   }
+  // printf("%s\n",my_list);
   nb_cards=get_nbCards(my_list);
+  // printf("nb_cards=%d \n",nb_cards);
   // instantiate storage for query results.
   res=(result_t*) malloc(sizeof(result_t)*nb_cards);
   WAllQueryData wData=prepareQueryData(my_list,res,nb_cards);
   nb_res=performGoldenQuery(wData,acc,loc);
+  // printf("nb_res=%d\n",nb_res);
   logEntriesNotFound(wData,nb_cards-nb_res);
   // print results
   print_results(wData.nb_cards,chk,res,file);
   free(my_list);
   freeQueryData(wData);
   free(res);
-  return EXIT_SUCCESS; }
+  if (nb_res==nb_cards) return SUCCESS_ALL_FOUND;
+  return SUCCESSS_NOT_ALL_FOUND;
+}
 
 /*
  Builds query from files whose names are passed as arguments to the command line.
@@ -201,7 +201,10 @@ void print_results(int nb_res,int chk,result_t * res,char * file) {
   if (file != NULL && (g = open(file, O_WRONLY|O_CREAT,0666)) == -1) err(errno,"cannot open file: %s.",file);
 
   // first version prints output. Don't want to change main's prototype at the beginning.
+    //printf("nb_res=%d\n",nb_res);
   for (i=0; i<nb_res; i++) {
+      // printf("i=%d\n",i);
+      // if (res[i].filenb==NOT_FOUND) printf("entry not found, continue\n");
     if (res[i].filenb==NOT_FOUND) continue; // only call print for results that were found. 
       res_display(res[i],chk, g);
       // printf("\n#####\n");
@@ -229,6 +232,7 @@ void res_display(result_t res, int chk, int fd) {
         return;
     }
     p = list_name(res.real_dbase, res.filenb);
+    // printf("In res_display, p=%s\n",p);
 
     /* Display database entry */
     if (chk == 0) {

@@ -201,7 +201,7 @@ void index_sort(char *file, uint64_t nb) {
 #ifdef DEBUG
   indix_t * old2=old;
   printf("AC/locus before sort:\n.");
-  int i;
+  uint64_t i;
   for (i=0;i<nb;i++) {
     printf("%s, %u, %lld\n",old2->name,old2->filenb,old2->offset);
     old2++;
@@ -234,7 +234,7 @@ void index_sort(char *file, uint64_t nb) {
  * If index file doesn't exist, create it.
  * returns the total number of indexes.
  */
-int index_concat(char *file, uint64_t nb, indix_t *ind) {
+uint64_t index_concat(char *file, uint64_t nb, indix_t *ind) {
   indix_t *cur;
   FILE *g;
   uint64_t newnb, oldnb;
@@ -292,18 +292,18 @@ void index_file_unlock(int fd, struct flock lock_t) {
  * them to destination file.
  */
 void index_append(int fd_d,int prev_nb_flat,uint64_t nb_to_read,int fd_s,indix_t * buf) {
-  int cnt;
+  uint64_t cnt;
   indix_t * inx;
 #ifdef DEBUG
   printf("index.c, index_append filenb will be incremented of : %d\n",prev_nb_flat);
 #endif
-  if (read(fd_s,buf, nb_to_read*sizeof(indix_t)) == -1) err(errno,"Cannot read index from source file");
+  if (read(fd_s,buf, (ssize_t) nb_to_read*sizeof(indix_t)) == -1) err(errno,"Cannot read index from source file");
   inx=buf;
   for (cnt=0;cnt<nb_to_read;cnt++) {
     inx->filenb=inx->filenb+prev_nb_flat;
     inx++;
   }
-  if (write(fd_d,buf, nb_to_read*sizeof(indix_t)) != nb_to_read*sizeof(indix_t)) err(errno,"Cannot write index to destination file");
+  if (write(fd_d,buf, (size_t) nb_to_read*sizeof(indix_t)) != nb_to_read*sizeof(indix_t)) err(errno,"Cannot write index to destination file");
 }
 
 /* concatenates indexes that have already been written to a file by a previous call to goldin. */
@@ -336,7 +336,7 @@ uint64_t index_file_concat(int fd_d,int prev_nb_flat, uint64_t nb_idx, int fd_s,
   res = fstat(fd_s, &s_source);
   if (res == -1) err(1, "stat failed on source file");
 
-  size_t s_to_add = s_source.st_size-sizeof(nb_idx); // do not concatenate number of indexes in index file.
+  size_t s_to_add = (size_t) s_source.st_size-sizeof(nb_idx); // do not concatenate number of indexes in index file.
   if (lseek(fd_d, 0, SEEK_END) == -1) err(errno,"index_file_concat: error while getting at the end of dest index file.");
   res = ftruncate(fd_d, s_dest.st_size + s_to_add);
   if (res == -1 && S_ISREG(s_dest.st_mode)) err(1, "Truncate failed");
@@ -349,7 +349,7 @@ uint64_t index_file_concat(int fd_d,int prev_nb_flat, uint64_t nb_idx, int fd_s,
   
   index_file_unlock(fd_d,lock_t);
 
-  int nb=nb_idx;
+  int nb=(int) nb_idx;
   if (buf==NULL) buf=malloc(MAX_IDX_READ*sizeof(indix_t));
   while (nb-MAX_IDX_READ>0) {
    index_append(fd_d,prev_nb_flat,MAX_IDX_READ,fd_s,buf);
@@ -455,7 +455,7 @@ void index_purge(const char * fic) {
   newnb=0;
 
   while(oldnb-1) {
-    int ret=fread(&cur2, sizeof(cur2), 1, g);
+    size_t ret=fread(&cur2, sizeof(cur2), 1, g);
     if (ret != 1) err(errno,"Cannot read indexes from file %s: %s",__func__,fic);
     int i=index_compare(&cur1,&cur2);
     if (i!=0) {

@@ -135,10 +135,11 @@ static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
   char * l_args;
   static int nb_cards;
   static int idx_cur_res=0;
-  static result_t * res;
+  static result_t * res=NULL;
   static WAllQueryData wData;
   PyObject *str;
   int nb_res;
+  int i;
   
   //printf("%d call to Golden_access_new\n",idx_cur_res);
   if (idx_cur_res==0) { // first call perform query
@@ -153,6 +154,20 @@ static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
     nb_cards=get_nbCards(l_args);
     // instantiate storage for query results.
     res=(result_t*) malloc(sizeof(result_t)*nb_cards);
+    if (res==NULL) {
+        PyErr_SetString(PyExc_MemoryError, "Couldn't allocate memory for storing results ");
+        return NULL;
+    }
+    // check that l_args is correct.
+    int len=(int) strlen(l_args);
+    int cnt=0;
+    for (i=0;i<len;i++) {
+        l_args[i]=='\n'?cnt++:cnt;
+    }
+    if (cnt!=nb_cards) {
+        PyErr_SetString(PyExc_ValueError, "input arguments must be like:\nbank:AC\\nbank:AC\\nbank:AC\\n");
+        return NULL;
+    }
     wData=prepareQueryData(l_args,res,nb_cards);
     nb_res=performGoldenQuery(wData,1,0);
   }

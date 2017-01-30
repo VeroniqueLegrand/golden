@@ -1,3 +1,10 @@
+What'new in 3.4
+
+* removed many compilation warning.
+* changed golden return codes.
+* added an iterator to python binding
+* improved documentation of python binding.
+
 What's new in 3.1.1
 
 * Better error message for the case of broken indexes.

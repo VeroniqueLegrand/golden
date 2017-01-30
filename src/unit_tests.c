@@ -119,7 +119,7 @@ void copy_file(char* fsource, char* fdest) {
   //char mode[]="0777";
   //int mod;
   struct stat st;
-  int fd, fd_dest,ret;
+  int fd, fd_dest;
   int nb_read;
   char * buf;
   //mod=strtol(mode, 0, 8);
@@ -172,8 +172,8 @@ void test_index_sort() {
 #endif
 
   while (i<21) {
-    char * v1=t_idx3.l_locind[i-1].name;
-    char * v2=t_idx3.l_locind[i].name;
+    /*char * v1=t_idx3.l_locind[i-1].name;
+    char * v2=t_idx3.l_locind[i].name;*/
     assert(strcmp(t_idx3.l_locind[i-1].name,t_idx3.l_locind[i].name)<=0);
     i++;
   }

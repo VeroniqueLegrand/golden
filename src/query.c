@@ -20,7 +20,9 @@
 #include "locus.h"
 #include "query.h"
 
-// #define DEBUG
+#ifndef min
+#define min(a,b) ((a) < (b) ? (a) : (b))
+#endif
 
 /*
  returns the number of cards in the query.
@@ -160,17 +162,14 @@ int performGoldenQuery(WAllQueryData wData,int acc,int loc) {
     // printf("cur_dbname : %s\n",cur_dbname);
     if (acc) {
       access_search(queryDB,cur_dbname, &nb_AC_not_found);
-      //if (nb_AC_not_found==0) loc4base=0;
       nb_locus_not_found=nb_AC_not_found;
-      tot_nb_res_not_found+=nb_AC_not_found;
     }
     if (nb_AC_not_found && loc) {
       locus_search(queryDB,cur_dbname,&nb_locus_not_found);
-      tot_nb_res_not_found+=nb_locus_not_found;
-    } else {
-      tot_nb_res_not_found+=nb_AC_not_found;
     }
+    tot_nb_res_not_found=min(nb_AC_not_found,nb_locus_not_found);
   }
+    
   tot_nb_res_found=wData.nb_cards-tot_nb_res_not_found;
   return tot_nb_res_found;
 }

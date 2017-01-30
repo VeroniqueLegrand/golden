@@ -56,6 +56,6 @@ all_indix_t index_load(const char *,const char *,const char *);
 int index_concat(char *, uint64_t, indix_t *);
 int index_merge(char *, uint64_t, indix_t *);
 array_indix_t fic_index_load(const char * file);
-void index_hl_remove(int,int,char *,char *);
+// void index_hl_remove(int,int,char *,char *);
 
 #endif /* INDEX_HL_H_ */

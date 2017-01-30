@@ -14,10 +14,6 @@
 #include "error.h"
 
 
-#ifndef EXIT_FAILURE
-#define EXIT_FAILURE 1
-#endif
-
 #ifndef HAVE_STRERROR
 char *strerror(int errnum) {
   extern char *sys_errlist[];
@@ -32,11 +28,14 @@ char *strerror(int errnum) {
 
 /* Abort on fatal error */
 void error_fatal(const char *str, const char *err) {
+    printf("error fatal called \n");
 
+  // printf("error fatal called with str=%s \n and \n err=%s \n",str,err);
   if (err == NULL) { err = strerror(errno); }
   (void)fprintf(stderr, "Fatal: %s: %s.\n", str, err);
 
-  exit(EXIT_FAILURE); }
+  exit(FAILURE);
+}
 
 /* Warn for non fatal error */
 void error_warn(const char *str, const char *err) {

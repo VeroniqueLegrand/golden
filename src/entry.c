@@ -100,7 +100,8 @@ int entry_parse(FILE *f, entry_t *ent) {
 /* Display database flat file entry */
 int entry_display(FILE *f, int fd) {
   static char *buf;
-  int len,read_len;
+  int len;
+  size_t read_len;
   len = BUFINC;
   if ((buf = (char *)malloc((size_t)len+1)) == NULL) {
     error_fatal("memory", NULL); }
@@ -108,9 +109,6 @@ int entry_display(FILE *f, int fd) {
   while(fgets(buf, len, f) != NULL) {
       didnt_read_anything=0;
     /* Print entry line */
-    // (void)fprintf(g, "%s", buf); // seems to be time consumming
-    //prev_bsiz+=len;
-    // write_buf=(char *) realloc(prev_bsiz);
     read_len=strlen(buf);
     write(fd,buf,read_len);
     /* Checks for entry end */

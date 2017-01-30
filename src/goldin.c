@@ -51,15 +51,7 @@ void process_index_files(int,int,char **,goldin_parms);
 
 /* Main function */
 int main(int argc, char **argv) {
-  FILE *f;
-  int i;
-  char *p, *dbase, *file;
-  entry_t ent;
-  uint64_t locnb, accnb, indnb;
-  indix_t *cur, *locind, *accind;
-  size_t len;
   goldin_parms s_parms;
-
 
   /* Checks command line options & arguments */
   init_goldin_parms(&s_parms,argc, argv);
@@ -97,7 +89,7 @@ void process_databank_files(int optind,int argc,char ** argv,goldin_parms s_parm
 all_indix_nb process_databank_file(goldin_parms s_parms , char * file, char ** buf) {
   struct stat st;
   slist_inc l_nb;
-  int ret;
+
   all_indix_nb tot_idx;
   /* Check for regular file */
   if (stat(file, &st) == -1) err(errno,file, NULL);
@@ -176,7 +168,6 @@ void process_index_files(int optind,int argc,char ** argv,goldin_parms s_parms) 
   char*  buf=NULL;
   all_indix_nb tot_idx;
   index_desc d_descr;
-  struct flock lck;
 
   d_descr=get_dest_index_desc(s_parms.acc,s_parms.loc,s_parms.new_index_dir,s_parms.dbase); // get description of destination index files.
   for(i = optind + 1; i < argc; i++) {

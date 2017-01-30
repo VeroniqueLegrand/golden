@@ -66,6 +66,29 @@ Search can be restricted to a single index type by setting one of the
 following flags: B<-a> for accession numbers or B<-i> for entry
 names. Setting both flags will restore the default search behaviour.
 
+Since version 2.0, golden can perform search on multiple entries in different databanks in 1 time.
+
+All entries found are displayed on the standard output (or written to a file if you used the -f option).
+The list of entries that were not found is displayed on stderr.
+
+=head1 RETURN CODES
+
+Since version 3.4, return codes have changed:
+0 all entries were found and no error occured during search.
+1 at least 1 entry was not found (see stderr for the list of entries not found) and no error occured during search.
+2 An error occurred (see stderr).
+
+=head1 PYTHON BINDING
+
+All golden versions provide a python export for calling golden from a python script.
+It is compatible with at least python 2.7.
+
+Version 1.0 and 1.1 provided the golden_access function for searching entries one at a time.
+Vesrsion 2.0 and newer provide in addition the golden_access_new function for retrieving several entries in one time.
+Version 3.4 provides in addition the entryIterator class for iteration over the requested entries. 
+
+See the EXAMPLES section for more information.
+
 =head1 EXAMPLES
 
 =over 4
@@ -98,6 +121,40 @@ File format must be as follows:
  genbank:otherAC\n
  uniprot:anotherLocus\n
  embl:stuff3
+ 
+ =item python examples
+ 
+ import Golden
+ from entryIterator import entryIterator
+ 
+ ids = ["uniprot:D0PRM9", "uniprot:D0PRM7", "uniprot:B8PWH5", "uniprot:test", "uniprot:Q66431", "uniprot:Q66431"]
+ 
+ # Using 'access' method 
+ for i in ids:
+    print("Searching %s ... " % str(i), end="")
+    print(i)
+    flat = Golden.access(i.split(":")[0], i.split(":")[1])
+    if flat is None:
+        print("Not FOUND!")
+    else:
+        print("FOUND!")
+        
+# Using 'access_new' method
+ str_list_ids='\n'.join([str(x) for x in ids])
+ str_list_ids+="\n"
+ flat = Golden.access_new(str_list_ids)
+ while (flat!=None):
+   print(flat)
+   flat = Golden.access_new(str_list_ids)
+ 
+        
+# using entry iterator
+str_list_ids=' '.join([str(x) for x in ids])
+for my_entry in entryIterator(str_list_ids):
+    print(my_entry)
+    print(" ")
+
+ 
 
 =back
 

@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([golden],3.3.1)
+AC_INIT([golden],3.4)
 AC_CONFIG_SRCDIR([src/golden.c])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADERS([src/config.h])
@@ -32,6 +32,8 @@ AC_CHECK_FUNCS([memset strchr strdup strerror strrchr])
 # Add 64-bits file support on some hosts
 AC_DEFINE([_FILE_OFFSET_BITS], [64],
           [Define to 64 for large file support on some hosts])
+          
+AC_SUBST(dir_for_binding_install)
 
 AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile python/Makefile
                  test/Makefile])

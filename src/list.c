@@ -67,20 +67,12 @@ void list_unlock(int fd) {
  */
 void check_doublon(char * a_fic,char *files_orig) {
   char * p,*q;
-  int len_files=strlen(files_orig);
+  size_t len_files=strlen(files_orig);
   int cnt=0;
   char * files=strdup(files_orig);
   char * a=files;
   char * new_file=files;
-  int len_a_fic=strlen(a_fic);
-  /*
-#ifdef DEBUG
-  printf("check_doublons : going to check for %s in %s\n",a_fic,files_orig);
-  if (a_fic[len_a_fic-1]=='/') {
-    printf("WARNING a_fic is cut on the / caracter");
-  }
-#endif
-   */
+  size_t len_a_fic=strlen(a_fic);
   if (a_fic[len_a_fic-1]=='/') return;
   while (new_file!=NULL) {
     while (*a!='\n' && cnt!=len_files) { // check for end of current filename un the list of filenames given in argument.
@@ -94,7 +86,7 @@ void check_doublon(char * a_fic,char *files_orig) {
     /*if ((q = strrchr(a_fic, '/')) != NULL) ++q;
     else q=a_fic;*/
     q=a_fic;
-    if (strcmp(p, q) == 0) errx(EXIT_FAILURE, "duplicate file in database : %s,%s",p,q);
+    if (strcmp(p, q) == 0) errx(FAILURE, "duplicate file in database : %s,%s",p,q); // UNCOMMENT this is simply fr debugging purpose.
     if (cnt==len_files) {
       new_file=NULL;
     } else {
@@ -109,19 +101,18 @@ void check_doublon(char * a_fic,char *files_orig) {
 
 
 void read_chunk(int f, char * remain,char * l_buf, off_t nb_to_read) {
-  int len_remain,nb_read;
-  // char l_buf[2*PATH_MAX+1];
-  // char * tmp_buf=*l_buf;
+  size_t len_remain;
+  ssize_t nb_read;
   len_remain=strlen(remain);
   if (len_remain>0) {
      strcpy(l_buf,remain);
      strcpy(remain,"");
   }
-  if ((nb_read=read(f,l_buf+len_remain,nb_to_read))==-1) err(EXIT_FAILURE,"Error while reading list file.");
+  if ((nb_read=read(f,l_buf+len_remain,(size_t) nb_to_read))==-1) err(FAILURE,"Error while reading list file.");
   l_buf[nb_to_read+len_remain]='\0';
   if (l_buf[nb_to_read+len_remain-1]!='\n') {
     // Here : look for last \n caracter in l_buf and copy what is after in remain. Do not modify remain in caller method.
-    int i=nb_to_read+len_remain;
+    size_t i=(size_t) nb_to_read+len_remain;
     while (i>0 && l_buf[i]!='\n') {
       i--;
     }
@@ -134,8 +125,8 @@ void read_chunk(int f, char * remain,char * l_buf, off_t nb_to_read) {
   }
   
 #ifdef DEBUG
-  printf("read : %d bytes.\n",nb_read);
-  printf("len_remain+nb_to_read=%lld \n",len_remain+nb_to_read);
+  printf("read : %zu bytes.\n",nb_read);
+  printf("len_remain+nb_to_read=%llu \n",len_remain+nb_to_read);
   printf("l_buf=%s\n",l_buf);
 #endif
 }
@@ -151,10 +142,10 @@ int count_check_doublons(char * name, int f, char * files) {
   int nb;
   char l_buf[2*PATH_MAX+1];
   char remain[PATH_MAX+1]="";
-  if (stat(name, &st) == -1) err(EXIT_FAILURE,name, NULL);
+  if (stat(name, &st) == -1) err(FAILURE,name, NULL);
 #ifdef DEBUG
   printf("%s size of list file before writing: %lld\n",__func__,(long long) st.st_size);
-  printf("%s list_append, File inode: %lld\n",__func__,st.st_ino);
+  printf("%s list_append, File inode: %llu\n",__func__,st.st_ino);
   printf("%s reading : \n",__func__);
 #endif
   nb = 0;
@@ -231,7 +222,7 @@ slist_inc list_append(char *dbase, char *dir, char *files,char * new_index_dir, 
   printf("going to open and lock : %s \n",name);
 #endif
   f = open(name, O_RDWR|O_CREAT, 0666);
-  if (f == -1) err(EXIT_FAILURE,"Cannot open file : %s",name);
+  if (f == -1) err(FAILURE,"Cannot open file : %s",name);
   list_lock(f);
   // 1rst part, count elements and check that there are no dublons.
   l_nb.oldnb=count_check_doublons(name, f, files);
@@ -245,7 +236,7 @@ slist_inc list_append(char *dbase, char *dir, char *files,char * new_index_dir, 
     q = new_file; if ((p = strrchr(q, '/')) != NULL) q = ++p;
     if (!keep_path) {
       if (dir!=NULL) {
-        int tmp=write(f,dir,strlen(dir));
+        ssize_t tmp=write(f,dir,strlen(dir));
         tmp=write(f,"/",1);
       }
       write(f,q,strlen(q));
@@ -257,12 +248,12 @@ slist_inc list_append(char *dbase, char *dir, char *files,char * new_index_dir, 
     nb++;
   }
   free(l_files);
-  if (fsync(f) ==-1) err(EXIT_FAILURE,"Error while fsync list file");
+  if (fsync(f) ==-1) err(FAILURE,"Error while fsync list file");
 #ifdef DEBUG
   struct stat st;
-  if (fstat(f, &st) == -1) err(EXIT_FAILURE,name, NULL);
+  if (fstat(f, &st) == -1) err(FAILURE,name, NULL);
   printf("list_append, size of list file after writing: %lld\n",st.st_size);
-  printf("list_append, File inode: %lld\n",st.st_ino);
+  printf("list_append, File inode: %llu\n",st.st_ino);
   printf("list_append, before adding files, nb=%d\n",nb);
 #endif  
   list_unlock(f);
@@ -400,12 +391,13 @@ void list_new(char *file) {
  */
 char * list_get(char * file) {
   struct stat st;
-  int fd,nb_read;
+  int fd;
+  ssize_t nb_read;
   if (stat(file, &st) == -1) err(errno,file, NULL);
-  int len=st.st_size;
-  char * lst_to_concat= malloc(len+1);
+  off_t len=st.st_size;
+  char * lst_to_concat= malloc((size_t) len+1);
   if ((fd=open(file,O_RDONLY))==-1) err(errno, "Cannot open source file.");
-  if ((nb_read=read(fd,lst_to_concat,st.st_size))==-1) err(errno,"Error while reading source file.");
+  if ((nb_read=read(fd,lst_to_concat,(size_t) st.st_size))==-1) err(errno,"Error while reading source file.");
   close(fd);
   lst_to_concat[len]='\0';
   // printf("read : %s from file : %s \n",lst_to_concat,file);

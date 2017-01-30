@@ -21,6 +21,7 @@
 #include "index_hl.h"
 #include <errno.h>
 #include <err.h>
+#include "error.h"
 #include <ctype.h>
 
 #define BUFINC 100
@@ -47,11 +48,11 @@ array_indix_t fic_index_load(const char * file) {
   array_indix_t fic_indix;
   indix_t cur;
   fic_indix.l_idx=NULL;
-  int i=0;
+  uint64_t i=0;
   if ((g = fopen(file, "r")) == NULL) err(errno,"cannot open file: %s.",file);
   if (fread(&nb_idx, sizeof(nb_idx), 1, g) != 1) err(errno,"cannot read index number from file: %s.",file);
   fic_indix.nb_idx=nb_idx;
-  if ((fic_indix.l_idx = (indix_t *)realloc(fic_indix.l_idx, nb_idx*sizeof(indix_t))) == NULL) err(errno,"cannot allocate memory");
+  if ((fic_indix.l_idx = (indix_t *)realloc(fic_indix.l_idx, (size_t) nb_idx*sizeof(indix_t))) == NULL) err(errno,"cannot allocate memory");
   for(i=0;i<nb_idx;i++) {
     if (fread(&cur, sizeof(cur), 1, g) != 1) err(errno,"cannot read index from file: %s.",file);
     fic_indix.l_idx[i]=cur;
@@ -103,6 +104,7 @@ all_indix_t index_load(const char *idx_dir, const char * dbase,const char * suff
 /*
  to remove old index files
  */
+/*
 void index_hl_remove(int acc,int loc,char *new_index_dir,char *dbase) {
   char * dbx_file;
   dbx_file = index_file(new_index_dir, dbase, LSTSUF);
@@ -120,7 +122,7 @@ void index_hl_remove(int acc,int loc,char *new_index_dir,char *dbase) {
     if (access(icx_file, F_OK) == 0) if (remove(icx_file)==-1) err(errno, "Couldn't remove : %s",icx_file);
     free(icx_file);
   }
-}
+}*/
 
 
 
@@ -221,7 +223,7 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
       indnb = iswap64(indnb); }
 
   /* Check that there are not too many indexes in the file so that while loop can work. */
-  if (indnb>LLONG_MAX) err(EXIT_FAILURE," Index file contains too many indexes, it should be splitted in order for index_search to work.");
+  if (indnb>LLONG_MAX) err(FAILURE," Index file contains too many indexes, it should be splitted in order for index_search to work.");
   
   int idx_card;
   //printf("lst_size=%d\n",lst_size);

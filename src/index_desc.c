@@ -70,14 +70,8 @@ fic_index_desc get_ficidx_desc(char *cur_index_dir, char *dbase,char* suff, char
 
 
 index_desc get_source_index_desc(int acc,int loc,char * s_index_dir, char * dbase) {
-  char *acx_file, *icx_file, *dbx_file;
-  uint64_t indnb;
   index_desc s_idx;
   fic_index_desc w_idx;
-  int ret;
-  size_t len;
-  char * buf, *p;
-  FILE * dbx_fd;
 
   init_idx_desc(&s_idx);
   s_idx.max_filenb=list_nb(s_index_dir, dbase);
@@ -95,14 +89,9 @@ index_desc get_source_index_desc(int acc,int loc,char * s_index_dir, char * dbas
 }
 
 index_desc get_dest_index_desc(int acc,int loc,char * new_index_dir, char * dbase) {
-  char *acx_file, *icx_file, *dbx_file;
-  uint64_t indnb;
   index_desc d_idx;
   fic_index_desc w_idx;
-  int ret;
-  size_t len;
-  char * buf, *p;
-  FILE * dbx_fd;
+
   // printf("Call to get_dest_index_desc\n");
   // remove old index files.No! concatenation will be done by several different processes. Process N must not erase what process M has written!
   // index_hl_remove(acc,loc,new_index_dir,dbase);

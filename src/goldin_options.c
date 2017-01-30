@@ -11,12 +11,8 @@
 #endif
 
 #include <libgen.h>
-
-#ifndef EXIT_SUCCESS // TODO : this is redundant with definitions in golden.c. Find a common place to put them.
-#define EXIT_SUCCESS 0
-#define EXIT_FAILURE 1
-#endif
 #include "goldin_options.h"
+#include "error.h"
 
 // static int dump_flag;
 static int concat_sflg=0;
@@ -61,7 +57,7 @@ void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
       case 'd':
         p_parms->dir = optarg; break;
       case 'h':
-        usage(EXIT_SUCCESS,prog); break;
+        usage(SUCCESS_ALL_FOUND,prog); break;
       case 'i':
         p_parms->loc = 1; break;
       case 'p':
@@ -75,23 +71,23 @@ void init_goldin_parms(goldin_parms * p_parms,int argc, char **argv) {
         concat_sflg=1;
         break;
       default:
-        usage(EXIT_FAILURE,prog); break; }
+        usage(FAILURE,prog); break; }
     }
     p_parms->idx_input_flag=idx_input_flg;
     p_parms->co_flag=concat_oflg;
     p_parms->csort_flag=concat_sflg;
     p_parms->purge_flag=purge_flg;
-    if ((p_parms->co_flag || p_parms->csort_flag || p_parms->purge_flag)  && p_parms->dir!=NULL) usage(EXIT_FAILURE,prog);
-    if (!p_parms->idx_input_flag && (p_parms->co_flag || p_parms->purge_flag || p_parms->csort_flag)) usage(EXIT_FAILURE,prog);
+    if ((p_parms->co_flag || p_parms->csort_flag || p_parms->purge_flag)  && p_parms->dir!=NULL) usage(FAILURE,prog);
+    if (!p_parms->idx_input_flag && (p_parms->co_flag || p_parms->purge_flag || p_parms->csort_flag)) usage(FAILURE,prog);
     if (!p_parms->idx_input_flag) p_parms->serial_behavior=1;
-    if (p_parms->idx_input_flag && ((p_parms->co_flag && p_parms->purge_flag) && !p_parms->csort_flag)) usage(EXIT_FAILURE,prog);
+    if (p_parms->idx_input_flag && ((p_parms->co_flag && p_parms->purge_flag) && !p_parms->csort_flag)) usage(FAILURE,prog);
     /*if (!p_parms->csort_flag && !p_parms->co_flag && !p_parms->purge_flag && !p_parms->idx_input_flag) p_parms->serial_behavior=1;
     if (p_parms->purge_flag && (p_parms->co_flag )) usage(EXIT_FAILURE,prog);
     if ((p_parms->purge_flag && !p_parms->idx_input_flag) && !p_parms->csort_flag) usage(EXIT_FAILURE,prog);
     if (p_parms->idx_input_flag && p_parms->dir !=NULL) usage(EXIT_FAILURE,prog);
     if ((p_parms->idx_input_flag && (!p_parms->co_flag && !p_parms->csort_flag && !p_parms->purge_flag)) ) usage(EXIT_FAILURE,prog); // TODO later? Implement merge of existing index files.
     if (p_parms->co_flag && p_parms->csort_flag) usage(EXIT_FAILURE,prog);*/
-    if (argc - optind < 2) usage(EXIT_FAILURE,prog);
+    if (argc - optind < 2) usage(FAILURE,prog);
     p_parms->dbase = argv[optind];
     if ((p_parms->loc + p_parms->acc) == 0) { p_parms->loc = p_parms->acc = 1; }
 }
