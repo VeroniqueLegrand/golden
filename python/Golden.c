@@ -15,6 +15,10 @@
 #define MAXNAME 100
 //#define DEBUG
 
+#if PY_MAJOR_VERSION >=3
+#define IS_PY3K
+#endif
+
 static int bank_exist(char *bank, char *suf) {
   static char sav[MAXNAME];
   static int ini = 0, prv;
@@ -131,7 +135,7 @@ static PyObject *Golden_access(PyObject *self, PyObject *args) {
 
   return str; }
 
-static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
+static PyObject *Golden_access_multi(PyObject *self, PyObject *args) {
   char * l_args;
   static int nb_cards;
   static int idx_cur_res=0;
@@ -140,7 +144,9 @@ static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
   PyObject *str;
   int nb_res;
   int i;
-  
+  int len,cnt;
+  result_t cur_res; 
+ 
   //printf("%d call to Golden_access_new\n",idx_cur_res);
   if (idx_cur_res==0) { // first call perform query
     /* get and validate list parameter*/
@@ -159,8 +165,8 @@ static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
         return NULL;
     }
     // check that l_args is correct.
-    int len=(int) strlen(l_args);
-    int cnt=0;
+    len=(int) strlen(l_args);
+    cnt=0;
     for (i=0;i<len;i++) {
         l_args[i]=='\n'?cnt++:cnt;
     }
@@ -180,7 +186,7 @@ static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
     idx_cur_res=0;
     Py_RETURN_NONE;
   }
-  result_t cur_res=res[idx_cur_res];
+  cur_res=res[idx_cur_res];
   if (cur_res.filenb == NOT_FOUND) {
     str=Py_BuildValue("ss",cur_res.name," Entry not found");
   } else {
@@ -198,9 +204,29 @@ static PyObject *Golden_access_new(PyObject *self, PyObject *args) {
 
 static PyMethodDef Golden_methods[] = {
   { "access", (PyCFunction)Golden_access, METH_VARARGS, NULL },
-  { "access_new", (PyCFunction)Golden_access_new, METH_VARARGS, NULL },
+  { "access_new", (PyCFunction) Golden_access_multi, METH_VARARGS, NULL }, // keep this alias for old python scripts. Please note that it is deprecated.
+  { "access_multi", (PyCFunction) Golden_access_multi, METH_VARARGS, NULL },
   { NULL, NULL, 0, NULL }
 };
 
+#ifdef IS_PY3K
+  static struct PyModuleDef Goldendef= {
+          PyModuleDef_HEAD_INIT,
+          "Golden",
+          "Contains functions that allow the user to query databank directly from a python script.",
+          -1,
+          Golden_methods,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+  };
+#endif
+
 PyMODINIT_FUNC initGolden() {
-  Py_InitModule3("Golden", Golden_methods, "???"); }
+#ifdef IS_PY3K
+    PyModule_Create(&Goldendef);
+#else
+  Py_InitModule3("Golden", Golden_methods, "???");
+#endif
+}

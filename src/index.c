@@ -58,9 +58,10 @@ static int index_move(const char *, const char *);
   Debug utility : prints content of data structure used for work (array of addresses of result_t structures).
  */
 void print_wrk_struct(result_t ** lst_work, int nb_cards, int missing_only) {
-    printf("\nlst_work content :");
-    int i=0;
+    int i;
     result_t * cur_res;
+    printf("\nlst_work content :");
+    i=0;
     while (i<nb_cards) {
       cur_res=lst_work[i];
       if ((missing_only && (cur_res->filenb==NOT_FOUND)) || (!missing_only)){
@@ -178,17 +179,22 @@ void index_sort(char *file, uint64_t nb) {
   const char *dir;
   indix_t * old;
   void * fmap, *fmap_orig;
-  // uint64_t nb_idx;
+  struct stat statbuf;  
+  int result;
+  off_t length;
+  indix_t * old2;
+#ifdef DEBUG
+  uint64_t i;
+#endif
 
   if (nb == 0) return;
   if ((dir = getenv("TMPDIR")) == NULL) { dir = TMPDIR; }
 
   if (access(file, F_OK) != 0) err(errno, "file doesn't exist : %s",file);// create_missing_idxfile(file);
   // figure out how big it is
-  struct stat statbuf;
-  int result = stat (file, &statbuf);
+  result = stat (file, &statbuf);
   if (result == -1) err(errno, "Cannot stat file : %s",file);
-  off_t length = statbuf.st_size;
+  length = statbuf.st_size;
   // if ((g = fopen(file, "r")) == NULL) err(errno, "Cannot open file : %s",file);
   if ((fd=open(file,O_RDWR))==-1) err(errno, "Cannot open file : %s",file);
   // mmap it
@@ -199,9 +205,8 @@ void index_sort(char *file, uint64_t nb) {
   old=(indix_t *) fmap;
 
 #ifdef DEBUG
-  indix_t * old2=old;
+  old2=old;
   printf("AC/locus before sort:\n.");
-  uint64_t i;
   for (i=0;i<nb;i++) {
     printf("%s, %u, %lld\n",old2->name,old2->filenb,old2->offset);
     old2++;
@@ -314,7 +319,9 @@ uint64_t index_file_concat(int fd_d,int prev_nb_flat, uint64_t nb_idx, int fd_s,
   struct flock lock_w; // lock to perform the writing in the "reserved" area of the destination file.
   struct stat s_dest, s_source;
   int res;
+  size_t s_to_add;
   indix_t * buf=NULL;
+  int nb;
 
 #ifdef DEBUG
   printf("index.c, index_file_concat called with prev_nb_flat=%d\n",prev_nb_flat);
@@ -336,7 +343,7 @@ uint64_t index_file_concat(int fd_d,int prev_nb_flat, uint64_t nb_idx, int fd_s,
   res = fstat(fd_s, &s_source);
   if (res == -1) err(1, "stat failed on source file");
 
-  size_t s_to_add = (size_t) s_source.st_size-sizeof(nb_idx); // do not concatenate number of indexes in index file.
+  s_to_add = (size_t) s_source.st_size-sizeof(nb_idx); // do not concatenate number of indexes in index file.
   if (lseek(fd_d, 0, SEEK_END) == -1) err(errno,"index_file_concat: error while getting at the end of dest index file.");
   res = ftruncate(fd_d, s_dest.st_size + s_to_add);
   if (res == -1 && S_ISREG(s_dest.st_mode)) err(1, "Truncate failed");
@@ -349,7 +356,7 @@ uint64_t index_file_concat(int fd_d,int prev_nb_flat, uint64_t nb_idx, int fd_s,
   
   index_file_unlock(fd_d,lock_t);
 
-  int nb=(int) nb_idx;
+  nb=(int) nb_idx;
   if (buf==NULL) buf=malloc(MAX_IDX_READ*sizeof(indix_t));
   while (nb-MAX_IDX_READ>0) {
    index_append(fd_d,prev_nb_flat,MAX_IDX_READ,fd_s,buf);
@@ -437,6 +444,8 @@ void index_purge(const char * fic) {
   FILE * f, *g;
   uint64_t newnb, oldnb;
   indix_t cur1,cur2;
+  int i;
+  size_t ret;
 
   if (access(fic, F_OK) != 0) err(errno,"file doesn't exist : %s",fic);
   if ((dir = getenv("TMPDIR")) == NULL) { dir = TMPDIR; }
@@ -455,9 +464,9 @@ void index_purge(const char * fic) {
   newnb=0;
 
   while(oldnb-1) {
-    size_t ret=fread(&cur2, sizeof(cur2), 1, g);
+    ret=fread(&cur2, sizeof(cur2), 1, g);
     if (ret != 1) err(errno,"Cannot read indexes from file %s: %s",__func__,fic);
-    int i=index_compare(&cur1,&cur2);
+    i=index_compare(&cur1,&cur2);
     if (i!=0) {
       if (fwrite(&cur1, sizeof(cur1), 1, f) != 1) err(errno,"Cannot write index to : %s",new);
       cur1=cur2;

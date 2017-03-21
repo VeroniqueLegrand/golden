@@ -61,14 +61,21 @@ static int compare_dbase (void const *a, void const *b)
 // parse query data; instantiate and fill data structure for later work (when running query).
 WAllQueryData prepareQueryData(char * my_list, result_t * res,int nb_cards) {
   WAllQueryData wData;
-  result_t ** lst_work=(result_t **) malloc(sizeof(result_t *)*nb_cards);
-  wData.lst_work=lst_work;
-  wData.nb_cards=nb_cards;
-
+  result_t ** lst_work;
   char * elm;
   int len;
   char * dbase, *name, *p, *q;
   int i;
+  char * curDBName;
+  int cnt_cards4db;
+  int nb_db;
+  WDBQueryData infoCurDB;
+  LWDBQueryData l_infoCurDB;  
+
+  lst_work=(result_t **) malloc(sizeof(result_t *)*nb_cards);
+  wData.lst_work=lst_work;
+  wData.nb_cards=nb_cards;
+
 #ifdef DEBUG
   printf("my_list=%s\n",my_list);
   printf("nb_cards=%d\n",nb_cards);
@@ -105,12 +112,10 @@ WAllQueryData prepareQueryData(char * my_list, result_t * res,int nb_cards) {
   print_wrk_struct(lst_work,nb_cards,0);
 #endif
 
-  char * curDBName=lst_work[0]->dbase;
-  int cnt_cards4db=0;
-  int nb_db=1;
+  curDBName=lst_work[0]->dbase;
+  cnt_cards4db=0;
+  nb_db=1;
 
-  WDBQueryData infoCurDB;
-  LWDBQueryData l_infoCurDB;
   l_infoCurDB.l_infoDB=(WDBQueryData *) malloc(sizeof(WDBQueryData));
   // fill meta data
   infoCurDB.start_l=lst_work;

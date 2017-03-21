@@ -59,6 +59,8 @@ int main(int argc, char **argv) {
   char *file=NULL;
   result_t *res;
   char * my_list=NULL;
+    
+    // printf("hello \n");
 
   /* Inits */
   prog = basename(*argv);
@@ -175,9 +177,12 @@ char * build_query_from_str(int optind, const int argc, char ** argv) {
     if ((my_list = (char *) realloc(my_list,new_siz*sizeof(char))) == NULL) err(errno, "cannot allocate memory to store requested ACs.");
     if (first_arg) {
       strncpy(my_list,argv[optind],arg_len);
+      my_list[arg_len]='\0';
       first_arg=0;
-    } else strncat(my_list,argv[optind],arg_len);
-    
+    } else {
+      strncat(my_list,argv[optind],arg_len);
+      my_list[prev_siz+arg_len]='\0';
+    }
     str_len=strlen(my_list);
     my_list[str_len]='\n';
     prev_siz=new_siz;

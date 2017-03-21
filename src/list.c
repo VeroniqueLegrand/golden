@@ -44,11 +44,12 @@
  */
 void set_list_lock(int fd, int l_type) {
   struct flock excl_wr_lock; // exclusive write lock.
+  int res;
   excl_wr_lock.l_type=l_type; //F_WRLCK;
   excl_wr_lock.l_whence=SEEK_SET;
   excl_wr_lock.l_start=0;
   excl_wr_lock.l_len=0;
-  int res=fcntl(fd,F_SETLKW,&excl_wr_lock);
+  res=fcntl(fd,F_SETLKW,&excl_wr_lock);
   if (res==-1) err(errno,"list_lock failed");
 }
 
@@ -117,8 +118,9 @@ void read_chunk(int f, char * remain,char * l_buf, off_t nb_to_read) {
       i--;
     }
     if (l_buf[i]=='\n') {
+      char * last;
       i++;
-      char * last=&l_buf[i];
+      last=&l_buf[i];
       strcpy(remain,last);
       l_buf[i]='\0';
     }
@@ -140,7 +142,9 @@ int count_check_doublons(char * name, int f, char * files) {
   // bool is_cut;
   char * a_fic;
   int nb;
+  off_t nb_to_read;
   char l_buf[2*PATH_MAX+1];
+  off_t offset;
   char remain[PATH_MAX+1]="";
   if (stat(name, &st) == -1) err(FAILURE,name, NULL);
 #ifdef DEBUG
@@ -149,7 +153,7 @@ int count_check_doublons(char * name, int f, char * files) {
   printf("%s reading : \n",__func__);
 #endif
   nb = 0;
-  off_t nb_to_read=st.st_size;
+  nb_to_read=st.st_size;
   //is_cut=true;
 #ifdef DEBUG
   printf("nb_to_read-PATH_MAX=%lld\n",nb_to_read-PATH_MAX);
@@ -184,7 +188,7 @@ int count_check_doublons(char * name, int f, char * files) {
 #ifdef DEBUG
   printf("%s : before adding files, nb= %d \n",__func__,nb);
   printf("%s : list_append, going to write : %ld bytes \n", __func__,strlen(files));
-  off_t offset = lseek( f, 0, SEEK_CUR ) ;
+  offset = lseek( f, 0, SEEK_CUR ) ;
   printf("%s, current offset : %lld \n", __func__,offset);
 #endif
   return nb;
@@ -211,9 +215,10 @@ slist_inc list_append(char *dbase, char *dir, char *files,char * new_index_dir, 
   char * new_file;
   char * l_files;
   char l_buf[2*PATH_MAX+1];
-  // char remain[PATH_MAX+1]="";
-  // bool is_cut;  // indicates if filename read is cut
   int len_remain;
+#ifdef DEBUG
+  struct stat st;
+#endif
 
   l_buf[0]='\0';
   len_remain=0;
@@ -250,7 +255,6 @@ slist_inc list_append(char *dbase, char *dir, char *files,char * new_index_dir, 
   free(l_files);
   if (fsync(f) ==-1) err(FAILURE,"Error while fsync list file");
 #ifdef DEBUG
-  struct stat st;
   if (fstat(f, &st) == -1) err(FAILURE,name, NULL);
   printf("list_append, size of list file after writing: %lld\n",st.st_size);
   printf("list_append, File inode: %llu\n",st.st_ino);
@@ -393,9 +397,11 @@ char * list_get(char * file) {
   struct stat st;
   int fd;
   ssize_t nb_read;
+  off_t len;
+  char * lst_to_concat;
   if (stat(file, &st) == -1) err(errno,file, NULL);
-  off_t len=st.st_size;
-  char * lst_to_concat= malloc((size_t) len+1);
+  len=st.st_size;
+  lst_to_concat= malloc((size_t) len+1);
   if ((fd=open(file,O_RDONLY))==-1) err(errno, "Cannot open source file.");
   if ((nb_read=read(fd,lst_to_concat,(size_t) st.st_size))==-1) err(errno,"Error while reading source file.");
   close(fd);

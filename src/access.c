@@ -27,14 +27,14 @@ result_t * access_search_deprecated(char *dbase, char *name) {
   result_t * res;
   // result_t * adr_res=&res;
   int nb_AC_not_found=1;
-  
+  WDBQueryData wData; 
+ 
   if ((res=malloc(sizeof(result_t)))==NULL) error_fatal("memory", NULL);
   
   res->name=strdup(name);
   res->dbase=strdup(dbase);
   res->filenb=NOT_FOUND;
   
-  WDBQueryData wData;
   wData.len_l=1;
   wData.start_l=&res;
   

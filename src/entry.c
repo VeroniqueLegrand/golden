@@ -102,10 +102,12 @@ int entry_display(FILE *f, int fd) {
   static char *buf;
   int len;
   size_t read_len;
+  int didnt_read_anything;
+
   len = BUFINC;
   if ((buf = (char *)malloc((size_t)len+1)) == NULL) {
     error_fatal("memory", NULL); }
-    int didnt_read_anything=1;
+    didnt_read_anything=1;
   while(fgets(buf, len, f) != NULL) {
       didnt_read_anything=0;
     /* Print entry line */

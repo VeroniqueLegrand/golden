@@ -47,8 +47,9 @@ array_indix_t fic_index_load(const char * file) {
   uint64_t nb_idx;
   array_indix_t fic_indix;
   indix_t cur;
+  uint64_t i;
   fic_indix.l_idx=NULL;
-  uint64_t i=0;
+  i=0;
   if ((g = fopen(file, "r")) == NULL) err(errno,"cannot open file: %s.",file);
   if (fread(&nb_idx, sizeof(nb_idx), 1, g) != 1) err(errno,"cannot read index number from file: %s.",file);
   fic_indix.nb_idx=nb_idx;
@@ -192,11 +193,14 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
   struct stat st;
   indix_t inx;
   int nb_found;
+  result_t ** lst;
+  int lst_size;
+  int idx_card;
+  char * name;
 
   nb_found=0;
-
-  result_t ** lst=wData.start_l; // for work
-  int lst_size=wData.len_l;
+  lst=wData.start_l; // for work
+  lst_size=wData.len_l;
 
   if (lst==NULL) return 0;
   if (*lst==NULL) {
@@ -225,13 +229,12 @@ int index_search(char *file, char * db_name, WDBQueryData wData, int * nb_not_fo
   /* Check that there are not too many indexes in the file so that while loop can work. */
   if (indnb>LLONG_MAX) err(FAILURE," Index file contains too many indexes, it should be splitted in order for index_search to work.");
   
-  int idx_card;
   //printf("lst_size=%d\n",lst_size);
   for (idx_card=0;idx_card<lst_size;idx_card++)
   {
     result_t * cur_res=lst[idx_card];
     if (cur_res->filenb!=NOT_FOUND) continue;
-    char * name=cur_res->name;
+    name=cur_res->name;
 #ifdef DEBUG
     printf("name : %s\n",name);
 #endif

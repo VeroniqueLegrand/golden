@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([golden],3.4)
+AC_INIT([golden],3.4.1)
 AC_CONFIG_SRCDIR([src/golden.c])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADERS([src/config.h])
@@ -8,7 +8,11 @@ AC_CONFIG_HEADERS([src/config.h])
 AC_PROG_CC
 AC_PROG_RANLIB
 AC_CHECK_PROG(POD2MAN, pod2man, pod2man, :)
-AC_PATH_PROG([PYTHON], [python python2.7], [/bin/false])
+AC_PATH_PROG([PYTHON2_7], [python2.7], [/bin/false])
+AC_PATH_PROG([PYTHON3_4], [python3.4], [/bin/false])
+AC_PATH_PROG([PYTHON3_5], [python3.5], [/bin/false])
+AC_PATH_PROG([PYTHON3_6], [python3.6], [/bin/false])
+
 
 # Checks for libraries.
 
