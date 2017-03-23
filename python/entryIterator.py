@@ -18,3 +18,5 @@ class entryIterator:
             return entry
         else:
             raise StopIteration()
+
+    __next__=next # python3.x compatibility

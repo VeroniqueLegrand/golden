@@ -223,10 +223,12 @@ static PyMethodDef Golden_methods[] = {
   };
 #endif
 
-PyMODINIT_FUNC initGolden() {
 #ifdef IS_PY3K
-    PyModule_Create(&Goldendef);
-#else
-  Py_InitModule3("Golden", Golden_methods, "???");
-#endif
+PyMODINIT_FUNC PyInit_Golden() {
+   return PyModule_Create(&Goldendef);
 }
+#else
+PyMODINIT_FUNC initGolden() {
+  Py_InitModule3("Golden", Golden_methods, "???");
+}
+#endif

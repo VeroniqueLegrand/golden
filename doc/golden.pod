@@ -83,9 +83,12 @@ Since version 3.4, return codes have changed:
 All golden versions provide a python export for calling golden from a python script.
 It is compatible with at least python 2.7.
 
-Version 1.0 and 1.1 provided the golden_access function for searching entries one at a time.
-Vesrsion 2.0 and newer provide in addition the golden_access_new function for retrieving several entries in one time.
-Version 3.4 provides in addition the entryIterator class for iteration over the requested entries. 
+Version 1.0 and 1.1 provided the golden_access function for searching entries one at a time (python 2.7 only).
+Version 2.0 and newer provide in addition the golden_access_new function for retrieving several entries in one time (python 2.7 only).
+Version 3.4 provides in addition the entryIterator class for iteration over the requested entries (python 2.7 only).
+Version 3.4.1 provides python bindings for python 3.4, python3.5 and python3.6. It still provides the python2.7 binding.
+The Golden_access_new method was renamed in Golden_access_multi which is more understandable. The Golden_access_new method is still
+provided to keep compatibility with old python scripts that were using it bit it is deprecated.
 
 See the EXAMPLES section for more information.
 
@@ -139,13 +142,13 @@ File format must be as follows:
     else:
         print("FOUND!")
         
-# Using 'access_new' method
+# Using 'access_multi' method
  str_list_ids='\n'.join([str(x) for x in ids])
  str_list_ids+="\n"
- flat = Golden.access_new(str_list_ids)
+ flat = Golden.access_multi(str_list_ids)
  while (flat!=None):
    print(flat)
-   flat = Golden.access_new(str_list_ids)
+   flat = Golden.access_multi(str_list_ids)
  
         
 # using entry iterator

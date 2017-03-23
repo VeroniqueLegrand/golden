@@ -1,3 +1,8 @@
+What's new in 3.4.1
+* Added python bindings for python 3.4; python3.5 and python3.6
+* Bug fix (strlen while building query on input args).
+* Renamed function access_new into access_multi in python binding. Keep access_new for compatibility with old scripts that were using it.
+
 What'new in 3.4
 
 * removed many compilation warning.
