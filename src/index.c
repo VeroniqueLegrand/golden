@@ -190,7 +190,10 @@ void index_sort(char *file, uint64_t nb) {
   if (nb == 0) return;
   if ((dir = getenv("TMPDIR")) == NULL) { dir = TMPDIR; }
 
-  if (access(file, F_OK) != 0) err(errno, "file doesn't exist : %s",file);// create_missing_idxfile(file);
+  if (access(file, F_OK) != 0) {
+      err(errno, "file doesn't exist : %s",file);
+      exit(1);
+  }
   // figure out how big it is
   result = stat (file, &statbuf);
   if (result == -1) err(errno, "Cannot stat file : %s",file);
