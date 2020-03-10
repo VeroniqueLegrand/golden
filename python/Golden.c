@@ -89,8 +89,11 @@ static PyObject *entry_load(result_t *res) {
   if (fclose(f) == EOF) {
     PyErr_SetFromErrnoWithFilename(PyExc_IOError, res->dbase);
     return NULL; }
-
+#ifdef IS_PY3K
+  str = Py_BuildValue("b", buf);
+#else
   str = Py_BuildValue("s", buf);
+#endif
   free(buf);
 
   return str; }
