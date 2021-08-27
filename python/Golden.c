@@ -16,6 +16,9 @@
 //#define DEBUG
 
 #if PY_MAJOR_VERSION >=3
+#if PY_MINOR_VERSION>=7
+#define IS_PY3_7MORE
+#endif
 #define IS_PY3K
 #endif
 
@@ -89,7 +92,13 @@ static PyObject *entry_load(result_t *res) {
   if (fclose(f) == EOF) {
     PyErr_SetFromErrnoWithFilename(PyExc_IOError, res->dbase);
     return NULL; }
-#ifdef IS_PY3K
+  /*printf("going to convert: %s \n",buf);*/
+#ifdef IS_PY3_7MORE
+  str = Py_BuildValue("z", buf);
+#elif IS_PY3K
+  /*printf("PY_MAJOR_VERSION=%d\n",PY_MAJOR_VERSION);
+  printf("PY_MINOR_VERSION=%d\n",PY_MINOR_VERSION);
+  printf("python3 version\n");*/
   str = Py_BuildValue("b", buf);
 #else
   str = Py_BuildValue("s", buf);
@@ -120,15 +129,17 @@ static PyObject *Golden_access(PyObject *self, PyObject *args) {
     return NULL; }
 
   /* Search indexes for name */
+  /*printf("Golden_access, bamk exists, going to look for card: %s\n",name);*/
   res = access_search_deprecated(bank, name);
   if (res->filenb == NOT_FOUND) {
     free(res->dbase);
     free(res->name);
+    /*printf("card not found\n");*/
     return Py_BuildValue("s", NULL); }
 
   /* Load entry if exists */
   str = entry_load(res);
-
+  /*printf("entry found\n");*/
   free(res->dbase);
   free(res->name);
   if (res->real_dbase!=NULL) {
