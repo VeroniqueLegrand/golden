@@ -1,4 +1,8 @@
 What's new in 3.4.2
+* Added python bindings for python 3.9
+* Fixed python bindings for python 3.8
+
+What's new in 3.4.2
 * Added python bindings for python 3.7 and python3.8
 
 What's new in 3.4.1
