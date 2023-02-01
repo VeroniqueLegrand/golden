@@ -14,6 +14,7 @@ AC_PATH_PROG([PYTHON3_5], [python3.5], [/bin/false])
 AC_PATH_PROG([PYTHON3_6], [python3.6], [/bin/false])
 AC_PATH_PROG([PYTHON3_7], [python3.7], [/bin/false])
 AC_PATH_PROG([PYTHON3_8], [python3.8], [/bin/false])
+AC_PATH_PROG([PYTHON3_9], [python3.9], [/bin/false])
 
 
 # Checks for libraries.
