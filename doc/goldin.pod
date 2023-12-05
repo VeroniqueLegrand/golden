@@ -135,4 +135,4 @@ instead of default F</tmp>.
 
 =head1 AUTHOR
 
-Nicolas Joly (njoly@pasteur.fr), VŽronique Legrand (vlegrand@pasteur.fr) Institut Pasteur.
+Nicolas Joly (njoly@pasteur.fr), Veronique Legrand (vlegrand@pasteur.fr) Institut Pasteur.
