@@ -53,7 +53,7 @@ class check(_build):
 
 cmdclass = { 'build':build, 'sdist':sdist, 'check':check }
 
-setup( name = "Golden", version = "3.4", cmdclass=cmdclass,
+setup( name = "golden-seq-retriever", version = "3.4.3", cmdclass=cmdclass,
        description = "Python bindings for the golden tool",
        url = " ", author = " ", author_email = " ",
        ext_modules = [ Goldenmod ], py_modules= [ "entryIterator" ] )

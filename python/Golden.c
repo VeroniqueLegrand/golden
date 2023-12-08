@@ -246,7 +246,7 @@ static PyMethodDef Golden_methods[] = {
 #ifdef IS_PY3K
   static struct PyModuleDef Goldendef= {
           PyModuleDef_HEAD_INIT,
-          "Golden",
+	  "Golden",
           "Contains functions that allow the user to query databank directly from a python script.",
           -1,
           Golden_methods,
