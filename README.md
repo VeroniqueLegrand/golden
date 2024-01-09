@@ -56,5 +56,24 @@ Below is a small example
 import Golden
 Golden.access("uniprot:A0A6C0J8N5")
 ```
+
 for a single query
+
+```
+import entryIterator
+it=entryIterator.entryIterator("uniprot:A0A6C0J8N5 uniprot:A0A6C0BRH4 uniprot:A0A6C0BRH4")
+for entry in it:
+    print(entry)
+```
+
+to make it easy to iterate over retrieved entries.
+Or
+
+```
+import Golden
+entries_str=access_multi("uniprot:A0A6C0J8N5\nuniprot:A0A6C0BRH4\nuniprot:A0A6C0BRH4\n")
+print(entries_str)
+```
+to get back a character string containing all entries.
+
 Any remark/suggestion/problem should be reported to  <vlegrand@pasteur.fr>.
