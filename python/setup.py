@@ -20,8 +20,11 @@
 ##
 
 import os, sys
-
-from distutils.command.build import build as _build
+# Keep distutil for the moment for compatibily reasons with older versions of python
+try:
+    from distutils.command.build import build as _build
+except ModuleNotFoundError :
+    from setuptools.command.build import build as _build
 from distutils.command.sdist import sdist as _sdist
 from distutils.core import setup, Extension
 from distutils.util import change_root
@@ -53,7 +56,7 @@ class check(_build):
 
 cmdclass = { 'build':build, 'sdist':sdist, 'check':check }
 
-setup( name = "golden-seq-retriever", version = "3.4.3", cmdclass=cmdclass,
+setup( name = "golden-seq-retriever", version = "3.4.4", cmdclass=cmdclass,
        description = "Python bindings for the golden tool",
        url = " ", author = " ", author_email = " ",
        ext_modules = [ Goldenmod ], py_modules= [ "entryIterator" ] )

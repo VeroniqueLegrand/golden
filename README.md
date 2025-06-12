@@ -54,7 +54,7 @@ Below is a small example
 
 ```
 import Golden
-Golden.access("uniprot:A0A6C0J8N5")
+Golden.access("uniprot","A0A6C0J8N5")
 ```
 
 for a single query

@@ -1,3 +1,6 @@
+What's new in 3.4.4
+* Did something more generic: python bindings were added for all python3 versions.
+
 What's new in 3.4.3
 * Added python bindings for python 3.10 and 3.11
 
