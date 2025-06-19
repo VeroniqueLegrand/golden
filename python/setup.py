@@ -25,8 +25,16 @@ from setuptools.command.sdist import sdist as _sdist
 from setuptools import Extension, setup
 
 Goldenmod = Extension( "Golden",
-  sources = [ "Golden.c", "../src/access.c", "../src/locus.c", "../src/index.c","../src/index_hl.c",
-              "../src/list.c", "../src/error.c", "../src/query.c", "../src/entry.c" ],
+            sources = [ "Golden.c", 
+                        "../src/access.c", 
+                        "../src/locus.c", 
+                        "../src/index.c",
+                        "../src/index_hl.c",
+                        "../src/list.c", 
+                        "../src/error.c", 
+                        "../src/query.c", 
+                        "../src/entry.c" 
+                        ],
   include_dirs = [ '../src' ],
   define_macros = [ ("HAVE_CONFIG_H", "1") ] )
 
@@ -48,11 +56,14 @@ class check(_build):
     chk = os.access("../src/config.h", os.F_OK)
     if not chk:
       sys.exit("ERROR: Please run golden package configure")
+    _build.run(self)
 
 cmdclass = { 'build':build, 'sdist':no_standalone_sdist, 'check':check }
 
-setup( name = "golden-seq-retriever", version = "3.4.4", cmdclass=cmdclass,
+setup( name = "golden-seq-retriever", 
+       version = "3.4.4", cmdclass=cmdclass,
        description = "Python bindings for the golden tool",
        url = "https://github.com/VeroniqueLegrand/golden", 
        author = "Nicolas Joly, Veronique Legrand", author_email = "vlegrand@pasteur.fr",
-       ext_modules = [ Goldenmod ], py_modules= [ "entryIterator" ] )
+       ext_modules = [ Goldenmod ], 
+       py_modules= [ "entryIterator" ] )
