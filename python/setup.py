@@ -20,14 +20,9 @@
 ##
 
 import os, sys
-# Keep distutil for the moment for compatibily reasons with older versions of python
-try:
-    from distutils.command.build import build as _build
-except ModuleNotFoundError :
-    from setuptools.command.build import build as _build
-from distutils.command.sdist import sdist as _sdist
-from distutils.core import setup, Extension
-from distutils.util import change_root
+from setuptools.command.build import build as _build
+from setuptools.command.sdist import sdist as _sdist
+from setuptools import Extension, setup
 
 Goldenmod = Extension( "Golden",
   sources = [ "Golden.c", "../src/access.c", "../src/locus.c", "../src/index.c","../src/index_hl.c",
@@ -44,7 +39,7 @@ class build(_build):
     _build.run(self)
 
 # No stand-alone distribution
-class sdist(_sdist):
+class no_standalone_sdist(_sdist):
   def run(self): pass
 
 # Nothing particular to test but need that to be able to run make check
@@ -54,9 +49,10 @@ class check(_build):
     if not chk:
       sys.exit("ERROR: Please run golden package configure")
 
-cmdclass = { 'build':build, 'sdist':sdist, 'check':check }
+cmdclass = { 'build':build, 'sdist':no_standalone_sdist, 'check':check }
 
 setup( name = "golden-seq-retriever", version = "3.4.4", cmdclass=cmdclass,
        description = "Python bindings for the golden tool",
-       url = " ", author = " ", author_email = " ",
+       url = "https://github.com/VeroniqueLegrand/golden", 
+       author = "Nicolas Joly, Veronique Legrand", author_email = "vlegrand@pasteur.fr",
        ext_modules = [ Goldenmod ], py_modules= [ "entryIterator" ] )
